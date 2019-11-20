@@ -1,0 +1,103 @@
+#include <float.h>
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <timer.h>
+
+int dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*);
+void dgetrf_(int* m, int* n, double* a, int* rhsda, int* ipiv, int* info);
+void dgetri_(int* n, double* a, int* rhsda, int* ipiv, double* work, int* rhswork, int* info);
+
+int main(int argc, char* argv[])
+{
+  int n, rhs;
+  double one = 1.0;
+  double zero = 0.0;
+  int* ipiv;
+  double *A, *B, *C, *work;
+  double dtime, dtime_save = DBL_MAX, cs_time = DBL_MAX;
+
+  if (argc < 3) {
+    printf("pass me 2 arguments: n, rhs, [name]\n");
+    return (-1);
+  } else {
+    n = atof(argv[1]);
+    rhs = atof(argv[2]);
+  }
+
+  for (int it = 0; it < LAMP_REPS; it++) {
+
+    A = (double*)malloc(n * n * sizeof(double));
+    B = (double*)malloc(n * rhs * sizeof(double));
+    C = (double*)malloc(n * rhs * sizeof(double));
+
+    work = (double*)malloc(n * n * sizeof(double));
+    ipiv = (int*)malloc(1 * n * sizeof(double));
+
+    srand48((unsigned)time((time_t*)NULL));
+
+    for (int i = 0; i < n * n; i++)
+      A[i] = drand48();
+    for (int i = 0; i < n * rhs; i++)
+      B[i] = drand48();
+    for (int i = 0; i < n * rhs; i++)
+      C[i] = 0.0;
+
+    for (int i = 0; i < n; i++)
+      ipiv[i] = 0;
+    for (int i = 0; i < n * n; i++)
+      work[i] = 0.0;
+
+    /*printf("A = [\n");*/
+    /*for (int i = 0; i < n; i++) {*/
+    /*for (int j = 0; j < n; j++)*/
+    /*printf(" %lf\t", A[i + j * n]);*/
+    /*printf(";\n");*/
+    /*}*/
+    /*printf("];\n");*/
+
+    /*printf("B = [\n");*/
+    /*for (int i = 0; i < n; i++) {*/
+    /*for (int j = 0; j < rhs; j++)*/
+    /*printf(" %lf\t", B[i + j * n]);*/
+    /*printf(";\n");*/
+    /*}*/
+    /*printf("];\n");*/
+
+    /*printf("C = inv(A)*B;\n");*/
+
+    int nn = n * n;
+    int info = 1;
+
+    cs_time = cache_scrub();
+    dtime = cclock();
+    dgetrf_(&n, &n, A, &n, ipiv, &info);
+    dgetri_(&n, A, &n, ipiv, work, &nn, &info);
+    dgemm_("N", "N", &n, &rhs, &n, &one, A, &n, B, &n, &zero, C, &n);
+    dtime_save = clock_min_diff(dtime_save, dtime);
+
+    /*printf("C2 = [\n");*/
+    /*for (int i = 0; i < n; i++) {*/
+    /*for (int j = 0; j < rhs; j++)*/
+    /*printf(" %lf\t", C[i + j * n]);*/
+    /*printf(";\n");*/
+    /*}*/
+    /*printf("];\n");*/
+    /*printf("isapprox(C, C2, atol=1e-4)\n");*/
+
+    free(A);
+    free(B);
+    free(C);
+    free(work);
+    free(ipiv);
+  };
+
+  if (argv[3]) {
+    printf("solve_%s_nai;%d;%d;%d;%e;%e\n", argv[3], 0, rhs, n, dtime_save, cs_time);
+  } else {
+    printf("solve_nai;%d;%d;%d;%e;%e\n", 0, rhs, n, dtime_save, cs_time);
+  }
+
+  return (0);
+}

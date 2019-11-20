@@ -1,0 +1,10 @@
+bufdo %s/pattern/replace/ge | update
+bufdo %s/def \(\w\+\)(\(.\+\))\:/\1 <- function(\2){/ge | update
+bufdo %s/\(\w\+\).T/t(\1)/ge | update
+bufdo %s/ @ / %*% /ge | update
+bufdo %s/end = time.perf_counter()/end.time <- Sys.time()/ge | update
+bufdo %s/start = time.perf_counter()/start.time <- Sys.time()/ge | update
+bufdo %s/\(\w\+\) = copy.deepcopy(\(\w\+\))/\1 <- matrix(\2, ncol=ncol(\2), nrow=nrow(\2))/ge | update
+bufdo %s/np\.random\.randn(\(\w\+\),\( *\w\+\))/matrix(data = rexp(n_rand, rate = 1), nrow = \1, ncol = \2)/ge | update
+bufdo %s/return \(.\+\)/return(tuple(as.double(end\.time-start\.time), \1))/ge | update
+bufdo %s/\*args/.../ge | update

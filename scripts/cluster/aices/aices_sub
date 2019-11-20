@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source $HOME/.zshrc.local
+
+export AICES_LOG_PATH=${LAMP_EXPERIMENTS}/scripts/cluster/aices/log
+
+#sbatch -J Matlab -o ${AICES_LOG_PATH}/matlab.log    -N 1 -n 1 --mem=5000 -t 02:00:00 --partition=ih -A aices2 -C hwx2680 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/aices/aices_matlab
+#sbatch -J Octave -o ${AICES_LOG_PATH}/octave.log    -N 1 -n 1 --mem=5000 -t 02:00:00 --partition=ih -A aices2 -C hwx2680 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/aices/aices_octave
+sbatch -J Julia  -o ${AICES_LOG_PATH}/julia.log     -N 1 -n 1 --mem=5000 -t 02:00:00 --partition=ih -A aices2 -C hwx2680 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/aices/aices_julia
+#sbatch -J C      -o ${AICES_LOG_PATH}/c.log         -N 1 -n 1 --mem=5000 -t 02:00:00 --partition=ih -A aices2 -C hwx2680 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/aices/aices_c
+#sbatch -J CppArm -o ${AICES_LOG_PATH}/cpp_armad.log -N 1 -n 1 --mem=5000 -t 02:00:00 --partition=ih -A aices2 -C hwx2680 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/aices/aices_cpp_arma
+#sbatch -J CppEig -o ${AICES_LOG_PATH}/cpp_eigen.log -N 1 -n 1 --mem=5000 -t 02:00:00 --partition=ih -A aices2 -C hwx2680 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/aices/aices_cpp_eig
+#sbatch -J Python -o ${AICES_LOG_PATH}/python.log    -N 1 -n 1 --mem=5000 -t 02:00:00 --partition=ih -A aices2 -C hwx2680 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/aices/aices_python
+#sbatch -J R      -o ${AICES_LOG_PATH}/R.log         -N 1 -n 1 --mem=5000 -t 02:00:00 --partition=ih -A aices2 -C hwx2680 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/aices/aices_r

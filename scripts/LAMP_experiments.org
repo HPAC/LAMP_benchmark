@@ -1,0 +1,71 @@
+** Configuration
+
+*** GNU GCC
+Version: 8.2.0
+
+*** Intel MKL
+Version: 19.0
+
+*** Armadillo
+Version: 9.800.x
+
+Create build directory and run:
+cmake -DCMAKE_INSTALL_PREFIX="$HPC_DIR/lib" ..
+
+Note:
+This is a template library. Compilation flags added in Makefile of experiments.
+
+*** Eigen
+Version: 3.3.7
+
+Create build directory and run:
+cmake -DCMAKE_INSTALL_PREFIX="$HPC_DIR/lib" ..
+
+Note:
+This is a template library. Compilation flags added in Makefile of experiments.
+
+*** GNU Octave
+Version: 5.1.0
+
+Run the following script:
+export CC=gcc
+export CXX=g++
+export F77=gfortran
+export CFLAGS="-O3 -fPIC -DMKL_LP64 -DM_PI=3.1415926535897932384"
+export FFLAGS="-O3 -fPIC"
+export CPPFLAGS="-I$MKLROOT/include -I$MKLROOT/include/fftw"
+export LDFLAGS="-L$MKLROOT/lib/intel64 -L$MKLROOT/../compiler/lib/intel64"
+export LD_LIBRARY_PATH="$MKLROOT/lib/intel64:$MKLROOT/../compiler/lib/intel64:$LD_LIBRARY_PATH"
+
+./configure --with-blas="-lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -liomp5 -lpthread" --with-lapack="-lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -liomp5 -lpthread" --with-fftw3="-lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -liomp5 -lpthread -lm" --with-fftw3f="-lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -liomp5 -lpthread -lm" --disable-java --prefix="$HPC_DIR/lib"
+make install -j 24
+
+*** R
+Version: 3.6.1
+
+**** GCC - Run the following script:
+LDFLAGS="-L$MKLROOT/lib/intel64 -m64"
+./configure --with-blas="-L${MKLROOT}/lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" --with-lapack --prefix=${HPC_DIR}/lib
+make install -j 24
+
+**** ICC - Run the following script:
+export CC="icc"
+export CXX="icpc"
+export F77="ifort"
+export FC="ifort"
+export AR="xiar"
+export LD="xild"
+
+MKL="-lmkl_rt -liomp5 -lpthread"
+echo $MKL
+
+ ./configure --prefix=${HPC_DIR}/lib --enable-R-shlib --with-x=no --with-blas="$MKL" --with-lapack
+
+*** MATLAB
+Version: 2019a
+*** Julia
+Version: 1.1.0
+
+Change variable `USE_INTEL_MKL` in file `Make.inc` to 1.
+make -j 24
+make install
