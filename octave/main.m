@@ -1,5 +1,4 @@
-addpath("/home/kl573376/Linnea/lib/MatrixGeneratorMatlab")
-addpath("/home/kl573376/projects/LAMP/LAMP_experiments/octave")
+addpath(getenv('LAMP_OCTAVE_DIR'))
 import MatrixGenerator.Benchmarker;
 
 m = 3000;
@@ -73,4 +72,4 @@ A2 = randn(p,p);
 B = randn(2*p,2*p);
 partitioned_matrices(A1, A2, B, b);
 
-b.save(strcat(getenv('LAMP_octave_results'), 'matlab', '.txt'));
+b.save(strcat(getenv('LAMP_OUTPUT_DIR'), 'octave', '.txt'));

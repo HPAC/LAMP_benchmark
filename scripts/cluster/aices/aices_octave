@@ -1,16 +1,12 @@
 #!/bin/bash
 
-source ~/.zshrc.local
-exppath="${LAMP_EXPERIMENTS}/octave"
+source ${HOME}/.zshrc.lamp
 
 export MKL_NUM_THREADS=1
 export OMP_NUM_THREADS=1
 
-export MATLAB_LOG_DIR=.
-export PATH=$PATH:$exppath
-export LAMP_octave_results=results/
+export LAMP_OCTAVE_DIR="${LAMP_EXPERIMENTS}/octave"
+cd $LAMP_OCTAVE_DIR
 
-cd $exppath
-
-# it is not possible to run runner.m directly here because of how importing in Matlab works.
+octave --version
 octave main.m
