@@ -1,11 +1,11 @@
 SRC				 := src
 OBJ 			 := obj
 
-EIGEN_INC  := -I${HPC_DIR}/lib/include/eigen3
+EIGEN_INC  := -I${LOCAL_INSTALL_DIR}/include/eigen3
 MKL_INC 	 := -m64 -I${MKLROOT}/include
 INC        := -Ilib $(EIGEN_INC) $(MKL_INC)
 
-EIGEN      := -L${HPC_DIR}/lib/lib
+EIGEN      := -L${LOCAL_INSTALL_DIR}/lib
 MKL_LD		 := -L${MKLROOT}/lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
 LDFLAGS    := $(EIGEN) $(MKL_LD) -lm -ldl -lpthread
 
@@ -19,7 +19,7 @@ EIGEN_DEFS := -DEIGEN_USE_BLAS \
 							-DEIGEN_NO_DEBUG \
 							-DEIGEN_DONT_PARALLELIZE \
 							-DEIGEN_NO_CUDA
-DEFS  		 := $(EIGEN_DEFS) -DLAMP_REPS=$(LAMP_REPS) -DLAMP_OUTPUT_DIR=\"results/\" -DLAMP_L3_CACHE_SIZE=$(LAMP_L3_CACHE_SIZE)
+DEFS  		 := $(EIGEN_DEFS) -DLAMP_REPS=$(LAMP_REPS) -DLAMP_L3_CACHE_SIZE=$(LAMP_L3_CACHE_SIZE)
 CFLAGS     := -O2 -march=native -std=c++14 -Wall $(INC) \
 
 

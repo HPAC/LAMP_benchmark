@@ -1,11 +1,7 @@
 #!/bin/bash
 
-module purge
-module load DEVELOP
-module load intel/19.0
-module load gcc/8
+source ~/.zshrc.lamp
 
-source ~/.zshrc.local
 cd ${LAMP_EXPERIMENTS}/cpp/eigen
 
 export MKL_NUM_THREADS=1
