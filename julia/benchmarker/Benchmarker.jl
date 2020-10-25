@@ -11,7 +11,7 @@ include("CSV.jl")
 gcscrub() = (GC.gc(); GC.gc(); GC.gc(); GC.gc())
 
 A = rand(7500000)
-cachescrub() = (A .+= rand())
+cachescrub() = (A .+= 0.0001)
 
 function measure(iters, f, args...)
   timings = Array{Float64}(undef, iters)

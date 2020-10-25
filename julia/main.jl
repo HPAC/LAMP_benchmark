@@ -1,7 +1,5 @@
 using LinearAlgebra
-using MatrixGenerator
 using Logging
-using Profile
 using Test
 
 LinearAlgebra.BLAS.set_num_threads(1)
