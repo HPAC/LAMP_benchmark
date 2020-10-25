@@ -22,7 +22,7 @@ include("partial_operand.jl")
 include("loop_translation.jl")
 include("add_scal.jl")
 
-csv = Benchmarker.CSV(string(ENV["LAMP_OUTPUT_DIR"], "/julia"))
+csv = Benchmarker.CSV(string(ENV["LAMP_OUTPUT_DIR"], "julia"))
 
 m = parse(Int32, ENV["LAMP_m"])
 k = parse(Int32, ENV["LAMP_k"])
