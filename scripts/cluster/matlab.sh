@@ -8,7 +8,6 @@ module load matlab/2019a
 export MKL_NUM_THREADS=1
 export OMP_NUM_THREADS=1
 
-export LAMP_MATLAB_RESULTS=results/
 export LAMP_MATLAB_DIR="${LAMP_EXPERIMENTS}/matlab"
 
 export MATLAB_LOG_DIR=$LAMP_LOG_DIR
