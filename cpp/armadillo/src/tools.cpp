@@ -4,8 +4,10 @@ using namespace std;
 
 Benchmarker::Benchmarker(string name, char delim)
 {
-  this->file = new ofstream(string(LAMP_OUTPUT_DIR) + name + ".txt");
-  this->file_timings = new ofstream(string(LAMP_OUTPUT_DIR) + name + "_timings.txt");
+  const char* lamp_output_dir = std::getenv("LAMP_OUTPUT_DIR");
+  std::cout << "Output file: " << string(lamp_output_dir) + name + ".txt" << std::endl;
+  this->file = new ofstream(string(lamp_output_dir) + name + ".txt");
+  this->file_timings = new ofstream(string(lamp_output_dir) + name + "_timings.txt");
   this->delim = delim;
   if (this->file->is_open()) {
     *(this->file) << "algorithm" << this->delim;

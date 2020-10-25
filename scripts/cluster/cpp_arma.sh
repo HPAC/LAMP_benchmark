@@ -1,17 +1,14 @@
 #!/bin/bash
 
-module purge
-module load DEVELOP
-module load intel/19.0
-module load gcc/8
-
-source ~/.zshrc.local
+source ~/.zshrc.lamp
 cd ${LAMP_EXPERIMENTS}/cpp/armadillo
 
 export MKL_NUM_THREADS=1
 export OMP_NUM_THREADS=1
 
+echo ${LAMP_OUTPUT_DIR}
+
 make clean
-make -j 10
+make -j 24
 ./bench_armadillo
 make clean
