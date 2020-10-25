@@ -1,4 +1,5 @@
 % If the input arguments of a function in matlab are arrays, they are passed by reference unless you modify the data inside the function. In that case, a copy of the matrix is created somewhere else, and the modified data are stored. This modified data is lost, unless the user returns the matrix he modified and assigns it back to the caller matrix. Reference [[https://de.mathworks.com/help/matlab/matlab_prog/memory-allocation.html]] for more information
+addpath(getenv('LAMP_MATLAB_DIR'))
 import MatrixGenerator.*;
 
 m = 3000;
@@ -72,4 +73,4 @@ A2 = randn(p,p);
 B = randn(2*p,2*p);
 partitioned_matrices(A1, A2, B, b);
 
-b.save(strcat(getenv('LAMP_matlab_results'), 'matlab', '.txt'));
+b.save(strcat(getenv('LAMP_OUTPUT_DIR'), 'matlab', '.txt'));
