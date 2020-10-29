@@ -32,7 +32,8 @@ cs = rand(1, 7500000);
 
         function save(obj, filename)
             fid = fopen (filename, "w");
-            fprintf (fid, "%s \t %f \t %f \t %f \t %f\n", obj.Results'{:});
+            fprintf (fid, "algorithm;Time;StdDev;Min;Max\n");
+            fprintf (fid, "%s;%f;%f;%f;%f\n", obj.Results'{:});
             fclose (fid);
         end
 
