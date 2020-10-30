@@ -39,7 +39,7 @@ void bench_diagonal_elements(const MatrixXd& A, const MatrixXd& B, Benchmarker& 
     t2 = std::chrono::high_resolution_clock::now();
     auto time_verification = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1e9;
 
-    std::cout << "Diagonal mult equal: " << test1.isApprox(test2.diagonal(), 1e-11) <<  "Time for multiplication: " << time_verification << std::endl;
+    // std::cout << "Diagonal mult equal: " << test1.isApprox(test2.diagonal(), 1e-11) <<  "Time for multiplication: " << time_verification << std::endl;
     // std::cout << "==========" << std::endl;
     // std::cout << test1 << std::endl;
     // std::cout << "----------" << std::endl;
