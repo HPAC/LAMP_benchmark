@@ -1,4 +1,6 @@
+import os
 import numpy as np
+
 from benchmarker import Benchmarker as ben
 from kernel_invocations_syrk import kernel_invocations_syrk
 from kernel_invocations_gemm import kernel_invocations_gemm
