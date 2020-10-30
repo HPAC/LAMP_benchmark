@@ -3,8 +3,9 @@
 source ${HOME}/.zshrc.lamp
 
 export TOP="0,2,4,6,8,10,12,14,16,18,20,22,1,3,5,7,9,11,13,15,17,19,21,23"
+export TOP="0 2 4 6 8 10 12 14 16 18 20 22 1 3 5 7 9 11 13 15 17 19 21 23"
 export LAMP_LOG_DIR=${LAMP_EXPERIMENTS}/scripts/cluster/log
-export THR=12
+export THR=24
 
 sbatch -J C      -o ${LAMP_LOG_DIR}/c.log         -t 02:00:00 -p ih -A aices2 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/c.sh $THR $TOP
 sbatch -J CppArm -o ${LAMP_LOG_DIR}/cpp_arma.log  -t 02:00:00 -p ih -A aices2 --nodelist=linuxihdc072 --exclusive ${LAMP_EXPERIMENTS}/scripts/cluster/cpp_arma.sh $THR $TOP
