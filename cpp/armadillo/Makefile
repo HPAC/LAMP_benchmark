@@ -1,32 +1,34 @@
-SRC				 := src
-OBJ 			 := obj
+SRC	     := src
+OBJ      := obj
 
-ARMA_INC   := -I${LOCAL_INSTALL_DIR}/include
-MKL_INC 	 := -m64 -I${MKLROOT}/include
-INC        := -Ilib $(ARMA_INC) $(MKL_INC)
+CXX      := g++
+LINKER   := $(CXX)
 
-ARMADILLO  := -L${LOCAL_INSTALL_DIR}/lib
-MKL_LD		 := -L${MKLROOT}/lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
-LDFLAGS    := $(ARMADILLO) $(MKL_LD) -lm -ldl -lpthread -larmadillo
+ARMA_INC := -I${LOCAL_INSTALL_DIR}/include
+MKL_INC  := -m64 -I${MKLROOT}/include
+INC      := -Ilib $(ARMA_INC) $(MKL_INC)
+CXXFLAGS := -O3 -march=native -std=c++14 -Wall -fopenmp $(INC)
 
-CC 				 := g++
-LINKER     := $(CC)
-ARMA_DEFS  := -DARMA_NO_DEBUG\
- 							-DARMA_OPTIMISE_SOLVE_SYMPD\
-							-DARMA_OPTIMISE_SOLVE_BAND\
-							-DARMA_USE_LAPACK -DARMA_USE_BLAS\
-							-DARMA_DONT_USE_WRAPPER
-DEFS  		 := $(ARMA_DEFS) -DLAMP_REPS=$(LAMP_REPS) -DLAMP_L3_CACHE_SIZE=$(LAMP_L3_CACHE_SIZE)
-CFLAGS     := -O2 -march=native -std=c++14 -Wall $(INC) \
+ARMA_LD  := -L${LOCAL_INSTALL_DIR}/lib -larmadillo
+MKL_LD	 := -L${MKLROOT}/lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5\
+			-lpthread -lm -ldl
+LDFLAGS  := $(ARMA_LD) $(MKL_LD)
 
+ARMA_DEFS := -DARMA_NO_DEBUG\
+ 			 -DARMA_OPTIMISE_SOLVE_SYMPD\
+			 -DARMA_OPTIMISE_SOLVE_BAND\
+			 -DARMA_USE_LAPACK -DARMA_USE_BLAS\
+			 -DARMA_DONT_USE_WRAPPER
 
-SOURCES 	 := $(wildcard $(SRC)/*.cpp)
-OBJECTS 	 := $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SOURCES))
+DEFS      := $(ARMA_DEFS) -DLAMP_REPS=$(LAMP_REPS) -DLAMP_L3_CACHE_SIZE=$(LAMP_L3_CACHE_SIZE)
 
-MYAPP  		 := bench_armadillo
+SOURCES   := $(wildcard $(SRC)/*.cpp)
+OBJECTS   := $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SOURCES))
+
+MYAPP     := bench_armadillo
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CC) $(CFLAGS) $(DEFS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(DEFS) -c $< -o $@
 
 $(MYAPP): $(OBJECTS)
 	$(LINKER) $(OBJECTS) $(LDFLAGS) -o $(MYAPP)
