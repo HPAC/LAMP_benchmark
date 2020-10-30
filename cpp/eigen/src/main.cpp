@@ -34,6 +34,9 @@ int main(int argc, char* argv[])
 
   Benchmarker b("eigen");
 
+  auto n_threads = Eigen::nbThreads();
+  std::cout << "Eigen threads: " << n_threads << std::endl;
+
   A = MatrixXd::Random(n, n);
   B = MatrixXd::Random(n, n);
   bench_add_scal(A, B, b);
