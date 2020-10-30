@@ -20,7 +20,7 @@ include("partial_operand.jl")
 include("loop_translation.jl")
 include("add_scal.jl")
 
-csv = Benchmarker.CSV(string(ENV["LAMP_OUTPUT_DIR"], "julia_", sting(ENV["OMP_NUM_THREADS"])))
+csv = Benchmarker.CSV(string(ENV["LAMP_OUTPUT_DIR"], "julia_", string(ENV["OMP_NUM_THREADS"])))
 
 m = parse(Int32, ENV["LAMP_m"])
 k = parse(Int32, ENV["LAMP_k"])
