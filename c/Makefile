@@ -9,7 +9,7 @@ MKL_INC := -m64 -I${MKLROOT}/include
 INC     := -Isrc/timer $(MKL_INC)
 CFLAGS  := -O3 -march=native -Wall $(INC)
 
-MKL_LD  := -L${MKLROOT}/lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5\
+MKL_LD  := -L${MKLROOT}/lib/intel64 -L${MKLROOT}/../lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5\
 	         -lpthread -lm -ldl
 LDFLAGS := $(MKL_LD)
 

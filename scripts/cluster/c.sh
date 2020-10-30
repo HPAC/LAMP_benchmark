@@ -8,7 +8,9 @@ echo "$1 Threads"
 echo "-----------------------------"
 export MKL_NUM_THREADS=$1
 export OMP_NUM_THREADS=$1
-export GOMP_CPU_AFFINITY="0,2,4,6,8,10,12,14,16,18,20,22,1,3,5,7,9,11,13,15,17,19,21,23"
+export GOMP_CPU_AFFINITY=$2
+export LD_LIBRARY_PATH="${MKLROOT}/../lib/intel64:$LD_LIBRARY_PATH"  # Runtime cannot find libiomp5.
+
 export LAMP_C_OUTPUT_DIR=${LAMP_OUTPUT_DIR}/c_${OMP_NUM_THREADS}.txt
 
 make clean
