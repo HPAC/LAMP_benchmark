@@ -25,7 +25,9 @@ ipn <- 80
 l   <- 100
 p   <- 1500
 
-init_benchmarker("R")
+threads <- Sys.getenv("OMP_NUM_THREADS")
+file_name <- paste("R_", threads, sep="")
+init_benchmarker(file_name)
 
 A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 B = matrix(data = rnorm(n*n), nrow = n, ncol = n)

@@ -27,7 +27,7 @@ ipn = 80
 l = 100
 p = 1500
 
-b = ben('python')
+b = ben('python_' + str(os.environ['OMP_NUM_THREADS']))
 
 A = np.random.randn(n, n)
 B = np.random.randn(n, n)

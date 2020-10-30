@@ -72,4 +72,4 @@ A2 = randn(p,p);
 B = randn(2*p,2*p);
 partitioned_matrices(A1, A2, B, b);
 
-b.save(strcat(getenv('LAMP_OUTPUT_DIR'), 'octave', '.txt'));
+b.save(strcat(getenv('LAMP_OUTPUT_DIR'), 'octave_', getenv('OMP_NUM_THREADS'), '.txt'));

@@ -2,7 +2,7 @@ using LinearAlgebra
 using Logging
 using Test
 
-LinearAlgebra.BLAS.set_num_threads(1)
+LinearAlgebra.BLAS.set_num_threads(parse(Int, ENV["OMP_NUM_THREADS"]))
 
 include("benchmarker/Benchmarker.jl")
 include("kernel_invocations_syrk.jl")
@@ -20,7 +20,7 @@ include("partial_operand.jl")
 include("loop_translation.jl")
 include("add_scal.jl")
 
-csv = Benchmarker.CSV(string(ENV["LAMP_OUTPUT_DIR"], "julia"))
+csv = Benchmarker.CSV(string(ENV["LAMP_OUTPUT_DIR"], "julia_", sting(ENV["OMP_NUM_THREADS"])))
 
 m = parse(Int32, ENV["LAMP_m"])
 k = parse(Int32, ENV["LAMP_k"])

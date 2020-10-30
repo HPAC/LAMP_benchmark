@@ -3,12 +3,16 @@
 source ${HOME}/.zshrc.lamp
 cd ${LAMP_EXPERIMENTS}/c
 
-export MKL_NUM_THREADS=1
-export OMP_NUM_THREADS=1
-export LAMP_C_OUTPUT_DIR=${LAMP_OUTPUT_DIR}/c.txt
+echo "-----------------------------"
+echo "$1 Threads"
+echo "-----------------------------"
+export MKL_NUM_THREADS=$1
+export OMP_NUM_THREADS=$1
+export GOMP_CPU_AFFINITY="0,2,4,6,8,10,12,14,16,18,20,22,1,3,5,7,9,11,13,15,17,19,21,23"
+export LAMP_C_OUTPUT_DIR=${LAMP_OUTPUT_DIR}/c_${OMP_NUM_THREADS}.txt
 
 make clean
-make all -j 10
+make all -j 24
 
 echo "algorithm;m;k;n;C;cs_time"                    > ${LAMP_C_OUTPUT_DIR}
 export LAMP_m=3000
