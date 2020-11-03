@@ -21,6 +21,7 @@ using namespace arma;
 int main(int argc, char* argv[])
 {
 
+  std::cout << "lala";
   int m = 3000;
   int k = 550;
   int n = 3000;
@@ -32,26 +33,23 @@ int main(int argc, char* argv[])
 
   dmat A, B, C, A1, A2;
 
-  Benchmarker b("armadillo");
+  const char* lamp_output_dir = std::getenv("LAMP_OUTPUT_DIR");
+  const char* threads = std::getenv("OMP_NUM_THREADS");
+  string file_name = string(lamp_output_dir) + "armadillo_" + string(threads) + "1.txt";
+  string file_timings_name = string(lamp_output_dir) + "armadillo_" + string(threads) + "_timings1.txt";
+  string name = "Armadillo";
 
-  A = randn<mat>(n, n);
-  B = randn<mat>(n, n);
-  bench_add_scal(A, B, b);
+  Benchmarker b(name, file_name, file_timings_name, 10, ';');
+
+  bench_add_scal(n, b);
 
   // Properties Solve
-
   bench_properties_solve(m, l, b);
 
   // SYRK
-
-  A = randn<dmat>(n, k);
-  C = randn<dmat>(n, n);
-  C = C * trans(C);
-
-  bench_syrk(A, C, b);
+  bench_syrk(n, k, b);
 
   // GEMM
-
   A = randn<mat>(m, k);
   B = randn<mat>(k, n);
   C = randn<mat>(m, n);

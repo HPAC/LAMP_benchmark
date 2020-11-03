@@ -4,10 +4,10 @@ OBJ      := obj
 CXX      := g++
 LINKER   := $(CXX)
 
-ARMA_INC := -I${LOCAL_INSTALL_DIR}/include
+ARMA_INC := -I${LOCAL_INSTALL_DIR}/include -I../benchmarker
 MKL_INC  := -m64 -I${MKLROOT}/include
 INC      := -Ilib $(ARMA_INC) $(MKL_INC)
-CXXFLAGS := -O3 -march=native -std=c++14 -Wall -fopenmp $(INC)
+CXXFLAGS := -O0 -march=native -std=c++14 -Wall -fopenmp $(INC) -g
 
 ARMA_LD  := -L${LOCAL_INSTALL_DIR}/lib -larmadillo
 MKL_LD	 := -L${MKLROOT}/lib/intel64 -L${MKLROOT}/../lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5\

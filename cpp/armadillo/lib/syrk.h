@@ -1,11 +1,8 @@
 #ifndef ARMADILLO_SYRK_H
 #define ARMADILLO_SYRK_H
 
-#include "tools.h"
-#include <armadillo>
+#include "../../benchmarker/benchmarker.h"
 
-using namespace arma;
-
-void bench_syrk(const mat& A, const mat& C, Benchmarker& b);
+void bench_syrk(int n, int k, Benchmarker& b);
 
 #endif //ARMADILLO_SYRK_H

@@ -3,6 +3,7 @@
 
 #include "tools.h"
 #include <armadillo>
+#include "../../benchmarker/benchmarker.h"
 
 using namespace arma;
 

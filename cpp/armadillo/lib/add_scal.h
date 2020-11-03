@@ -3,9 +3,10 @@
 
 #include "tools.h"
 #include <armadillo>
+#include "../../benchmarker/benchmarker.h"
 
 using namespace arma;
 
-void bench_add_scal(const mat& A, const mat& B, Benchmarker& b);
+void bench_add_scal(int n, Benchmarker& b);
 
 #endif //ARMADILLO_ADD_SCAL_H
