@@ -1,4 +1,6 @@
-#include "../lib/benchmarks.h"
+#include "../include/benchmarks.h"
+
+using namespace arma;
 
 void syrk_implicit(const mat& A, mat& C)
 {
@@ -15,10 +17,11 @@ void syrk_implicit_noup(const mat& A, mat& C)
   C = A * trans(A);
 }
 
-void bench_syrk(int n, int k, Benchmarker& b)
+void bench_syrk(Benchmarker &b, int n)
 {
-  A = randn<dmat>(n, k);
-  C = randn<dmat>(n, n);
+  auto k = n;
+  dmat A = randn<dmat>(n, k);
+  dmat C = randn<dmat>(n, n);
   C = C * trans(C);
 
   b.benchmark("syrk_implicit", syrk_implicit, A, C);

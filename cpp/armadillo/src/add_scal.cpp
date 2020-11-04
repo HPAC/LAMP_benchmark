@@ -1,4 +1,6 @@
-#include "../lib/benchmarks.h"
+#include "../include/benchmarks.h"
+
+using namespace arma;
 
 static void add(const mat& A, mat& B)
 {
@@ -10,10 +12,10 @@ static void scal(mat& A)
   A = 3.0 * A;
 }
 
-void bench_add_scal(int n, Benchmarker& b)
+void bench_add_scal(Benchmarker& b, int n)
 {
-  A = randn<mat>(n, n);
-  B = randn<mat>(n, n);
+  dmat A = randn<dmat>(n, n);
+  dmat B = randn<dmat>(n, n);
 
   b.benchmark("add", add, A, B);
   b.benchmark("scal", scal, A);

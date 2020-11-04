@@ -1,40 +1,25 @@
-#include "../lib/loop_translation.h"
+#include "../include/benchmarks.h"
 
-static void naive(const mat& A, const mat& B, dmat& C)
+using namespace arma;
+
+void loop_translation_naive(const mat& A, const mat& B, dmat& C)
 {
   for (uint32_t i = 0; i < C.n_cols; i++) {
     C.col(i) = A * B.col(i);
   }
 }
 
-static void recommended(const mat& A, const mat& B, dmat& C)
+void loop_translation_recommended(const mat& A, const mat& B, dmat& C)
 {
   C = A * B;
 }
 
-void bench_loop_translation(const mat& A, const mat& B, const mat& C, Benchmarker& b)
+void bench_loop_translation(Benchmarker& b, int n)
 {
+  dmat A = randn<dmat>(n, n);
+  dmat B = randn<dmat>(n, n);
+  dmat C = randn<dmat>(n, n);
 
-  std::chrono::high_resolution_clock::time_point t1, t2;
-  std::vector<double> naive_v(LAMP_REPS);
-  std::vector<double> recommended_v(LAMP_REPS);
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-    dmat Bt = B;
-    dmat Ct = C;
-
-    BENCHMARK(b, naive(At, Bt, Ct), naive_v[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-    dmat Bt = B;
-    dmat Ct = C;
-
-    BENCHMARK(b, recommended(At, Bt, Ct), recommended_v[i]);
-  }
-
-  b.add(naive_v, "loop_translation_nai");
-  b.add(recommended_v, "loop_translation_rec");
+  b.benchmark("loop_translation_nai", loop_translation_naive, A, B, C);
+  b.benchmark("loop_translation_rec", loop_translation_recommended, A, B, C);
 }

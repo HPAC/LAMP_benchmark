@@ -1,6 +1,8 @@
-#include "../lib/index_problems.h"
+#include "../include/benchmarks.h"
 
-static void naive(const mat& A, const mat& B, dmat& C)
+using namespace arma;
+
+void loop_naive(const mat& A, const mat& B, dmat& C)
 {
   dmat temp = zeros<dmat>(A.n_rows, B.n_cols);
   for (uint32_t i = 0; i < C.n_rows; i++) {
@@ -9,7 +11,7 @@ static void naive(const mat& A, const mat& B, dmat& C)
   }
 }
 
-static void recommended(const mat& A, const mat& B, dmat& C)
+void loop_recommended(const mat& A, const mat& B, dmat& C)
 {
   dmat temp = A * B;
   for (uint32_t i = 0; i < C.n_rows; i++) {
@@ -17,29 +19,13 @@ static void recommended(const mat& A, const mat& B, dmat& C)
   }
 }
 
-void bench_index_problems(const mat& A, const mat& B, const mat& C, Benchmarker& b)
+void bench_index_problems(Benchmarker& b, int n)
 {
+  auto m = n / 10;
+  dmat A = randn<dmat>(m, m);
+  dmat B = randn<dmat>(m, m);
+  dmat C = randn<dmat>(m, 1);
 
-  std::chrono::high_resolution_clock::time_point t1, t2;
-  std::vector<double> naive_v(LAMP_REPS);
-  std::vector<double> recommended_v(LAMP_REPS);
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-    dmat Bt = B;
-    dmat Ct = C;
-
-    BENCHMARK(b, naive(At, Bt, Ct), naive_v[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-    dmat Bt = B;
-    dmat Ct = C;
-
-    BENCHMARK(b, recommended(At, Bt, Ct), recommended_v[i]);
-  }
-
-  b.add(naive_v, "loop_nai");
-  b.add(recommended_v, "loop_rec");
+  b.benchmark("loop_nai", loop_naive, A, B, C);
+  b.benchmark("loop_rec", loop_recommended, A, B, C);
 }

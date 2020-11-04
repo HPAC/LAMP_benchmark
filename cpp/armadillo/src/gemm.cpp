@@ -1,4 +1,6 @@
-#include "../lib/benchmarks.h"
+#include "../include/benchmarks.h"
+
+using namespace arma;
 
 void gemm_implicit(const mat& A, const mat& B, mat& C)
 {
@@ -40,26 +42,21 @@ void diagmm(const mat& A, const mat& B, mat& C)
   C = A * B;
 }
 
-void bench_gemm(int m, int k, int n, Benchmarker& b)
+void bench_gemm(Benchmarker &b, int n)
 {
-  A = randn<mat>(m, k);
-  B = randn<mat>(k, n);
-  C = randn<mat>(m, n);
+  dmat A = randn<dmat>(n, n);
+  dmat B = randn<dmat>(n, n);
+  dmat C = randn<dmat>(n, n);
   b.benchmark("gemm_implicit", gemm_implicit, A, B, C);
   b.benchmark("gemm_implicit_compact", gemm_implicit_compact, A, B, C);
   b.benchmark("gemm_implicit_noup", gemm_implicit_noup, A, B, C);
   b.benchmark("gemm_implicit_coeff", gemm_implicit_coeff, A, B, C);
   b.benchmark("gemm_implicit_double_coeff", gemm_implicit_double_coeff, A, B, C);
 
-  A = randn<mat>(m, m);
-  B = randn<mat>(m, m);
-  C = randn<mat>(m, m);
-  b.benchmark("gemm_prop", gemm_implicit_noup, A, B, C);
-
-  A = trimatl(randn<dmat>(m, m));
+  A = trimatl(randn<dmat>(n, n));
   b.benchmark("trmm_implicit", trmm_implicit, A, B);
   b.benchmark("trmm_implicit_compact", trmm_implicit_compact, A, B);
 
-  A = diagmat(randn<dmat>(m, m));
+  A = diagmat(randn<dmat>(n, n));
   b.benchmark("diagmm", diagmm, A, B, C);
 }

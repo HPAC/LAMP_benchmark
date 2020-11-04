@@ -10,6 +10,7 @@
 
 using std::vector;
 using std::string;
+using std::cout;
 using std::cerr;
 using std::endl;
 using clockk = std::chrono::high_resolution_clock;
@@ -38,12 +39,18 @@ public:
     file = std::ofstream(file_name);
     file_timings = std::ofstream(file_timings_name);
     delim = delimiter;
-    std::cout << "test"<< endl;
     if (file.is_open())
       file << "algorithm" << delim << name << endl;
     else
       cerr << "ERROR: File not open" << endl;
     cs = vector<double>(cache_size, 0.0);
+    cout << "Library:               " << name << endl;
+    cout << "Output file:           " << file_name << endl;
+    cout << "Output file (timings): " << file_timings_name << endl;
+    cout << "Cache size:            " << cache_size << endl;
+    cout << "Iterations:            " << iterations << endl;
+    cout << "Delimiter:             " << delim << endl;
+
   }
 
   template<typename F, typename... Args>
