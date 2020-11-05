@@ -1,4 +1,6 @@
-#include "../lib/transposition.h"
+#include "../include/benchmarks.h"
+
+using namespace Eigen;
 
 void transposition_nn(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
 {
@@ -20,49 +22,15 @@ void transposition_tt(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
   C = A.transpose() * B.transpose();
 }
 
-void bench_transposition(const MatrixXd& A, const MatrixXd& B, Benchmarker& b)
+void bench_transposition(Benchmarker &b, int n)
 {
+  auto m = n / 10;
+  MatrixXd A = MatrixXd::Random(m, m);
+  MatrixXd B = MatrixXd::Random(m, m);
+  MatrixXd C = MatrixXd::Zero(m, m);
 
-  std::chrono::high_resolution_clock::time_point t1, t2;
-  MatrixXd C = MatrixXd::Zero(A.rows(), A.cols());
-  std::vector<double> transposition_nn_v(LAMP_REPS);
-  std::vector<double> transposition_tn_v(LAMP_REPS);
-  std::vector<double> transposition_nt_v(LAMP_REPS);
-  std::vector<double> transposition_tt_v(LAMP_REPS);
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, transposition_nn(At, Bt, Ct), transposition_nn_v[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, transposition_tn(At, Bt, Ct), transposition_tn_v[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, transposition_nt(At, Bt, Ct), transposition_nt_v[i]);
-  }
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, transposition_tt(At, Bt, Ct), transposition_tt_v[i]);
-  }
-
-  b.add(transposition_nn_v, "tr_nn_implicit");
-  b.add(transposition_tn_v, "tr_tn_implicit");
-  b.add(transposition_nt_v, "tr_nt_implicit");
-  b.add(transposition_tt_v, "tr_tt_implicit");
+  b.benchmark("tr_nn_implicit", transposition_nn, A, B, C);
+  b.benchmark("tr_tn_implicit", transposition_tn, A, B, C);
+  b.benchmark("tr_nt_implicit", transposition_nt, A, B, C);
+  b.benchmark("tr_tt_implicit", transposition_tt, A, B, C);
 }

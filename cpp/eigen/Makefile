@@ -4,7 +4,7 @@ OBJ       := obj
 CXX       := g++
 LINKER    := $(CXX)
 
-EIGEN_INC := -I${LOCAL_INSTALL_DIR}/include/eigen3
+EIGEN_INC := -I${LOCAL_INSTALL_DIR}/include/eigen3 -I../benchmarker
 MKL_INC   := -m64 -I${MKLROOT}/include
 INC       := -Ilib $(EIGEN_INC) $(MKL_INC)
 CXXFLAGS  := -O3 -march=native -std=c++14 -Wall -fopenmp $(INC)
@@ -18,10 +18,9 @@ EIGEN_DEFS := -DEIGEN_USE_BLAS \
  			  -DEIGEN_USE_LAPACK \
 			  -DEIGEN_USE_MKL_ALL \
 			  -DEIGEN_USE_MKL \
-			  -DEIGEN_MAX_CPP_VER=11 \
 			  -DEIGEN_NO_DEBUG
 
-DEFS       := $(EIGEN_DEFS) -DLAMP_REPS=$(LAMP_REPS) -DLAMP_L3_CACHE_SIZE=$(LAMP_L3_CACHE_SIZE)
+DEFS       := $(EIGEN_DEFS)
 
 SOURCES   := $(wildcard $(SRC)/*.cpp)
 OBJECTS   := $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SOURCES))

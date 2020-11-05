@@ -1,41 +1,24 @@
-#include "../lib/subexpression.h"
+#include "../include/benchmarks.h"
 
-static void naive(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
+using namespace Eigen;
+
+void subexpression_naive(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
 {
   C = A * B + A * B;
 }
 
-static void recommended(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
+void subexpression_recommended(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
 {
   C = A * B;
   C = C + C;
 }
 
-void bench_subexpression(const MatrixXd& A, const MatrixXd& B, Benchmarker& b)
+void bench_subexpression(Benchmarker& b, int n)
 {
+  MatrixXd A = MatrixXd::Random(n, n);
+  MatrixXd B = MatrixXd::Random(n, n);
+  MatrixXd C = MatrixXd::Zero(n, n);
 
-  std::chrono::high_resolution_clock::time_point t1, t2;
-  MatrixXd C = MatrixXd::Zero(A.rows(), B.cols());
-  MatrixXd D = MatrixXd::Zero(A.rows(), B.cols());
-  std::vector<double> naive_v(LAMP_REPS);
-  std::vector<double> recommended_v(LAMP_REPS);
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, naive(At, Bt, Ct), naive_v[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, recommended(At, Bt, Ct), recommended_v[i]);
-  }
-
-  b.add(naive_v, "subexpr_nai");
-  b.add(recommended_v, "subexpr_rec");
+  b.benchmark("subexpr_nai", subexpression_naive, A, B, C);
+  b.benchmark("subexpr_rec", subexpression_recommended, A, B, C);
 }
