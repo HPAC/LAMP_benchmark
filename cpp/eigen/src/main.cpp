@@ -23,16 +23,16 @@ int main(int argc, char *argv[])
 
   Benchmarker b(name, file_name, file_timings_name, cache_size, reps, ';');
 
-//  bench_gemm(b, n);
-//  bench_syrk(b, n);
-//  bench_syr2k(b, n);
-//  bench_add_scal(b, n);
-//
-//  bench_matrix_chain(b, n);
-//  bench_subexpression(b, n);
-//  bench_partial_operand(b, n);
-//  bench_loop_translation(b, n);
-//  bench_diagonal_elements(b, n);
+  bench_gemm(b, n);
+  bench_syrk(b, n);
+  bench_syr2k(b, n);
+  bench_add_scal(b, n);
+
+  bench_matrix_chain(b, n);
+  bench_subexpression(b, n);
+  bench_partial_operand(b, n);
+  bench_loop_translation(b, n);
+  bench_diagonal_elements(b, n);
   bench_properties_solve(b, n);
   bench_composed_operations(b, n);
   bench_transposition(b, n);
