@@ -16,7 +16,8 @@ source("loop_translation.R")
 source("partial_operand.R")
 source("benchmarker.R")
 
-n <- 3000
+n <- strtoi(Sys.getenv("LAMP_N"))
+print(n)
 
 threads <- Sys.getenv("OMP_NUM_THREADS")
 file_name <- paste("R_", threads, sep="")
@@ -76,8 +77,8 @@ solve_linear_systems(b, A, B)
 
 ##! Matrix Chain Problem
 
-A = matrix(data = rnorm(m*k), nrow = m, ncol = k)
-B = matrix(data = rnorm(k*n), nrow = k, ncol = n)
+A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 
 matrix_chain(b, A, B)
 
@@ -97,6 +98,7 @@ partial_operand(b, A, B)
 
 ##! Index problems
 
+ipn <- n / 10
 A = matrix(data = rnorm(ipn*ipn), nrow = ipn, ncol = ipn)
 B = matrix(data = rnorm(ipn*ipn), nrow = ipn, ncol = ipn)
 C = matrix(data = rnorm(ipn*1)  , nrow = 1  , ncol = ipn)
@@ -113,6 +115,7 @@ loop_translation(b, A, B, C)
 
 ##! Partitioned Matrices
 
+p <- n / 10
 A1 = matrix(data = rnorm(p*p), nrow = p, ncol =  p)
 A2 = matrix(data = rnorm(p*p), nrow = p, ncol =  p)
 B  = matrix(data = rnorm(2*p, 2*p), nrow = 2*p, ncol = 2*p)

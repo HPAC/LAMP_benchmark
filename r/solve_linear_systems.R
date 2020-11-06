@@ -38,6 +38,5 @@ solve_linear_systems <- function(b, ...){
     res3 <- benchmark('solve_large_nai', solve_nai, A, B)
     res4 <- benchmark('solve_large_rec', solve_rec, A, B)
     cat(c("Solve large correctness: ", all.equal(res3, res4), "\n"), sep="")
-
 }
 

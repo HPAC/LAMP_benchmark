@@ -97,7 +97,7 @@ matrix_chain <- function(b, ...){
   res2 <- benchmark('mc_l_r_guid', mc_l_r_guid, m1, ...)
   cat(c("mc_l_r correctness: ", all.equal(res1, res2), "\n"), sep="")
 
-  m2 <- matrix(data = rnorm((n/5)*n), nrow = n, ncol = n/2)
+  m2 <- matrix(data = rnorm((n/5)*n), nrow = n, ncol = n/5)
   res1 <- benchmark('mc_r_l_orig', mc_r_l_orig, m2, ...)
   res2 <- benchmark('mc_r_l_guid', mc_r_l_guid, m2, ...)
   cat(c("mc_r_l correctness: ", all.equal(res1, res2), "\n"), sep="")
