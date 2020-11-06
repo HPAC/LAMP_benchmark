@@ -20,14 +20,7 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(name)-2s: %(levelname)-2s %(message)s')
 
-m = 3000
-k = 550
-n = 3000
-
-tn = 80
-ipn = 80
-l = 100
-p = 1500
+n = int(os.environ['LAMP_N'])
 
 b = ben('python_' + str(os.environ['OMP_NUM_THREADS']))
 
@@ -37,11 +30,11 @@ add_scal(b, A, B)
 
 # ! Properties Solve
 
-properties_solve(b, m, l)
+properties_solve(b, n, n / 10)
 
 # ! SYRK
 
-A = np.random.randn(n, k)
+A = np.random.randn(n, n)
 C = np.random.randn(n, n)
 C = C + C.T
 
@@ -49,16 +42,16 @@ kernel_invocations_syrk(b, A, C)
 
 # ! GEMM
 
-A = np.random.randn(m, k)
-B = np.random.randn(k, n)
-C = np.random.randn(m, n)
+A = np.random.randn(n, n)
+B = np.random.randn(n, n)
+C = np.random.randn(n, n)
 
 kernel_invocations_gemm(b, A, B, C)
 
 # ! SYR2K
 
-A = np.random.randn(n, k)
-B = np.random.randn(n, k)
+A = np.random.randn(n, n)
+B = np.random.randn(n, n)
 C = np.random.randn(n, n)
 C = C + C.T
 
@@ -66,6 +59,7 @@ kernel_invocations_syr2k(b, A, B, C)
 
 # ! Transposition
 
+tn = n / 10
 A = np.random.randn(tn, tn)
 B = np.random.randn(tn, tn)
 C = np.random.randn(tn, tn)
@@ -74,22 +68,22 @@ transposition(b, A, B, C)
 
 # ! Common Subexpression
 
-A = np.random.randn(m, k)
-B = np.random.randn(k, n)
+A = np.random.randn(n, n)
+B = np.random.randn(n, n)
 
 common_subexpressions(b, A, B)
 
 # ! Composed Operations
 
 A = np.random.randn(n, n)
-B = np.random.randn(n, l)
+B = np.random.randn(n, n / 10)
 
 solve_linear_systems(b, A, B)
 
 #! Matrix Chain Problem
 
-A = np.random.randn(m, k)
-B = np.random.randn(k, n)
+A = np.random.randn(n, n)
+B = np.random.randn(n, n)
 
 matrix_chain(b, A, B)
 
@@ -109,6 +103,7 @@ partial_operand(b, A, B)
 
 # ! Index problems
 
+ipn = n / 10
 A = np.random.randn(ipn, ipn)
 B = np.random.randn(ipn, ipn)
 C = np.random.randn(ipn)
@@ -125,6 +120,7 @@ loop_translation(b, A, B, C)
 
 # ! Partitioned Matrices
 
+p = n / 10
 A1 = np.random.randn(p, p)
 A2 = np.random.randn(p, p)
 B = np.random.randn(2*p, 2*p)
