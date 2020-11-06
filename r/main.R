@@ -16,14 +16,7 @@ source("loop_translation.R")
 source("partial_operand.R")
 source("benchmarker.R")
 
-m <- 3000
-k <- 550
 n <- 3000
-
-tn  <- 80
-ipn <- 80
-l   <- 100
-p   <- 1500
 
 threads <- Sys.getenv("OMP_NUM_THREADS")
 file_name <- paste("R_", threads, sep="")
@@ -34,32 +27,33 @@ B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 add_scal(b, A, B)
 
 ##! Properties Solve
-properties_solve(b, m, l)
+properties_solve(b, n, n / 10)
 
 ##! SYRK
-A = matrix(data = rnorm(n*k), nrow = n, ncol = k)
+A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 C = matrix(data = rnorm(n*n), nrow = n, ncol = n); C = C + t(C);
 
 kernel_invocations_syrk(b, A, C)
 
 ##! GEMM
 
-A = matrix(data = rnorm(m*k), nrow = m, ncol = k)
-B = matrix(data = rnorm(k*n), nrow = k, ncol = n)
-C = matrix(data = rnorm(m*n), nrow = m, ncol = n)
+A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+C = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 
 kernel_invocations_gemm(b, A, B, C)
 
 ##! SYR2K
 
-A = matrix(data = rnorm(n*k), nrow = n, ncol = k)
-B = matrix(data = rnorm(n*k), nrow = n, ncol = k)
+A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 C = matrix(data = rnorm(n*n), nrow = n, ncol = n); C = C + t(C);
 
 kernel_invocations_syr2k(b, A, B, C)
 
 ##! Transposition
 
+tn <- n / 10
 A = matrix(data = rnorm(tn * tn), nrow = tn, ncol = tn)
 B = matrix(data = rnorm(tn * tn), nrow = tn, ncol = tn)
 C = matrix(data = rnorm(tn * tn), nrow = tn, ncol = tn)
@@ -68,15 +62,15 @@ transposition(b, A, B, C)
 
 ##! Common Subexpression
 
-A = matrix(data = rnorm(m*k), nrow = m, ncol = k)
-B = matrix(data = rnorm(k*n), nrow = k, ncol = n)
+A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 
 common_subexpressions(b, A, B)
 
 ##! Composed Operations
 
 A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*l), nrow = n, ncol = l)
+B = matrix(data = rnorm(n*(n/10)), nrow = n, ncol = n/10)
 
 solve_linear_systems(b, A, B)
 

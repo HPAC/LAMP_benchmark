@@ -90,24 +90,22 @@ matrix_chain <- function(b, ...){
 
   args = list(...)
 
-  m = dim(args[[1]])[1]
-  k = dim(args[[1]])[2]
-  n = dim(args[[2]])[2]
+  n = dim(args[[1]])[1]
 
-  m1 <- matrix(data = rnorm((k/2)*m), nrow = k/2, ncol = m)
+  m1 <- matrix(data = rnorm((n/5)*n), nrow = n/5, ncol = n)
   res1 <- benchmark('mc_l_r_orig', mc_l_r_orig, m1, ...)
   res2 <- benchmark('mc_l_r_guid', mc_l_r_guid, m1, ...)
   cat(c("mc_l_r correctness: ", all.equal(res1, res2), "\n"), sep="")
 
-  m2 <- matrix(data = rnorm((k/2)*n), nrow = n, ncol = k/2)
+  m2 <- matrix(data = rnorm((n/5)*n), nrow = n, ncol = n/2)
   res1 <- benchmark('mc_r_l_orig', mc_r_l_orig, m2, ...)
   res2 <- benchmark('mc_r_l_guid', mc_r_l_guid, m2, ...)
   cat(c("mc_r_l correctness: ", all.equal(res1, res2), "\n"), sep="")
 
-  Al <- matrix(data = rnorm(m*k), nrow = m, ncol = k)
-  Bl <- matrix(data = rnorm(k*(k/2)), nrow = k, ncol = k/2)
-  Cl <- matrix(data = rnorm((k/2)*k), nrow = k/2, ncol = k)
-  Dl <- matrix(data = rnorm(k*n), nrow = k, ncol = n)
+  Al <- matrix(data = rnorm(n*n), nrow = n, ncol = n)
+  Bl <- matrix(data = rnorm(n*(n/5)), nrow = n, ncol = n/5)
+  Cl <- matrix(data = rnorm((n/5)*n), nrow = n/5, ncol = n)
+  Dl <- matrix(data = rnorm(n*n), nrow = n, ncol = n)
   res1 <- benchmark('mc_mixed_orig', mc_mixed_orig, Al, Bl, Cl, Dl)
   res2 <- benchmark('mc_mixed_guid', mc_mixed_guid, Al, Bl, Cl, Dl)
   cat(c("mc_mixed correctness: ", all.equal(res1, res2), "\n"), sep="")

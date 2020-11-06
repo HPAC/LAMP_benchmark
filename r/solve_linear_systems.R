@@ -34,7 +34,7 @@ solve_linear_systems <- function(b, ...){
     args <- list(...)
     A <- args[[1]]
     Bt <- args[[2]]
-    B <- matrix(rnorm(2 * nrow(Bt) * nrow(A)), nrow=nrow(Bt), ncol=(2 * nrow(A)))
+    B <- matrix(rnorm(5 * nrow(Bt) * nrow(A)), nrow=nrow(Bt), ncol=(5 * nrow(A)))
     res3 <- benchmark('solve_large_nai', solve_nai, A, B)
     res4 <- benchmark('solve_large_rec', solve_rec, A, B)
     cat(c("Solve large correctness: ", all.equal(res3, res4), "\n"), sep="")
