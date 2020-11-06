@@ -3,13 +3,13 @@ function solve_linear_systems(n, rhs_small, rhs_large)
   reps = parse(Int64, ENV["LAMP_REPS"])
 
   A = randn(n,n)
-  B = randn(n,rhs_small)
+  B = randn(n,n/10)
 
   Benchmarker.add_data(csv, "solve_nai", Benchmarker.measure(reps, implicit_solve, A, B))
   Benchmarker.add_data(csv, "solve_rec", Benchmarker.measure(reps, explicit_solve, A, B))
   @test isapprox(implicit_solve(A, B)[2], explicit_solve(A, B)[2])
 
-  B = randn(n,rhs_large)
+  B = randn(n,n/2)
   Benchmarker.add_data(csv, "solve_large_nai", Benchmarker.measure(reps, implicit_solve, A, B))
   Benchmarker.add_data(csv, "solve_large_rec", Benchmarker.measure(reps, explicit_solve, A, B))
   @test isapprox(implicit_solve(A, B)[2], explicit_solve(A, B)[2])

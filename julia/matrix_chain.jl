@@ -2,27 +2,25 @@ function matrix_chain(m, k, n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  k_half::Int64 = k / 2
-  A = randn(m,k)
-  B = randn(k,n)
-  C = randn(k_half, m)
+  A = randn(n,n)
+  B = randn(n,n)
+  C = randn(n / 5, m)
 
   Benchmarker.add_data(csv, "mc_l_r_orig", Benchmarker.measure(reps, left_to_right_chain_original, A, B, C))
   Benchmarker.add_data(csv, "mc_l_r_guid", Benchmarker.measure(reps, left_to_right_chain_guided, A, B, C))
 
   @test isapprox(left_to_right_chain_original(A, B, C)[2], left_to_right_chain_guided(A, B, C)[2])
 
-  C = randn(n, k_half)
-
+  C = randn(n, n / 5)
   Benchmarker.add_data(csv, "mc_r_l_orig", Benchmarker.measure(reps, right_to_left_chain_original, A, B, C))
   Benchmarker.add_data(csv, "mc_r_l_guid", Benchmarker.measure(reps, right_to_left_chain_guided, A, B, C))
 
   @test isapprox(right_to_left_chain_original(A, B, C)[2], right_to_left_chain_guided(A, B, C)[2])
 
-  A = randn(m, k)
-  B = randn(k, k_half)
-  C = randn(k_half, k)
-  D = randn(k, n)
+  A = randn(n, n)
+  B = randn(n, n / 5)
+  C = randn(n / 5, n)
+  D = randn(n, n)
 
   Benchmarker.add_data(csv, "mc_mixed_orig", Benchmarker.measure(reps, mixed_chain_original, A, B, C, D))
   Benchmarker.add_data(csv, "mc_mixed_guid", Benchmarker.measure(reps, mixed_chain_guided, A, B, C, D))

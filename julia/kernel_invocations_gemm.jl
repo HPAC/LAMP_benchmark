@@ -1,10 +1,10 @@
-function kernel_invocations_gemm(m, k, n)
+function kernel_invocations_gemm(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  A = randn(m, k)
-  B = randn(k, n)
-  C = randn(m, n)
+  A = randn(n, n)
+  B = randn(n, n)
+  C = randn(n, n)
 
   Benchmarker.add_data(csv, "gemm_implicit", Benchmarker.measure(reps, gemm_implicit, A, B, C))
   Benchmarker.add_data(csv, "gemm_implicit_noup", Benchmarker.measure(reps, gemm_implicit_noup, A, B))
@@ -19,10 +19,6 @@ function kernel_invocations_gemm(m, k, n)
   @test(isapprox(gemm_implicit(A,B,C)[2], gemm_implicit_compact(A,B,C)[2]))
   @test(isapprox(gemm_implicit(A,B,C)[2], gemm_explicit_semi(A,B,C)[2]))
   @test(isapprox(gemm_implicit_noup(A,B)[2], gemm_explicit_noup(A,B)[2]))
-
-  A = randn(n, n)
-  B = randn(n, n)
-  Benchmarker.add_data(csv, "gemm_prop", Benchmarker.measure(reps, gemm_implicit_noup, A, B))
 
   A = LowerTriangular(randn(n, n))
   Benchmarker.add_data(csv, "trmm_implicit", Benchmarker.measure(reps, trmm_implicit, A, B))

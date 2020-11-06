@@ -1,9 +1,9 @@
-function common_subexpressions(m, k, n)
+function common_subexpressions(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  A = randn(m,k)
-  B = randn(k,n)
+  A = randn(n,n)
+  B = randn(n,n)
 
   Benchmarker.add_data(csv, "subexpr_nai", Benchmarker.measure(reps, implicit_subexpression, A, B))
   Benchmarker.add_data(csv, "subexpr_rec", Benchmarker.measure(reps, explicit_subexpression, A, B))
