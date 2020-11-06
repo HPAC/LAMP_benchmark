@@ -30,7 +30,7 @@ add_scal(b, A, B)
 
 # ! Properties Solve
 
-properties_solve(b, n, n / 10)
+properties_solve(b, n, int(n / 10))
 
 # ! SYRK
 
@@ -59,7 +59,7 @@ kernel_invocations_syr2k(b, A, B, C)
 
 # ! Transposition
 
-tn = n / 10
+tn = int(n / 10)
 A = np.random.randn(tn, tn)
 B = np.random.randn(tn, tn)
 C = np.random.randn(tn, tn)
@@ -76,7 +76,7 @@ common_subexpressions(b, A, B)
 # ! Composed Operations
 
 A = np.random.randn(n, n)
-B = np.random.randn(n, n / 10)
+B = np.random.randn(n, int(n / 10))
 
 solve_linear_systems(b, A, B)
 
@@ -103,7 +103,7 @@ partial_operand(b, A, B)
 
 # ! Index problems
 
-ipn = n / 10
+ipn = int(n / 10)
 A = np.random.randn(ipn, ipn)
 B = np.random.randn(ipn, ipn)
 C = np.random.randn(ipn)
@@ -120,7 +120,7 @@ loop_translation(b, A, B, C)
 
 # ! Partitioned Matrices
 
-p = n / 10
+p = int(n / 10)
 A1 = np.random.randn(p, p)
 A2 = np.random.randn(p, p)
 B = np.random.randn(2*p, 2*p)
