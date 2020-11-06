@@ -16,15 +16,11 @@ diagmm_ = @() diagmm(Ad, Bsq, Csq);
 Atr = tril(Asy);
 trmm_implicit_ = @() trmm_implicit(Atr, Bsq);
 
-Asq = randn(size(A, 1), size(A, 1));
-gemm_prop_ = @() gemm_implicit_noup(Asq, Bsq, Csq);
-
 b.benchmark('gemm_implicit', reps, gemm_implicit_);
 b.benchmark('gemm_implicit_noup', reps, gemm_implicit_noup_);
 b.benchmark('gemm_implicit_coeff', reps, gemm_implicit_coeff_);
 b.benchmark('gemm_implicit_double_coeff', reps, gemm_implicit_double_coeff_);
 
-b.benchmark('gemm_prop', reps, gemm_prop_);
 b.benchmark('trmm_implicit', reps, trmm_implicit_);
 b.benchmark('diagmm', reps, diagmm_);
 end
