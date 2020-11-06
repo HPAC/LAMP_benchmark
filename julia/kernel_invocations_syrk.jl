@@ -1,4 +1,4 @@
-function kernel_invocations_syrk(n, k)
+function kernel_invocations_syrk(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 

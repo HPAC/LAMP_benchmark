@@ -1,7 +1,8 @@
 function partitioned_matrices(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
-    m = n / 10
+
+  m = Int(floor(n / 10))
   A1 = randn(m, m)
   A2 = randn(m, m)
   B = randn(2*m, 2*m)

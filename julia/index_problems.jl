@@ -2,9 +2,10 @@ function index_problems(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  A = randn(n/10,n/10)
-  B = randn(n/10,n/10)
-  C = Vector(randn(n / 10))
+  m = Int(floor(n / 10))
+  A = randn(m, m)
+  B = randn(m, m)
+  C = Vector(randn(m))
 
   Benchmarker.add_data(csv, "loop_nai", Benchmarker.measure(reps, naive_loop, A, B, C))
   Benchmarker.add_data(csv, "loop_rec", Benchmarker.measure(reps, recommended_loop, A, B, C))

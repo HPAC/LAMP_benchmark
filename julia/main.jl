@@ -23,6 +23,7 @@ include("add_scal.jl")
 csv = Benchmarker.CSV(string(ENV["LAMP_OUTPUT_DIR"], "julia_", string(ENV["OMP_NUM_THREADS"])))
 
 n = parse(Int32, ENV["LAMP_N"])
+println(Threads.nthreads())
 
 add_scal(n)
 properties_solve(n)
