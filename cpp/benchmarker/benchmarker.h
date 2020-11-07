@@ -39,6 +39,7 @@ public:
     file = std::ofstream(file_name);
     file_timings = std::ofstream(file_timings_name);
     delim = delimiter;
+    this->iterations = iterations;
     if (file.is_open())
       file << "algorithm" << delim << name << endl;
     else
