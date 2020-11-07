@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     n = atof(argv[3]);
   }
 
-  int k_half = k / 2;
+  int k_half = k / 5;
 
   for (int it = 0; it < LAMP_REPS; it++) {
     A = (double*)malloc(m * k * sizeof(double));
