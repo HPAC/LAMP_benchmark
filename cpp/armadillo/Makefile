@@ -10,8 +10,8 @@ INC      := -Iinclude $(ARMA_INC) $(MKL_INC)
 CXXFLAGS := -O3 -march=native -std=c++14 -Wall -fopenmp $(INC)
 
 ARMA_LD  := -L${LOCAL_INSTALL_DIR}/lib -larmadillo
-MKL_LD	 := -L${MKLROOT}/lib/intel64 -L${MKLROOT}/../lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5\
-			-lpthread -lm -ldl
+MKL_LD	 := -L${MKLROOT}/lib/intel64 -L${MKLROOT}/../lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core -lgomp\
+			      -lpthread -lm -ldl
 LDFLAGS  := $(ARMA_LD) $(MKL_LD)
 
 ARMA_DEFS := -DARMA_NO_DEBUG\
