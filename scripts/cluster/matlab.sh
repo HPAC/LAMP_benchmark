@@ -9,9 +9,6 @@ echo "$1 Threads"
 echo "-----------------------------"
 export MKL_NUM_THREADS=$1
 export OMP_NUM_THREADS=$1
-#export GOMP_CPU_AFFINITY=$2
-#export KMP_AFFINITY=compact,verbose
-export KMP_AFFINITY=verbose,granularity=core,proclist=[$2],explicit
 
 module load MISC
 module load matlab/2019a
@@ -26,7 +23,7 @@ else
   export THREADING=
 fi
 echo "Threading: ${THREADING}"
-/usr/local_rwth/sw/MATLAB/matlab_2019a/bin/matlab ${THREADING} -nodisplay -nodesktop -nosplash -logfile /dev/null <<EOF
+numactl -N 0 /usr/local_rwth/sw/MATLAB/matlab_2019a/bin/matlab ${THREADING} -nodisplay -nodesktop -nosplash -logfile /dev/null <<EOF
 main;
 quit();
 EOF

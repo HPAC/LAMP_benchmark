@@ -16,35 +16,35 @@ make clean
 make all -j 24
 
 echo "algorithm;m;k;n;C;cs_time"                    > ${LAMP_C_OUTPUT_DIR}
-./bin/gemm.x       $LAMP_N $LAMP_N $LAMP_N          >> ${LAMP_C_OUTPUT_DIR}
-./bin/gemm_noup.x  $LAMP_N $LAMP_N $LAMP_N          >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/gemm.x       $LAMP_N $LAMP_N $LAMP_N          >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/gemm_noup.x  $LAMP_N $LAMP_N $LAMP_N          >> ${LAMP_C_OUTPUT_DIR}
 
-./bin/syrk.x       $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
-./bin/syrk_noup.x  $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/syrk.x       $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/syrk_noup.x  $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
 
-./bin/syr2k.x      $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
-./bin/syr2k_noup.x $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/syr2k.x      $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/syr2k_noup.x $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
 
-./bin/trmm.x       $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
-./bin/diagmm.x     $LAMP_N                          >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/trmm.x       $LAMP_N $LAMP_N                  >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/diagmm.x     $LAMP_N                          >> ${LAMP_C_OUTPUT_DIR}
 
-./bin/subexpr_nai.x $LAMP_N $LAMP_N                 >> ${LAMP_C_OUTPUT_DIR}
-./bin/subexpr_rec.x $LAMP_N $LAMP_N                 >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/subexpr_nai.x $LAMP_N $LAMP_N                 >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/subexpr_rec.x $LAMP_N $LAMP_N                 >> ${LAMP_C_OUTPUT_DIR}
 
-./bin/mc_mixed.x $LAMP_N $LAMP_N $LAMP_N            >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/mc_mixed.x $LAMP_N $LAMP_N $LAMP_N            >> ${LAMP_C_OUTPUT_DIR}
 
 let N_10=LAMP_N/10
-./bin/transposition.x $N_10 $N_10 $N_10             >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/transposition.x $N_10 $N_10 $N_10             >> ${LAMP_C_OUTPUT_DIR}
 
 let RHS_SMALL=LAMP_N/10
-./bin/solve_naive.x       $LAMP_N $RHS_SMALL        >> ${LAMP_C_OUTPUT_DIR}
-./bin/solve_recommended.x $LAMP_N $RHS_SMALL       >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/solve_naive.x       $LAMP_N $RHS_SMALL        >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/solve_recommended.x $LAMP_N $RHS_SMALL       >> ${LAMP_C_OUTPUT_DIR}
 
-./bin/solve_recommended_spd.x $LAMP_N $RHS_SMALL    >> ${LAMP_C_OUTPUT_DIR}
-./bin/solve_recommended_sym.x $LAMP_N $RHS_SMALL    >> ${LAMP_C_OUTPUT_DIR}
-./bin/solve_recommended_tri.x $LAMP_N $RHS_SMALL    >> ${LAMP_C_OUTPUT_DIR}
-./bin/solve_recommended_dia.x $LAMP_N $RHS_SMALL    >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/solve_recommended_spd.x $LAMP_N $RHS_SMALL    >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/solve_recommended_sym.x $LAMP_N $RHS_SMALL    >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/solve_recommended_tri.x $LAMP_N $RHS_SMALL    >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/solve_recommended_dia.x $LAMP_N $RHS_SMALL    >> ${LAMP_C_OUTPUT_DIR}
 
 let RHS_LARGE=LAMP_N/2
-./bin/solve_naive.x       $LAMP_N $RHS_LARGE large >> ${LAMP_C_OUTPUT_DIR}
-./bin/solve_recommended.x $LAMP_N $RHS_LARGE large >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/solve_naive.x       $LAMP_N $RHS_LARGE large >> ${LAMP_C_OUTPUT_DIR}
+numactl -N 0 ./bin/solve_recommended.x $LAMP_N $RHS_LARGE large >> ${LAMP_C_OUTPUT_DIR}
