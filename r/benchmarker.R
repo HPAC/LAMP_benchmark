@@ -4,8 +4,7 @@ l3_size <- as.numeric(Sys.getenv("LAMP_L3_CACHE_SIZE"))
 file_out  <- "default"
 file_time <- "default_time"
 
-##! cs <- matrix(data = rnorm(l3_size), nrow = 1, ncol = l3_size)
-cs <- matrix(data = rnorm(1), nrow = 1, ncol = 1)
+cs <- matrix(data = rnorm(l3_size), nrow = 1, ncol = l3_size)
 
 cache_scrub <- function(){
   for (j in 1:dim(cs)[2]){

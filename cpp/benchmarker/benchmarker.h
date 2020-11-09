@@ -84,7 +84,7 @@ private:
   template<typename F, typename... Args>
   double benchmark_(F &&f, Args... args)
   {
-//    cache_scrub_();
+    cache_scrub_();
     t1 = clockk::now();
     std::forward<decltype(f)>(f)(args...);
     t2 = clockk::now();

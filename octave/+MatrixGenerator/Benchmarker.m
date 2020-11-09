@@ -1,13 +1,12 @@
 classdef Benchmarker < handle
 
 properties
-Timings = cell(0, 0);
-Results = cell(0, 5);
-%cs = rand(1, 7500000);
-cs = rand(1, 1);
-    end
+	Timings = cell(0, 0);
+	Results = cell(0, 5);
+	cs = rand(1, str2num(getenv('LAMP_L3_CACHE_SIZE')));
+end
 
-    methods
+methods
 
     function res = benchmark(obj, label, iters, f)
     timings = zeros(iters, 1);

@@ -10,8 +10,7 @@ include("CSV.jl")
 
 gcscrub() = (GC.gc(); GC.gc(); GC.gc(); GC.gc())
 
-# A = rand(7500000)
-A = rand(1)
+A = rand(parse(Int32, ENV["LAMP_L3_CACHE_SIZE"]))
 cachescrub() = (A .+= 0.0001)
 
 function measure(iters, f, args...)
