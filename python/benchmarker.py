@@ -6,7 +6,8 @@ import logging
 logger = logging.getLogger('Benchmarker')
 
 l3_size = int(os.environ['LAMP_L3_CACHE_SIZE'])
-cs = np.random.randn(1, l3_size)
+# cs = np.random.randn(1, l3_size)
+cs = np.random.randn(1, 1)
 
 
 def cache_scrub():

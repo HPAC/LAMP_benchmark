@@ -3,7 +3,8 @@ classdef Benchmarker < handle
 properties
 Timings = cell(0, 0);
 Results = cell(0, 5);
-cs = rand(1, 7500000);
+%cs = rand(1, 7500000);
+cs = rand(1, 1);
     end
 
     methods

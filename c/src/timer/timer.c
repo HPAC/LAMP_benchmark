@@ -58,16 +58,17 @@ double clock_min_diff(double time_min, double time_start)
 
 double cache_scrub()
 {
-  double dtime, dtime_save = 1e10;
-  if (cs == NULL) {
-    cs = (double*)malloc(LAMP_L3_CACHE_SIZE * sizeof(double));
-    srand48((unsigned)time((time_t*)NULL));
-    for (int i = 0; i < LAMP_L3_CACHE_SIZE; i++)
-      cs[i] = drand48();
-  }
-  dtime = cclock();
-  for (int i = 0; i < LAMP_L3_CACHE_SIZE; i++)
-    cs[i] += 1e-3;
-  dtime_save = clock_min_diff(dtime_save, dtime);
-  return dtime_save;
+//  double dtime, dtime_save = 1e10;
+//  if (cs == NULL) {
+//    cs = (double*)malloc(LAMP_L3_CACHE_SIZE * sizeof(double));
+//    srand48((unsigned)time((time_t*)NULL));
+//    for (int i = 0; i < LAMP_L3_CACHE_SIZE; i++)
+//      cs[i] = drand48();
+//  }
+//  dtime = cclock();
+//  for (int i = 0; i < LAMP_L3_CACHE_SIZE; i++)
+//    cs[i] += 1e-3;
+//  dtime_save = clock_min_diff(dtime_save, dtime);
+//  return dtime_save;
+  return 0.0;
 }

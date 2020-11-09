@@ -10,7 +10,8 @@ include("CSV.jl")
 
 gcscrub() = (GC.gc(); GC.gc(); GC.gc(); GC.gc())
 
-A = rand(7500000)
+# A = rand(7500000)
+A = rand(1)
 cachescrub() = (A .+= 0.0001)
 
 function measure(iters, f, args...)
