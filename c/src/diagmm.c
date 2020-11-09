@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <timer.h>
-
-void daxpy(const int*, const double*, const double*, const int*, double*, const int*);
+#include "mkl.h"
 
 int main(int argc, char* argv[])
 {
@@ -19,19 +18,18 @@ int main(int argc, char* argv[])
   } else {
     n = atof(argv[1]);
   }
+  srand48((unsigned)time((time_t*)NULL));
+
+  A = (double*)mkl_malloc(n * n * sizeof(double), 64);
+  B = (double*)mkl_malloc(n * n * sizeof(double), 64);
+  C = (double*)mkl_malloc(n * n * sizeof(double), 64);
+
+  for (int i = 0; i < n * n; i++) B[i] = drand48();
 
   for (int it = 0; it < LAMP_REPS; it++) {
-    A = (double*)malloc(n * n * sizeof(double));
-    B = (double*)malloc(n * n * sizeof(double));
-    C = (double*)malloc(n * n * sizeof(double));
 
-    srand48((unsigned)time((time_t*)NULL));
+    for (int i = 0; i < n * n; i++) C[i] = 0.0;
 
-    for (int i = 0; i < n * n; i++) {
-      A[i] = drand48();
-      B[i] = drand48();
-      C[i] = 0.0;
-    }
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++) {
         if (i == j)
@@ -81,11 +79,10 @@ int main(int argc, char* argv[])
     /*printf("using LinearAlgebra\n");*/
     /*printf("C = A * B\n");*/
     /*printf("isapprox(C2, C, atol=1e-4)\n");*/
-
-    free(A);
-    free(B);
-    free(C);
-  };
+  }
+  mkl_free(A);
+  mkl_free(B);
+  mkl_free(C);
 
   printf("diagmm;%d;%d;%d;%e;%e\n", n, n, n, dtime_save, cs_time);
 

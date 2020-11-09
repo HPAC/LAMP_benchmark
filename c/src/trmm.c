@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <timer.h>
-
-void dtrmm_(const char*, const char*, const char*, const char*, const int*, const int*, const double*, const double*, const int*, double*, const int*);
+#include "mkl.h"
 
 int main(int argc, char* argv[])
 {
@@ -21,22 +20,21 @@ int main(int argc, char* argv[])
     m = atof(argv[1]);
     n = atof(argv[2]);
   }
+  srand48((unsigned)time((time_t*)NULL));
+
+  A = (double*)mkl_malloc(m * m * sizeof(double), 64);
+  B = (double*)mkl_malloc(m * n * sizeof(double), 64);
+
+  for (int i = 0; i < m * n; i++) B[i] = drand48();
 
   for (int it = 0; it < LAMP_REPS; it++) {
-    A = (double*)malloc(m * m * sizeof(double));
-    B = (double*)malloc(m * n * sizeof(double));
-
-    srand48((unsigned)time((time_t*)NULL));
-
-    for (int i = 0; i < m * m; i++)
-      A[i] = drand48();
-    for (int i = 0; i < m * n; i++)
-      B[i] = drand48();
 
     for (int i = 0; i < m; i++)
       for (int j = 0; j < m; j++)
         if (i < j)
           A[i + j * n] = 0.0;
+        else
+          A[i + j * n] = drand48();
 
     /*printf("A = [\n");*/
     /*for (int i = 0; i < m; i++) {*/
@@ -57,7 +55,7 @@ int main(int argc, char* argv[])
     cs_time = cache_scrub();
 
     dtime = cclock();
-    dtrmm_("L", "L", "N", "N", &m, &n, &one, A, &m, B, &m);
+    dtrmm("L", "L", "N", "N", &m, &n, &one, A, &m, B, &m);
     dtime_save = clock_min_diff(dtime_save, dtime);
 
     /*printf("B2 = [\n");*/
@@ -70,10 +68,9 @@ int main(int argc, char* argv[])
     /*printf("using LinearAlgebra\n");*/
     /*printf("B = A * B\n");*/
     /*printf("isapprox(B2, B, atol=1e-4)\n");*/
-
-    free(A);
-    free(B);
-  };
+  }
+  mkl_free(A);
+  mkl_free(B);
 
   printf("trmm_explicit;%d;%d;%d;%e;%e\n", m, 0, n, dtime_save, cs_time);
   printf("trmm_implicit;%d;%d;%d;%e;%e\n", m, 0, n, dtime_save, cs_time);

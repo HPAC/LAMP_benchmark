@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <timer.h>
-
-int dsyr2k_(char*, char*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*);
+#include "mkl.h"
 
 int main(int argc, char* argv[])
 {
@@ -21,20 +20,18 @@ int main(int argc, char* argv[])
     n = atof(argv[1]);
     k = atof(argv[2]);
   }
+  srand48((unsigned)time((time_t*)NULL));
+
+  A = (double*)mkl_malloc(n * k * sizeof(double), 64);
+  B = (double*)mkl_malloc(n * k * sizeof(double), 64);
+  C = (double*)mkl_malloc(n * n * sizeof(double), 64);
+
+  for (int i = 0; i < n * k; i++) A[i] = drand48();
+  for (int i = 0; i < n * k; i++) B[i] = drand48();
 
   for (int it = 0; it < LAMP_REPS; it++) {
-    A = (double*)malloc(n * k * sizeof(double));
-    B = (double*)malloc(n * k * sizeof(double));
-    C = (double*)malloc(n * n * sizeof(double));
 
-    srand48((unsigned)time((time_t*)NULL));
-
-    for (int i = 0; i < n * k; i++)
-      A[i] = drand48();
-    for (int i = 0; i < n * k; i++)
-      B[i] = drand48();
-    for (int i = 0; i < n * n; i++)
-      C[i] = drand48();
+    for (int i = 0; i < n * n; i++) C[i] = drand48();
 
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
@@ -66,7 +63,7 @@ int main(int argc, char* argv[])
 
     cs_time = cache_scrub();
     dtime = cclock();
-    dsyr2k_("L", "N", &n, &k, &one, A, &n, B, &n, &one, C, &n);
+    dsyr2k("L", "N", &n, &k, &one, A, &n, B, &n, &one, C, &n);
     dtime_save = clock_min_diff(dtime_save, dtime);
 
     /*printf("C2 = [\n");*/
@@ -79,11 +76,10 @@ int main(int argc, char* argv[])
     /*printf("using LinearAlgebra\n");*/
     /*printf("C += A * transpose(B) + B * transpose(A)\n");*/
     /*printf("isapprox(Symmetric(C2, :L), C, atol=1e-4)\n");*/
-
-    free(A);
-    free(B);
-    free(C);
-  };
+  }
+  mkl_free(A);
+  mkl_free(B);
+  mkl_free(C);
 
   printf("syr2k_explicit;%d;%d;%d;%e;%e\n", 0, k, n, dtime_save, cs_time);
 

@@ -4,15 +4,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <timer.h>
-
-int dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*);
+#include "mkl.h"
 
 int main(int argc, char* argv[])
 {
   int m, k, n;
-  double one = 1.0;
-  double zero = 0.0;
-  double *A, *m1, *m2, *B, *t1, *t2, *C;
+  double one = 1.0, zero = 0.0;
+  double *A, *M1, *M2, *B, *T1, *T2, *C;
   double dtime, dtime_save = DBL_MAX, cs_time = DBL_MAX;
 
   if (argc < 4) {
@@ -24,35 +22,28 @@ int main(int argc, char* argv[])
     n = atof(argv[3]);
   }
 
-  int k_half = k / 5;
+  int small = k / 5;
+
+  A = (double*)mkl_malloc(m * k * sizeof(double), 64);
+  M1 = (double*)mkl_malloc(k * small * sizeof(double), 64);
+  M2 = (double*)mkl_malloc(small * k * sizeof(double), 64);
+  B = (double*)mkl_malloc(k * n * sizeof(double), 64);
+
+  T1 = (double*)mkl_malloc(m * small * sizeof(double), 64);
+  T2 = (double*)mkl_malloc(small * n * sizeof(double), 64);
+  C = (double*)mkl_malloc(m * n * sizeof(double), 64);
+
+  srand48((unsigned)time((time_t*)NULL));
+  for (int i = 0; i < m * k; i++) A[i] = drand48();
+  for (int i = 0; i < k * small; i++) M1[i] = drand48();
+  for (int i = 0; i < small * k; i++) M2[i] = drand48();
+  for (int i = 0; i < k * n; i++) B[i] = drand48();
 
   for (int it = 0; it < LAMP_REPS; it++) {
-    A = (double*)malloc(m * k * sizeof(double));
-    m1 = (double*)malloc(k * k_half * sizeof(double));
-    m2 = (double*)malloc(k_half * k * sizeof(double));
-    B = (double*)malloc(k * n * sizeof(double));
 
-    t1 = (double*)malloc(m * k_half * sizeof(double));
-    t2 = (double*)malloc(k_half * n * sizeof(double));
-    C = (double*)malloc(m * n * sizeof(double));
-
-    srand48((unsigned)time((time_t*)NULL));
-
-    for (int i = 0; i < m * k; i++)
-      A[i] = drand48();
-    for (int i = 0; i < k * k_half; i++)
-      m1[i] = drand48();
-    for (int i = 0; i < k_half * k; i++)
-      m2[i] = drand48();
-    for (int i = 0; i < k * n; i++)
-      B[i] = drand48();
-
-    for (int i = 0; i < m * k_half; i++)
-      t1[i] = 0.0;
-    for (int i = 0; i < k_half * n; i++)
-      t2[i] = 0.0;
-    for (int i = 0; i < m * n; i++)
-      C[i] = 0.0;
+    for (int i = 0; i < m * small; i++) T1[i] = 0.0;
+    for (int i = 0; i < small * n; i++) T2[i] = 0.0;
+    for (int i = 0; i < m * n; i++) C[i] = 0.0;
 
     /*printf("A = [\n");*/
     /*for (int i = 0; i < m; i++) {*/
@@ -91,10 +82,11 @@ int main(int argc, char* argv[])
     /*printf("C1 = t1*t2;\n");*/
 
     cs_time = cache_scrub();
+
     dtime = cclock();
-    dgemm_("N", "N", &m, &k_half, &k, &one, A, &m, m1, &k, &zero, t1, &m);
-    dgemm_("N", "N", &k_half, &n, &k, &one, m2, &k_half, B, &k, &zero, t2, &k_half);
-    dgemm_("N", "N", &m, &n, &k_half, &one, t1, &m, t2, &k_half, &zero, C, &m);
+    dgemm("N", "N", &m, &small, &k, &one, A, &m, M1, &k, &zero, T1, &m);
+    dgemm("N", "N", &small, &n, &k, &one, M2, &small, B, &k, &zero, T2, &small);
+    dgemm("N", "N", &m, &n, &small, &one, T1, &m, T2, &small, &zero, C, &m);
     dtime_save = clock_min_diff(dtime_save, dtime);
 
     /*printf("C = [\n");*/
@@ -104,15 +96,15 @@ int main(int argc, char* argv[])
     /*printf(";\n");*/
     /*}*/
     /*printf("];\n");*/
+  }
 
-    free(A);
-    free(B);
-    free(C);
-    free(t1);
-    free(t2);
-    free(m1);
-    free(m2);
-  };
+  mkl_free(A);
+  mkl_free(B);
+  mkl_free(C);
+  mkl_free(T1);
+  mkl_free(T2);
+  mkl_free(M1);
+  mkl_free(M2);
 
   printf("mc_mixed_guid;%d;%d;%d;%e;%e\n", m, k, n, dtime_save, cs_time);
 
