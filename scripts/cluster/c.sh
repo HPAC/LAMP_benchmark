@@ -9,7 +9,8 @@ echo "-----------------------------"
 export MKL_NUM_THREADS=$1
 export OMP_NUM_THREADS=$1
 #export GOMP_CPU_AFFINITY=$2
-#export KMP_AFFINITY=compact,verbose
+#export KMP_AFFINITY=verbose,granularity=core,compact
+export KMP_AFFINITY=verbose,granularity=core,proclist=[$2],explicit
 export LD_LIBRARY_PATH="${MKLROOT}/../lib/intel64:$LD_LIBRARY_PATH"  # Runtime cannot find libiomp5.
 
 export LAMP_C_OUTPUT_DIR=${LAMP_OUTPUT_DIR}/c_${OMP_NUM_THREADS}.txt
