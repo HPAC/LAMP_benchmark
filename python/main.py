@@ -120,7 +120,7 @@ loop_translation(b, A, B, C)
 
 # ! Partitioned Matrices
 
-p = int(n / 10)
+p = int(n / 2)
 A1 = np.random.randn(p, p)
 A2 = np.random.randn(p, p)
 B = np.random.randn(2*p, 2*p)

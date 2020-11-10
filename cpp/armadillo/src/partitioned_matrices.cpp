@@ -16,7 +16,7 @@ void explicit_partitioned(const mat& A1, const mat& A2, const mat& B, mat& C)
 
 void bench_partitioned_matrices(Benchmarker& b, int n)
 {
-  auto m = n / 10;
+  auto m = n / 2;
   dmat A1 = randn<dmat>(m, m);
   dmat A2 = randn<dmat>(m, m);
   dmat B = randn<dmat>(2 * m, 2 * m);

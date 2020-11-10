@@ -18,7 +18,7 @@ void explicit_partitioned(const MatrixXd& A1, const MatrixXd& A2, const MatrixXd
 
 void bench_partitioned_matrices(Benchmarker& b, int n)
 {
-  auto m = n / 10;
+  auto m = n / 2;
   MatrixXd A1 = MatrixXd::Random(m, m);
   MatrixXd A2 = MatrixXd::Random(m, m);
   MatrixXd B = MatrixXd::Random(2 * m, 2 * m);

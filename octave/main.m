@@ -60,9 +60,9 @@ B = randn(n,n);
 C = randn(n,n);
 loop_translation(A, B, C, b);
 
-A1 = randn(n / 10,n / 10);
-A2 = randn(n / 10,n / 10);
-B = randn(n / 5,n / 5);
+A1 = randn(n / 2, n / 2);
+A2 = randn(n / 2, n / 2);
+B = randn(n,n);
 partitioned_matrices(A1, A2, B, b);
 
 b.save(strcat(getenv('LAMP_OUTPUT_DIR'), 'octave_', getenv('OMP_NUM_THREADS'), '.txt'));

@@ -115,7 +115,7 @@ loop_translation(b, A, B, C)
 
 ##! Partitioned Matrices
 
-p <- n / 10
+p <- n / 2
 A1 = matrix(data = rnorm(p*p), nrow = p, ncol =  p)
 A2 = matrix(data = rnorm(p*p), nrow = p, ncol =  p)
 B  = matrix(data = rnorm(2*p, 2*p), nrow = 2*p, ncol = 2*p)
