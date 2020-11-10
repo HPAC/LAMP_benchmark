@@ -12,5 +12,5 @@ export LD_LIBRARY_PATH="${MKLROOT}/../lib/intel64:$LD_LIBRARY_PATH"  # Runtime c
 
 make clean
 make -j 24
-numactl -N 0 ./bench_armadillo
+./bench_armadillo
 make clean

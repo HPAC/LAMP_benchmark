@@ -9,4 +9,4 @@ echo "-----------------------------"
 export MKL_NUM_THREADS=$1
 export OMP_NUM_THREADS=$1
 
-numactl -N 0 ${R_SCRIPT} main.R
+${R_SCRIPT} main.R

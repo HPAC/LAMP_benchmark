@@ -11,4 +11,4 @@ export MKL_NUM_THREADS=$1
 export OMP_NUM_THREADS=$1
 
 octave --version
-numactl -N 0 octave main.m
+octave main.m

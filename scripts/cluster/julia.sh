@@ -12,4 +12,4 @@ export JULIA_NUM_THREADS=$1
 export LD_LIBRARY_PATH="${MKLROOT}/../lib/intel64:$LD_LIBRARY_PATH"  # Runtime cannot find libiomp5.
 
 ${JULIA_DIR}/julia --version
-numactl -N 0 ${JULIA_DIR}/julia main.jl
+${JULIA_DIR}/julia main.jl
