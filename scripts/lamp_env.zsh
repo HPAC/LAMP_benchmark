@@ -47,8 +47,8 @@ export R=${LOCAL_INSTALL_DIR}/lib64/R/bin/R
 alias R="${R}"
 
 # Python
-export MKL_PYTHON=python3
-alias python="${MKL_PYTHON}"
+export PYTHON=python3
+alias python="${PYTHON}"
 
 # Matlab
 export MATLAB="/usr/local_rwth/sw/MATLAB/matlab_2020a/bin/matlab"

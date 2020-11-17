@@ -12,4 +12,4 @@ export OMP_NUM_THREADS=$1
 module load DEVELOP
 module load pythoni/3.6.2019
 
-${MKL_PYTHON} main.py
+${PYTHON} main.py
