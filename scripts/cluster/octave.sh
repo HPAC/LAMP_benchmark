@@ -10,5 +10,5 @@ echo "-----------------------------"
 export MKL_NUM_THREADS=$1
 export OMP_NUM_THREADS=$1
 
-octave --version
-octave main.m
+${OCTAVE} --version
+${OCTAVE} main.m

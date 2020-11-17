@@ -1,10 +1,9 @@
-*/*/results
-*/results
-*/*/obj
 */obj
 */__pycache__
 */bin
-*/*/bin
+
 scripts/cluster/log
 scripts/.ipynb_checkpoints
+.idea
+lamp.tar.gz
 results

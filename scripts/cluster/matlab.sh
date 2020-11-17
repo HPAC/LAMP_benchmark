@@ -23,7 +23,7 @@ else
   export THREADING=
 fi
 echo "Threading: ${THREADING}"
-/usr/local_rwth/sw/MATLAB/matlab_2020a/bin/matlab ${THREADING} -nodisplay -nodesktop -nosplash -logfile /dev/null <<EOF
+${MALTAB} ${THREADING} -nodisplay -nodesktop -nosplash -logfile /dev/null <<EOF
 main;
 quit();
 EOF
