@@ -2,19 +2,17 @@ function matrix_chain(A, B, b)
 
 reps = str2num(getenv('LAMP_REPS'));
 
-m = size(A, 1);
-k = size(A, 2);
-n = size(B, 2);
+n = size(A, 2);
 
-C1 = randn(k/2, m);
-C2 = randn(n, k/2);
+C1 = randn(n/5, n);
+C2 = randn(n, n/5);
 l_r_orig_ = @() l_r_orig(A, B, C1);
 l_r_guid_ = @() l_r_guid(A, B, C1);
 r_l_orig_ = @() r_l_orig(A, B, C2);
 r_l_guid_ = @() r_l_guid(A, B, C2);
 
-C11 = randn(k, k/2);
-C21 = randn(k/2, k);
+C11 = randn(n, n/5);
+C21 = randn(n/5, n);
 mixed_orig_ = @() mixed_orig(A, B, C11, C21);
 mixed_guid_ = @() mixed_guid(A, B, C11, C21);
 

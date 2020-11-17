@@ -5,9 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <timer.h>
-
-void daxpy(const int*, const double*, const double*, const int*, double*, const int*);
-void dgemm_(const char*, const char*, const int*, const int*, const int*, const double*, const double*, const int*, const double*, const int*, const double*, double*, const int*);
+#include "mkl.h"
 
 int main(int argc, char* argv[])
 {
@@ -24,27 +22,25 @@ int main(int argc, char* argv[])
     n = atof(argv[1]);
     rhs = atof(argv[2]);
   }
+  srand48((unsigned)time((time_t*)NULL));
+
+  A = (double*)mkl_malloc(n * n * sizeof(double), 64);
+  B = (double*)mkl_malloc(n * rhs * sizeof(double), 64);
+  C = (double*)mkl_malloc(n * rhs * sizeof(double), 64);
+
+  for (int i = 0; i < n * rhs; i++) B[i] = drand48();
 
   for (int it = 0; it < LAMP_REPS; it++) {
 
-    A = (double*)malloc(n * n * sizeof(double));
-    B = (double*)malloc(n * rhs * sizeof(double));
-    C = (double*)malloc(n * rhs * sizeof(double));
-
-    srand48((unsigned)time((time_t*)NULL));
-
-    for (int i = 0; i < n * n; i++)
-      A[i] = drand48();
-    for (int i = 0; i < n * rhs; i++) {
-      B[i] = drand48();
-      C[i] = 0.0;
-    }
+    for (int i = 0; i < n * rhs; i++) C[i] = 0.0;
 
     // Create Diagonal Matrix
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++) {
         if (i != j)
           A[i + j * n] = 0.0;
+        else
+          A[i + j * n] = drand48();
       }
 
     /*printf("A = \n");*/
@@ -63,7 +59,7 @@ int main(int argc, char* argv[])
     }
     dtime_save = clock_min_diff(dtime_save, dtime);
 
-    dgemm_("N", "N", &n, &rhs, &n, &one, A, &n, C, &n, &minus_one, B, &n);
+    dgemm("N", "N", &n, &rhs, &n, &one, A, &n, C, &n, &minus_one, B, &n);
     double max_value = abs(B[0]);
     for (int i = 0; i < n * rhs; i++)
       max_value = fmax(fabs(B[i]), max_value);
@@ -71,11 +67,10 @@ int main(int argc, char* argv[])
       printf("Verification failed...\n");
       return (-1);
     }
-
-    free(A);
-    free(B);
-    free(C);
-  };
+  }
+  mkl_free(A);
+  mkl_free(B);
+  mkl_free(C);
 
   printf("solve_dia;%d;%d;%d;%e;%e\n", 0, rhs, n, dtime_save, cs_time);
 

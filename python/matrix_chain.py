@@ -96,25 +96,23 @@ def mc_mixed_guid(A, B, C, D):
 
 def matrix_chain(b, *args):
 
-    m = args[0].shape[0]  # nrows A
-    k = args[0].shape[1]  # ncols A
-    n = args[1].shape[1]  # ncols B
-    k_half = int(k/2)
+    n = args[0].shape[0]  # ncols B
+    n_5 = int(n/5)
 
-    C = np.random.randn(k_half, m)
+    C = np.random.randn(n_5, n)
     res1 = b.benchmark('mc_l_r_orig', mc_l_r_orig, C, *args)
     res2 = b.benchmark('mc_l_r_guid', mc_l_r_guid, C, *args)
     logger.info('mc_l_r correctness: {}'.format(np.allclose(res1, res2)))
 
-    C = np.random.randn(n, k_half)
+    C = np.random.randn(n, n_5)
     res1 = b.benchmark('mc_r_l_orig', mc_r_l_orig, C, *args)
     res2 = b.benchmark('mc_r_l_guid', mc_r_l_guid, C, *args)
     logger.info('mc_r_l correctness: {}'.format(np.allclose(res1, res2)))
 
-    A = np.random.randn(m, k)
-    B = np.random.randn(k, k_half)
-    C = np.random.randn(k_half, k)
-    D = np.random.randn(k, n)
+    A = np.random.randn(n, n)
+    B = np.random.randn(n, n_5)
+    C = np.random.randn(n_5, n)
+    D = np.random.randn(n, n)
     res1 = b.benchmark('mc_mixed_orig', mc_mixed_orig, A, B, C, D)
     res2 = b.benchmark('mc_mixed_guid', mc_mixed_guid, A, B, C, D)
     logger.info('mc_mixed correctness: {}'.format(np.allclose(res1, res2)))

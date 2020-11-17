@@ -70,4 +70,5 @@ double cache_scrub()
     cs[i] += 1e-3;
   dtime_save = clock_min_diff(dtime_save, dtime);
   return dtime_save;
+  return 0.0;
 }

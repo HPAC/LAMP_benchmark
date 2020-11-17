@@ -1,19 +1,22 @@
-SRC				 := src
-OBJ 			 := obj
-BIN        := bin
+SRC     := src
+OBJ     := obj
+BIN     := bin
 
-MKL_INC 	 := -m64 -I${MKLROOT}/include
-INC        := -Isrc/timer $(MKL_INC)
-MKL_LD		 := -L${MKLROOT}/lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+CC      := gcc
+LINKER  := $(CC)
 
-CC 				 := gcc
-LINKER     := $(CC)
-DEFS  		 := -DLAMP_REPS=$(LAMP_REPS) -DLAMP_L3_CACHE_SIZE=$(LAMP_L3_CACHE_SIZE)
-CFLAGS     := -O3 -march=native -Wall $(INC)
-LDFLAGS    := $(MKL_LD) -lm -ldl -lpthread
+MKL_INC := -m64 -I${MKLROOT}/include
+INC     := -Isrc/timer $(MKL_INC)
+CFLAGS  := -O3 -march=native -Wall $(INC)
 
-SOURCES 	 := $(wildcard $(SRC)/*.c)
-BINARIES 	 := $(patsubst $(SRC)/%.c, $(BIN)/%.x, $(SOURCES))
+MKL_LD  := -L${MKLROOT}/lib/intel64 -L${MKLROOT}/../lib/intel64 -Wall -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5\
+	         -lpthread -lm -ldl
+LDFLAGS := $(MKL_LD)
+
+DEFS    := -DLAMP_REPS=$(LAMP_REPS) -DLAMP_L3_CACHE_SIZE=$(LAMP_L3_CACHE_SIZE)
+
+SOURCES  := $(wildcard $(SRC)/*.c)
+BINARIES := $(patsubst $(SRC)/%.c, $(BIN)/%.x, $(SOURCES))
 
 default: all
 all: $(BINARIES)

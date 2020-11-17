@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <timer.h>
-
-void dgesv_(int* n, int* nrhs, double* a, int* rhsda, int* ipiv, double* b, int* rhsdb, int* info);
+#include "mkl.h"
 
 int main(int argc, char* argv[])
 {
@@ -22,20 +21,18 @@ int main(int argc, char* argv[])
     rhs = atof(argv[2]);
   }
 
+  srand48((unsigned)time((time_t*)NULL));
+
+  A = (double*)mkl_malloc(n * n * sizeof(double), 64);
+  B = (double*)mkl_malloc(n * rhs * sizeof(double), 64);
+  ipiv = (int*)mkl_malloc(1 * n * sizeof(double), 64);
+
+  for (int i = 0; i < n * rhs; i++) B[i] = drand48();
+
   for (int it = 0; it < LAMP_REPS; it++) {
 
-    A = (double*)malloc(n * n * sizeof(double));
-    B = (double*)malloc(n * rhs * sizeof(double));
-    ipiv = (int*)malloc(1 * n * sizeof(double));
-
-    srand48((unsigned)time((time_t*)NULL));
-
-    for (int i = 0; i < n * n; i++)
-      A[i] = drand48();
-    for (int i = 0; i < n * rhs; i++)
-      B[i] = drand48();
-    for (int i = 0; i < n; i++)
-      ipiv[i] = 0;
+    for (int i = 0; i < n * n; i++) A[i] = drand48();
+    for (int i = 0; i < n; i++) ipiv[i] = 0;
 
     /*printf("A = [\n");*/
     /*for (int i = 0; i < n; i++) {*/
@@ -58,6 +55,7 @@ int main(int argc, char* argv[])
     int info = 1;
 
     cs_time = cache_scrub();
+
     dtime = cclock();
     dgesv_(&n, &rhs, A, &n, ipiv, B, &n, &info);
     dtime_save = clock_min_diff(dtime_save, dtime);
@@ -70,11 +68,10 @@ int main(int argc, char* argv[])
     /*}*/
     /*printf("];\n");*/
     /*printf("isapprox(C, C2, atol=1e-4)\n");*/
-
-    free(A);
-    free(B);
-    free(ipiv);
   };
+  mkl_free(A);
+  mkl_free(B);
+  mkl_free(ipiv);
 
   if (argv[3]) {
     printf("solve_%s_rec;%d;%d;%d;%e;%e\n", argv[3], 0, rhs, n, dtime_save, cs_time);

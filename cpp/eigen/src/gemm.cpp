@@ -1,4 +1,6 @@
-#include "../lib/gemm.h"
+#include "../include/benchmarks.h"
+
+using namespace Eigen;
 
 void gemm_implicit(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
 {
@@ -45,112 +47,25 @@ void diagmm(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
   C = A * B;
 }
 
-void bench_gemm(const MatrixXd& A, const MatrixXd& B, const MatrixXd& C, Benchmarker& b)
+void bench_gemm(Benchmarker &b, int n)
 {
+  MatrixXd A = MatrixXd::Random(n, n);
+  MatrixXd B = MatrixXd::Random(n, n);
+  MatrixXd C = MatrixXd::Random(n, n);
 
-  std::chrono::high_resolution_clock::time_point t1, t2;
-  std::vector<double> impl_gemm(LAMP_REPS);
-  std::vector<double> impl_gemm_compact(LAMP_REPS);
-  std::vector<double> impl_gemm_noup(LAMP_REPS);
-  std::vector<double> impl_gemm_coeff(LAMP_REPS);
-  std::vector<double> impl_gemm_double_coeff(LAMP_REPS);
+  b.benchmark("gemm_implicit", gemm_implicit, A, B, C);
+  b.benchmark("gemm_implicit_compact", gemm_implicit_compact, A, B, C);
+  b.benchmark("gemm_implicit_noup", gemm_implicit_noup, A, B, C);
+  b.benchmark("gemm_implicit_coeff", gemm_implicit_coeff, A, B, C);
+  b.benchmark("gemm_implicit_double_coeff", gemm_implicit_double_coeff, A, B, C);
 
-  std::vector<double> gemm_prop(LAMP_REPS);
-  std::vector<double> impl_trmm(LAMP_REPS);
-  std::vector<double> impl_trmm_compact(LAMP_REPS);
-  std::vector<double> impl_diagmm(LAMP_REPS);
+  A.setRandom(n, n);
+  A = A.triangularView<Eigen::Lower>(); // This step creates a full matrix from the view.
+  b.benchmark("trmm_implicit", trmm_implicit, A, B);
+  b.benchmark("trmm_implicit_compact", trmm_implicit_compact, A, B);
+  b.benchmark("trmm_implicit_eig", trmm_implicit_eig, A, B);
 
-  std::vector<double> impl_trmm_eig(LAMP_REPS);
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, gemm_implicit(At, Bt, Ct), impl_gemm[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, gemm_implicit_compact(At, Bt, Ct), impl_gemm_compact[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, gemm_implicit_noup(At, Bt, Ct), impl_gemm_noup[i]);
-  }
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, gemm_implicit_coeff(At, Bt, Ct), impl_gemm_coeff[i]);
-  }
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = A;
-    MatrixXd Bt = B;
-    MatrixXd Ct = C;
-
-    BENCHMARK(b, gemm_implicit_double_coeff(At, Bt, Ct), impl_gemm_double_coeff[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = MatrixXd::Random(A.rows(), A.rows());
-    At = At.triangularView<Eigen::Lower>(); // This step creates a full matrix from the view.
-    MatrixXd Bt = MatrixXd::Random(A.rows(), A.rows());
-
-    BENCHMARK(b, trmm_implicit(At, Bt), impl_trmm[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = MatrixXd::Random(A.rows(), A.rows());
-    At = At.triangularView<Eigen::Lower>(); // This step creates a full matrix from the view.
-    MatrixXd Bt = MatrixXd::Random(A.rows(), A.rows());
-
-    BENCHMARK(b, trmm_implicit_compact(At, Bt), impl_trmm_compact[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = MatrixXd::Random(A.rows(), A.rows());
-    At = At.triangularView<Eigen::Lower>();
-    MatrixXd Bt = MatrixXd::Random(A.rows(), A.rows());
-
-    BENCHMARK(b, trmm_implicit_eig(At, Bt), impl_trmm_eig[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = MatrixXd::Random(A.rows(), A.rows());
-    MatrixXd Atd = At.diagonal().asDiagonal();
-    MatrixXd Bt = MatrixXd::Random(A.rows(), A.rows());
-    MatrixXd Ct = MatrixXd::Random(A.rows(), A.rows());
-
-    BENCHMARK(b, diagmm(Atd, Bt, Ct), impl_diagmm[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    MatrixXd At = MatrixXd::Random(A.rows(), A.rows());
-    MatrixXd Bt = MatrixXd::Random(A.rows(), A.rows());
-    MatrixXd Ct = MatrixXd::Random(A.rows(), A.rows());
-
-    BENCHMARK(b, gemm_implicit_noup(At, Bt, Ct), gemm_prop[i]);
-  }
-
-  b.add(impl_gemm, "gemm_implicit");
-  b.add(impl_gemm_compact, "gemm_implicit_compact");
-  b.add(impl_gemm_noup, "gemm_implicit_noup");
-  b.add(impl_gemm_coeff, "gemm_implicit_coeff");
-  b.add(impl_gemm_double_coeff, "gemm_implicit_double_coeff");
-
-  b.add(gemm_prop, "gemm_prop");
-  b.add(impl_trmm, "trmm_implicit");
-  b.add(impl_trmm_compact, "trmm_implicit_compact");
-  b.add(impl_diagmm, "diagmm");
-
-  b.add(impl_trmm_eig, "trmm_implicit_eig");
+  A.setRandom(n, n);
+  A = A.diagonal().asDiagonal();
+  b.benchmark("diagmm", diagmm, A, B, C);
 }

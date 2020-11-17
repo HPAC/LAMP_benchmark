@@ -2,9 +2,10 @@ function partitioned_matrices(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  A1 = randn(n, n)
-  A2 = randn(n, n)
-  B = randn(2*n, 2*n)
+  m = Int(floor(n / 2))
+  A1 = randn(m, m)
+  A2 = randn(m, m)
+  B = randn(2*m, 2*m)
 
   Benchmarker.add_data(csv, "compact", Benchmarker.measure(reps, blocked_solve_naive, A1, A2, B))
   Benchmarker.add_data(csv, "blocked", Benchmarker.measure(reps, blocked_solve_recommended, A1, A2, B))
@@ -34,7 +35,7 @@ function blocked_solve_recommended(A1::DenseArray{Float64, 2}, A2::DenseArray{Fl
   Benchmarker.gcscrub()
   start = time_ns()
 
-b1 = @view B[1:size(A1, 1), 1:end] # do not use view with parenthesis
+  b1 = @view B[1:size(A1, 1), 1:end] # do not use view with parenthesis
   b2 = @view B[size(A1, 1)+1:end, 1:end]
   result = [A1\b1; A2\b2]
 

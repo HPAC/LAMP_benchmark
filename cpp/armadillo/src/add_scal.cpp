@@ -1,4 +1,6 @@
-#include "../lib/add_scal.h"
+#include "../include/benchmarks.h"
+
+using namespace arma;
 
 static void add(const mat& A, mat& B)
 {
@@ -10,26 +12,11 @@ static void scal(mat& A)
   A = 3.0 * A;
 }
 
-void bench_add_scal(const mat& A, const mat& B, Benchmarker& b)
+void bench_add_scal(Benchmarker& b, int n)
 {
+  dmat A = randn<dmat>(n, n);
+  dmat B = randn<dmat>(n, n);
 
-  std::chrono::high_resolution_clock::time_point t1, t2;
-  std::vector<double> add_v(LAMP_REPS);
-  std::vector<double> scal_v(LAMP_REPS);
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-    dmat Bt = B;
-
-    BENCHMARK(b, add(At, Bt), add_v[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-
-    BENCHMARK(b, scal(At), scal_v[i]);
-  }
-
-  b.add(add_v, "add");
-  b.add(scal_v, "scal");
+  b.benchmark("add", add, A, B);
+  b.benchmark("scal", scal, A);
 }

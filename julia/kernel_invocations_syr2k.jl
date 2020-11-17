@@ -1,9 +1,9 @@
-function kernel_invocations_syr2k(n, k)
+function kernel_invocations_syr2k(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  A = randn(n,k)
-  B = randn(n,k)
+  A = randn(n,n)
+  B = randn(n,n)
   C = Symmetric(randn(n,n))
 
   Benchmarker.add_data(csv, "syr2k_implicit", Benchmarker.measure(reps, syr2k_implicit, A, B, C))

@@ -2,14 +2,14 @@
 addpath(getenv('LAMP_MATLAB_DIR'))
 import MatrixGenerator.*;
 
-m = 3000;
-k = 550;
-n = 3000;
+n = maxNumCompThreads();
+if n ~= 1
+  n = maxNumCompThreads(str2num(getenv('OMP_NUM_THREADS')));
+end
+n = maxNumCompThreads();
+fprintf('Threads = %d', n)
 
-tn = 80;
-ipn = 80;
-l = 100;
-p = 1500;
+n = str2num(getenv('LAMP_N'));
 
 b = Benchmarker();
 
@@ -17,37 +17,37 @@ A = randn(n,n);
 B = randn(n,n);
 add_scal(A, B, b);
 
-properties_solve(m, l, b);
+properties_solve(n, n / 10, b);
 
-A = randn(n,k);
+A = randn(n,n);
 C = randn(n,n); C = C+C';
 kernel_invocations_syrk(A, C, b);
 
-A = randn(m,k);
-B = randn(k,n);
-C = randn(m,n);
+A = randn(n,n);
+B = randn(n,n);
+C = randn(n,n);
 kernel_invocations_gemm(A, B, C, b);
 
-A = randn(n,k);
-B = randn(n,k);
+A = randn(n,n);
+B = randn(n,n);
 C = randn(n,n); C = C+C';
 kernel_invocations_syr2k(A, B, C, b);
 
-A = randn(tn,tn);
-B = randn(tn,tn);
-C = randn(tn,tn);
+A = randn(n / 10, n / 10);
+B = randn(n / 10, n / 10);
+C = randn(n / 10, n / 10);
 transposition(A, B, C, b);
 
-A = randn(m,k);
-B = randn(k,n);
+A = randn(n,n);
+B = randn(n,n);
 common_subexpressions(A, B, b);
 
 A = randn(n,n);
-B = randn(n,l);
+B = randn(n,n / 10);
 solve_linear_systems(A, B, b);
 
-A = randn(m,k);
-B = randn(k,n);
+A = randn(n,n);
+B = randn(n,n);
 matrix_chain(A, B, b);
 
 A = randn(n,n);
@@ -58,9 +58,9 @@ A = randn(n,n);
 B = randn(n,n);
 partial_operand(A, B, b);
 
-A = randn(ipn,ipn);
-B = randn(ipn,ipn);
-C = randn(ipn,1);
+A = randn(n / 10,n / 10);
+B = randn(n / 10,n / 10);
+C = randn(n / 10,1);
 index_problems(A, B, C, b);
 
 A = randn(n,n);
@@ -68,9 +68,9 @@ B = randn(n,n);
 C = randn(n,n);
 loop_translation(A, B, C, b);
 
-A1 = randn(p,p);
-A2 = randn(p,p);
-B = randn(2*p,2*p);
+A1 = randn(n / 2,n / 2);
+A2 = randn(n / 2,n / 2);
+B = randn(n,n);
 partitioned_matrices(A1, A2, B, b);
 
-b.save(strcat(getenv('LAMP_OUTPUT_DIR'), 'matlab', '.txt'));
+b.save(strcat(getenv('LAMP_OUTPUT_DIR'), 'matlab_', getenv('OMP_NUM_THREADS'), '.txt'));

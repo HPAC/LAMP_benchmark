@@ -138,8 +138,6 @@ def kernel_invocations_gemm(b, *args):
     Bsq = np.random.randn(args[0].shape[0], args[0].shape[0])
     Csq = np.random.randn(args[0].shape[0], args[0].shape[0])
 
-    res10 = b.benchmark('gemm_prop', gemm_implicit_noup, Asq, Bsq, Csq)
-
     Asq = np.tril(Asq)
     logger.debug('Asq is triangualar'.format(np.allclose(Asq, np.tril(Asq))))
     res7 = b.benchmark('trmm_implicit', trmm_implicit, Asq, Bsq)

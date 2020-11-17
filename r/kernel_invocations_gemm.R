@@ -102,8 +102,6 @@ kernel_invocations_gemm <- function(b, ...){
     B <- matrix(data=rnorm(n*n), ncol=ncol(A), nrow=nrow(A))
     C <- matrix(data=rnorm(n*n), ncol=ncol(A), nrow=nrow(A))
 
-    res7 <- benchmark('gemm_prop', gemm_implicit_noup, A, B, C)
-
     A[upper.tri(A, diag=FALSE)] <- 0.0 # Transform A into a lower triangular matrix
     res5 <- benchmark('trmm_implicit', trmm_implicit, A, B)
 

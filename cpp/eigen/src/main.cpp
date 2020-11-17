@@ -1,137 +1,43 @@
 #include <iostream>
 
-#include "add_scal.h"
-#include "composed_operations.h"
-#include "diagonal_elements.h"
-#include "gemm.h"
-#include "index_problems.h"
-#include "loop_translation.h"
-#include "matrix_chain.h"
-#include "partial_operand.h"
-#include "partitioned_matrices.h"
-#include "properties_solve.h"
-#include "subexpression.h"
-#include "syr2k.h"
-#include "syrk.h"
-#include "transposition.h"
+#include "../include/benchmarks.h"
 #include <Eigen/Dense>
 
 using namespace Eigen;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
+  const int n = std::atoi(std::getenv("LAMP_N"));
+  const int cache_size = std::atoi(std::getenv("LAMP_L3_CACHE_SIZE"));
+  const int threads = std::atoi(std::getenv("OMP_NUM_THREADS"));
+  const int reps = std::atoi(std::getenv("LAMP_REPS"));
 
-  int m = 3000;
-  int k = 550;
-  int n = 3000;
+  const string output_dir = string(std::getenv("LAMP_OUTPUT_DIR"));
+  string file_name = output_dir + "eigen_" + std::to_string(threads) + ".txt";
+  string file_timings_name = output_dir + "eigen_" + std::to_string(threads) + "_timings.txt";
+  string name = "Eigen";
 
-  int tn = 80;
-  int ipn = 80;
-  int l = 100;
-  int p = 1500;
+  const int eigen_n_threads = Eigen::nbThreads();
+  cout << "Eigen threads: " << eigen_n_threads << endl;
+  if (eigen_n_threads != threads) cerr << "Something is wrong with the thread count..." << endl;
 
-  MatrixXd A, B, C, A1, A2;
+  Benchmarker b(name, file_name, file_timings_name, cache_size, reps, ';');
 
-  Benchmarker b("eigen");
+  bench_gemm(b, n);
+  bench_syrk(b, n);
+  bench_syr2k(b, n);
+  bench_add_scal(b, n);
 
-  A = MatrixXd::Random(n, n);
-  B = MatrixXd::Random(n, n);
-  bench_add_scal(A, B, b);
-
-  // Properties Solve
-
-  bench_properties_solve(m, l, b);
-
-  // SYRK
-
-  A = MatrixXd::Random(n, k);
-  C = MatrixXd::Random(n, n);
-  C = C * C.transpose();
-
-  bench_syrk(A, C, b);
-
-  // GEMM
-
-  A = MatrixXd::Random(m, k);
-  B = MatrixXd::Random(k, n);
-  C = MatrixXd::Random(m, n);
-
-  bench_gemm(A, B, C, b);
-
-  // SYR2K
-
-  A = MatrixXd::Random(n, k);
-  B = MatrixXd::Random(n, k);
-  C = MatrixXd::Random(n, n);
-  C = C * C.transpose();
-
-  bench_syr2k(A, B, C, b);
-
-  // Transposition
-
-  A = MatrixXd::Random(tn, tn);
-  B = MatrixXd::Random(tn, tn);
-
-  bench_transposition(A, B, b);
-
-  // Common Subexpression
-
-  A = MatrixXd::Random(m, k);
-  B = MatrixXd::Random(k, n);
-
-  bench_subexpression(A, B, b);
-
-  // Composed Operations
-
-  A = MatrixXd::Random(n, n);
-  B = MatrixXd::Random(n, l);
-
-  bench_composed_operations(A, B, b);
-
-  // Matrix Chain Problem
-
-  A = MatrixXd::Random(m, k);
-  B = MatrixXd::Random(k, n);
-
-  bench_matrix_chain(A, B, b);
-
-  // Diagonal elements
-
-  A = MatrixXd::Random(n, n);
-  B = MatrixXd::Random(n, n);
-
-  bench_diagonal_elements(A, B, b);
-
-  // Diagonal elements
-
-  A = MatrixXd::Random(n, n);
-  B = MatrixXd::Random(n, n);
-
-  bench_partial_operand(A, B, b);
-
-  // Index problems
-
-  A = MatrixXd::Random(ipn, ipn);
-  B = MatrixXd::Random(ipn, ipn);
-  C = MatrixXd::Random(ipn, 1);
-
-  bench_index_problems(A, B, C, b);
-
-  // Index problems
-
-  A = MatrixXd::Random(n, n);
-  B = MatrixXd::Random(n, n);
-  C = MatrixXd::Random(n, n);
-
-  bench_loop_translation(A, B, C, b);
-
-  // Partitioned Matrices
-
-  A1 = MatrixXd::Random(p, p);
-  A2 = MatrixXd::Random(p, p);
-  B = MatrixXd::Random(2 * p, 2 * p);
-
-  bench_partitioned_matrices(A1, A2, B, b);
+  bench_matrix_chain(b, n);
+  bench_subexpression(b, n);
+  bench_partial_operand(b, n);
+  bench_loop_translation(b, n);
+  bench_diagonal_elements(b, n);
+  bench_properties_solve(b, n);
+  bench_composed_operations(b, n);
+  bench_transposition(b, n);
+  bench_index_problems(b, n);
+  bench_partitioned_matrices(b, n);
 
   return 0;
 }

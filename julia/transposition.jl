@@ -1,10 +1,11 @@
-function transposition(tr_n)
+function transposition(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  A = randn(tr_n, tr_n)
-  B = randn(tr_n, tr_n)
-  C = randn(tr_n, tr_n)
+  m = Int(floor(n / 10))
+  A = randn(m, m)
+  B = randn(m, m)
+  C = randn(m, m)
 
   Benchmarker.add_data(csv, "tr_nn_implicit", Benchmarker.measure(reps, no_transpose, A, B))
   Benchmarker.add_data(csv, "tr_nn_explicit", Benchmarker.measure(reps, g_no_transpose, A, B))

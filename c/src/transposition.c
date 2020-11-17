@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <timer.h>
-
-int dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*);
+#include "mkl.h"
 
 int main(int argc, char* argv[])
 {
@@ -27,20 +26,16 @@ int main(int argc, char* argv[])
     k = atof(argv[2]);
     n = atof(argv[3]);
   }
+  srand48((unsigned)time((time_t*)NULL));
+
+  A = (double*)mkl_malloc(m * k * sizeof(double), 64);
+  B = (double*)mkl_malloc(k * n * sizeof(double), 64);
+  C = (double*)mkl_malloc(m * n * sizeof(double), 64);
+
+  for (int i = 0; i < m * k; i++) A[i] = drand48();
+  for (int i = 0; i < k * n; i++) B[i] = drand48();
 
   for (int it = 0; it < LAMP_REPS; it++) {
-    A = (double*)malloc(m * k * sizeof(double));
-    B = (double*)malloc(k * n * sizeof(double));
-    C = (double*)malloc(m * n * sizeof(double));
-
-    srand48((unsigned)time((time_t*)NULL));
-
-    for (int i = 0; i < m * k; i++)
-      A[i] = drand48();
-    for (int i = 0; i < k * n; i++)
-      B[i] = drand48();
-    for (int i = 0; i < m * n; i++)
-      C[i] = drand48();
 
     /*int j;*/
     /*printf("A = [\n");*/
@@ -66,22 +61,22 @@ int main(int argc, char* argv[])
 
     cs_time = cache_scrub();
     dtime_tn = cclock();
-    dgemm_("T", "N", &m, &n, &k, &one, A, &n, B, &m, &zero, C, &n);
+    dgemm("T", "N", &m, &n, &k, &one, A, &n, B, &m, &zero, C, &n);
     dtime_save_tn = clock_min_diff(dtime_save_tn, dtime_tn);
 
     cs_time = cache_scrub();
     dtime_nt = cclock();
-    dgemm_("N", "T", &m, &n, &k, &one, A, &n, B, &m, &zero, C, &n);
+    dgemm("N", "T", &m, &n, &k, &one, A, &n, B, &m, &zero, C, &n);
     dtime_save_nt = clock_min_diff(dtime_save_nt, dtime_nt);
 
     cs_time = cache_scrub();
     dtime_tt = cclock();
-    dgemm_("T", "T", &m, &n, &k, &one, A, &n, B, &m, &zero, C, &n);
+    dgemm("T", "T", &m, &n, &k, &one, A, &n, B, &m, &zero, C, &n);
     dtime_save_tt = clock_min_diff(dtime_save_tt, dtime_tt);
 
     cs_time = cache_scrub();
     dtime_nn = cclock();
-    dgemm_("N", "N", &m, &n, &k, &one, A, &n, B, &m, &zero, C, &n);
+    dgemm("N", "N", &m, &n, &k, &one, A, &n, B, &m, &zero, C, &n);
     dtime_save_nn = clock_min_diff(dtime_save_nn, dtime_nn);
 
     /*printf("C2 = [\n");*/
@@ -90,11 +85,10 @@ int main(int argc, char* argv[])
     /*printf(";\n");*/
     /*}*/
     /*printf("];\n");*/
-
-    free(A);
-    free(B);
-    free(C);
-  };
+  }
+  mkl_free(A);
+  mkl_free(B);
+  mkl_free(C);
 
   printf("tr_nn_explicit;%d;%d;%d;%e;%e\n", m, k, n, dtime_save_nn, cs_time);
   printf("tr_tn_explicit;%d;%d;%d;%e;%e\n", m, k, n, dtime_save_tn, cs_time);

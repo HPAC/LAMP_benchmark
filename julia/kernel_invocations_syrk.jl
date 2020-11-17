@@ -1,8 +1,8 @@
-function kernel_invocations_syrk(n, k)
+function kernel_invocations_syrk(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  A = randn(n,k)
+  A = randn(n,n)
   C = Symmetric(randn(n,n))
 
   Benchmarker.add_data(csv, "syrk_implicit", Benchmarker.measure(reps, syrk_implicit, A, C))

@@ -5,7 +5,7 @@ reps = str2num(getenv('LAMP_REPS'));
 implicit_ = @() implicit(A, B);
 explicit_ = @() explicit(A, B);
 
-Bl = randn(size(B,1), 2 * size(A,1));
+Bl = randn(size(B,1), 5 * size(A,1));
 implicit_large_ = @() implicit(A, Bl);
 explicit_large_ = @() explicit(A, Bl);
 

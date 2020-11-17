@@ -5,9 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <timer.h>
-
-void dtrtrs_(const char*, const char*, const char*, const int*, const int*, const double*, const int*, double*, const int*, const int*);
-void dgemm_(const char*, const char*, const int*, const int*, const int*, const double*, const double*, const int*, const double*, const int*, const double*, double*, const int*);
+#include "mkl.h"
 
 int main(int argc, char* argv[])
 {
@@ -25,17 +23,16 @@ int main(int argc, char* argv[])
     rhs = atof(argv[2]);
   }
 
+  srand48((unsigned)time((time_t*)NULL));
+
+  A = (double*)mkl_malloc(n * n * sizeof(double), 64);
+  A_orig = (double*)mkl_malloc(n * n * sizeof(double), 64);
+  B = (double*)mkl_malloc(n * rhs * sizeof(double), 64);
+  B_orig = (double*)mkl_malloc(n * rhs * sizeof(double), 64);
+
   for (int it = 0; it < LAMP_REPS; it++) {
 
-    A = (double*)malloc(n * n * sizeof(double));
-    A_orig = (double*)malloc(n * n * sizeof(double));
-    B = (double*)malloc(n * rhs * sizeof(double));
-    B_orig = (double*)malloc(n * rhs * sizeof(double));
-
-    srand48((unsigned)time((time_t*)NULL));
-
-    for (int i = 0; i < n * n; i++)
-      A[i] = drand48();
+    for (int i = 0; i < n * n; i++) A[i] = drand48();
     for (int i = 0; i < n * rhs; i++) {
       B[i] = drand48();
       B_orig[i] = B[i];
@@ -64,7 +61,7 @@ int main(int argc, char* argv[])
     dtrtrs_("L", "N", "N", &n, &rhs, A, &n, B, &n, &solve_info);
     dtime_save = clock_min_diff(dtime_save, dtime);
 
-    dgemm_("N", "N", &n, &rhs, &n, &one, A_orig, &n, B, &n, &minus_one, B_orig, &n);
+    dgemm("N", "N", &n, &rhs, &n, &one, A_orig, &n, B, &n, &minus_one, B_orig, &n);
     double max_value = abs(B_orig[0]);
     for (int i = 0; i < n * rhs; i++)
       max_value = fmax(fabs(B_orig[i]), max_value);
@@ -72,12 +69,11 @@ int main(int argc, char* argv[])
       printf("Verification failed...\n");
       return (-1);
     }
-
-    free(A);
-    free(A_orig);
-    free(B);
-    free(B_orig);
-  };
+  }
+  mkl_free(A);
+  mkl_free(A_orig);
+  mkl_free(B);
+  mkl_free(B_orig);
 
   printf("solve_tri;%d;%d;%d;%e;%e\n", 0, rhs, n, dtime_save, cs_time);
 

@@ -1,4 +1,6 @@
-#include "../lib/transposition.h"
+#include "../include/benchmarks.h"
+
+using namespace arma;
 
 void transposition_nn(const mat& A, const mat& B, mat& C)
 {
@@ -20,49 +22,14 @@ void transposition_tt(const mat& A, const mat& B, mat& C)
   C = trans(A) * trans(B);
 }
 
-void bench_transposition(const mat& A, const mat& B, Benchmarker& b)
+void bench_transposition(Benchmarker &b, int n)
 {
-
-  std::chrono::high_resolution_clock::time_point t1, t2;
-  dmat C = zeros<dmat>(size(A));
-  std::vector<double> transposition_nn_v(LAMP_REPS);
-  std::vector<double> transposition_tn_v(LAMP_REPS);
-  std::vector<double> transposition_nt_v(LAMP_REPS);
-  std::vector<double> transposition_tt_v(LAMP_REPS);
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-    dmat Bt = B;
-    dmat Ct = C;
-
-    BENCHMARK(b, transposition_nn(At, Bt, Ct), transposition_nn_v[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-    dmat Bt = B;
-    dmat Ct = C;
-
-    BENCHMARK(b, transposition_tn(At, Bt, Ct), transposition_tn_v[i]);
-  }
-
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-    dmat Bt = B;
-    dmat Ct = C;
-
-    BENCHMARK(b, transposition_nt(At, Bt, Ct), transposition_nt_v[i]);
-  }
-  for (auto i = 0; i < LAMP_REPS; i++) {
-    dmat At = A;
-    dmat Bt = B;
-    dmat Ct = C;
-
-    BENCHMARK(b, transposition_tt(At, Bt, Ct), transposition_tt_v[i]);
-  }
-
-  b.add(transposition_nn_v, "tr_nn_implicit");
-  b.add(transposition_tn_v, "tr_tn_implicit");
-  b.add(transposition_nt_v, "tr_nt_implicit");
-  b.add(transposition_tt_v, "tr_tt_implicit");
+  auto m = n / 10;
+  dmat A = randn<dmat>(m, m);
+  dmat B = randn<dmat>(m, m);
+  dmat C = randn<dmat>(m, m);
+  b.benchmark("tr_nn_implicit", transposition_nn, A, B, C);
+  b.benchmark("tr_tn_implicit", transposition_tn, A, B, C);
+  b.benchmark("tr_nt_implicit", transposition_nt, A, B, C);
+  b.benchmark("tr_tt_implicit", transposition_tt, A, B, C);
 }

@@ -1,30 +1,34 @@
-function properties_solve(m, rhs)
+function properties_solve(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  B = randn(m, rhs)
+  m = Int(floor(n/10))
+
+  B = randn(n,m)
 
   # SPD
-  A = randn(m, m)
-  A = Matrix(Symmetric(A, :L)) + I*m
+  A = randn(n,n)
+  A = Matrix(Symmetric(A, :L)) + I*n
+  @test issymmetric(A)
+  @test isposdef(A)
   Benchmarker.add_data(csv, "solve_spd", Benchmarker.measure(reps, solve, A, B))
   @test isposdef(A) && issymmetric(A)
 
   # Symmetric
-  A = randn(m, m)
+  A = randn(n,n)
   A = Matrix(Symmetric(A, :L))
   A[1, 1] = -1.0
   Benchmarker.add_data(csv, "solve_sym", Benchmarker.measure(reps, solve, A, B))
   @test issymmetric(A) && !isposdef(A)
 
   # Triangular
-  A = randn(m, m)
+  A = randn(n,n)
   A = Matrix(LowerTriangular(A))
   Benchmarker.add_data(csv, "solve_tri", Benchmarker.measure(reps, solve, A, B))
   @test istril(A)
 
   # Diagonal
-  A = randn(m, m)
+  A = randn(n,n)
   A = Matrix(Diagonal(A))
   Benchmarker.add_data(csv, "solve_dia", Benchmarker.measure(reps, solve, A, B))
   @test isdiag(A)

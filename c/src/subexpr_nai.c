@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <timer.h>
-
-int dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*);
-void daxpy(const int*, const double*, const double*, const int*, double*, const int*);
+#include "mkl.h"
 
 int main(int argc, char* argv[])
 {
@@ -28,18 +26,18 @@ int main(int argc, char* argv[])
   n = m;
   int mn = n * m;
 
+  srand48((unsigned)time((time_t*)NULL));
+
+  A = (double*)mkl_malloc(m * k * sizeof(double), 64);
+  B = (double*)mkl_malloc(k * n * sizeof(double), 64);
+  C = (double*)mkl_malloc(m * n * sizeof(double), 64);
+  D = (double*)mkl_malloc(m * n * sizeof(double), 64);
+
+  for (int i = 0; i < m * k; i++) A[i] = drand48();
+  for (int i = 0; i < k * n; i++) B[i] = drand48();
+
   for (int it = 0; it < LAMP_REPS; it++) {
-    A = (double*)malloc(m * k * sizeof(double));
-    B = (double*)malloc(k * n * sizeof(double));
-    C = (double*)malloc(m * n * sizeof(double));
-    D = (double*)malloc(m * n * sizeof(double));
 
-    srand48((unsigned)time((time_t*)NULL));
-
-    for (int i = 0; i < m * k; i++)
-      A[i] = drand48();
-    for (int i = 0; i < k * n; i++)
-      B[i] = drand48();
     for (int i = 0; i < m * n; i++) {
       C[i] = 0.0;
       D[i] = 0.0;
@@ -80,8 +78,8 @@ int main(int argc, char* argv[])
     cs_time = cache_scrub();
 
     dtime = cclock();
-    dgemm_("N", "N", &m, &n, &k, &one, A, &m, B, &k, &zero, C, &m);
-    dgemm_("N", "N", &m, &n, &k, &one, A, &m, B, &k, &zero, D, &m);
+    dgemm("N", "N", &m, &n, &k, &one, A, &m, B, &k, &zero, C, &m);
+    dgemm("N", "N", &m, &n, &k, &one, A, &m, B, &k, &zero, D, &m);
     daxpy(&mn, &one, C, &oni, D, &oni);
     dtime_save = clock_min_diff(dtime_save, dtime);
 
@@ -100,12 +98,11 @@ int main(int argc, char* argv[])
     /*printf(";\n");*/
     /*}*/
     /*printf("];\n");*/
-
-    free(A);
-    free(B);
-    free(C);
-    free(D);
-  };
+  }
+  mkl_free(A);
+  mkl_free(B);
+  mkl_free(C);
+  mkl_free(D);
 
   printf("subexpr_nai;%d;%d;%d;%e;%e\n", m, k, n, dtime_save, cs_time);
 
