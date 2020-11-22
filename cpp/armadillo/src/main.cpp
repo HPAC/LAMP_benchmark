@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
   // bench_transposition(b, n);
   // bench_index_problems(b, n);
   // bench_partitioned_matrices(b, n);
-  bench_properties_solve_sparse(b, 10000, 0.0001);
+  bench_properties_solve_sparse(b, 100000, 0.00001);
 
   return 0;
 }

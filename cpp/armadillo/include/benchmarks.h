@@ -6,7 +6,7 @@
 
 void bench_add_scal(Benchmarker& b, int n);
 void bench_properties_solve(Benchmarker &b, int n);
-void bench_properties_solve_sparse(Benchmarker &b, int n, double sparsity);
+void bench_properties_solve_sparse(Benchmarker &b, int n, double density);
 void bench_composed_operations(Benchmarker &b, int n);
 void bench_syrk(Benchmarker &b, int n);
 void bench_gemm(Benchmarker &b, int n);
