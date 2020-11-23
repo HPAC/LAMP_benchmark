@@ -27,6 +27,8 @@ csv = Benchmarker.CSV(string(ENV["LAMP_OUTPUT_DIR"], "julia_", string(ENV["OMP_N
 n = parse(Int32, ENV["LAMP_N"])
 sp_n = parse(Int32, ENV["LAMP_SP_N"])
 density = parse(Float64, ENV["LAMP_SP_DENSITY"])
+println(sp_n)
+println(density)
 println(Threads.nthreads())
 
 # add_scal(n)

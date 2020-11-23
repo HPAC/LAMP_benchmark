@@ -28,7 +28,7 @@ export LAMP_REPS=50
 export LAMP_N=3000
 #export LAMP_N=6000
 export LAMP_SP_N=1000000
-export LAMP_SP_DENSITY=0.000001
+export LAMP_SP_DENSITY=0.000002
 
 #######################################################################
 # Setup Languages
