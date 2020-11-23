@@ -1,4 +1,5 @@
 using LinearAlgebra
+using SparseArrays
 using Logging
 using Test
 
@@ -24,13 +25,13 @@ include("add_scal.jl")
 csv = Benchmarker.CSV(string(ENV["LAMP_OUTPUT_DIR"], "julia_", string(ENV["OMP_NUM_THREADS"])))
 
 n = parse(Int32, ENV["LAMP_N"])
+sp_n = parse(Int32, ENV["LAMP_SP_N"])
+density = parse(Float64, ENV["LAMP_SP_DENSITY"])
 println(Threads.nthreads())
 
 # add_scal(n)
 # properties_solve(n)
-sp_n = 1000000
-density = 0.000001
-properties_solve_sparse(spn, density)
+properties_solve_sparse(sp_n, density)
 # kernel_invocations_syrk(n)
 # kernel_invocations_gemm(n)
 # kernel_invocations_syr2k(n)

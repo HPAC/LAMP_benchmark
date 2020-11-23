@@ -27,6 +27,8 @@ export LAMP_L3_CACHE_SIZE="7500000"
 export LAMP_REPS=50
 export LAMP_N=3000
 #export LAMP_N=6000
+export LAMP_SP_N=1000000
+export LAMP_SP_DENSITY=0.000001
 
 #######################################################################
 # Setup Languages
@@ -55,6 +57,6 @@ export MATLAB="/usr/local_rwth/sw/MATLAB/matlab_2020a/bin/matlab"
 alias matlab="${MATLAB}"
 
 #######################################################################
-# Navigation 
+# Navigation
 alias lamp="cd ${LAMP_EXPERIMENTS}"
 alias lampi="cd ${LOCAL_INSTALL_DIR}"
