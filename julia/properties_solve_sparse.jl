@@ -22,7 +22,7 @@ function properties_solve_sparse(n, density)
 
   # Symmetric
   A = sprandn(n, n, density)
-  A = A + A' + sparse(I, n, n)
+  A = A + A' + 2.0 * sparse(I, n, n)
   Benchmarker.add_data(csv, "solve_sym", Benchmarker.measure(reps, solve, A, B))
   @test issymmetric(A) && !isposdef(A)
 

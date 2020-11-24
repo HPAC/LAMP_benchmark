@@ -18,7 +18,7 @@ function properties_solve_sparse(n, rhs, density, b)
   b.benchmark('solve_sp_spd', reps, custom_solve_);
 
   % Symmetric
-  A = sprandn(n,n,density/2) + speye(n,n);
+  A = sprandn(n,n,density/2) + 2.0 * speye(n,n);
   A = A + A';
   fprintf("Cond number: %.1f, nnz: %d\n", condest(A), nnz(A))
   custom_solve_ = @() custom_solve(A, B);
