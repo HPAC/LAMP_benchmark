@@ -31,7 +31,7 @@ export LAMP_SP_N=1000000
 export LAMP_SP_DENSITY=0.000001
 
 #######################################################################
-# Setup Languages
+# Languages (compiled and installed by hand)
 
 # Octave
 export OCTAVE="${LAMP_INSTALL_DIR}/bin/octave-cli"
@@ -48,14 +48,6 @@ export R_SCRIPT=${R_DIR}/bin/Rscript
 export R_PACK=${R_DIR}/packages
 export R=${R_DIR}/bin/R
 alias R="${R}"
-
-# Python
-export PYTHON=python3
-alias python="${PYTHON}"
-
-# Matlab
-export MATLAB="/usr/local_rwth/sw/MATLAB/matlab_2020a/bin/matlab"
-alias matlab="${MATLAB}"
 
 #######################################################################
 # Navigation

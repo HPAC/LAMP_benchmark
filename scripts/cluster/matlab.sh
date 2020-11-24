@@ -22,8 +22,9 @@ if [[ "$1" == 1 ]] ; then
 else
   export THREADING=
 fi
+echo ${MATLAB}
 echo "Threading: ${THREADING}"
-${MALTAB} ${THREADING} -nodisplay -nodesktop -nosplash -logfile /dev/null <<EOF
+matlab ${THREADING} -nodisplay -nodesktop -nosplash -logfile /dev/null <<EOF
 main;
 quit();
 EOF
