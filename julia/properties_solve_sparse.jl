@@ -34,7 +34,6 @@ function properties_solve_sparse(n, density)
 end
 
 function solve(A::SparseMatrixCSC{Float64,Int64}, B::DenseArray{Float64, 2})
-  println("doing")
   result = zeros(size(B))
   start::Float64 = 0.0
   finish::Float64 = 0.0
