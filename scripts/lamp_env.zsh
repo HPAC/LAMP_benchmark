@@ -60,4 +60,4 @@ alias matlab="${MATLAB}"
 #######################################################################
 # Navigation
 alias lamp="cd ${LAMP_EXPERIMENTS}"
-alias lampi="cd ${LOCAL_INSTALL_DIR}"
+alias lampi="cd ${LAMP_INSTALL_DIR}"
