@@ -5,30 +5,30 @@ function properties_solve_sparse(n, density)
   B = randn(n, 10)
 
   # Generic
-  A = sprandn(n,n, density)
-  A = A + sparse(I,n,n)*0.01
+  A = sprandn(n, n, density)
+  A = A + sparse(I, n, n)
   @test !issymmetric(A)
   @test !isposdef(A)
   Benchmarker.add_data(csv, "solve_gen", Benchmarker.measure(reps, solve, A, B))
   @test !isposdef(A) && !issymmetric(A)
 
   # SPD
-  A = sprandn(n,n, density)
-  A = sparse(Symmetric(A, :L)) + sparse(I,n,n)*n
+  A = sprandn(n, n, density/2)
+  A = A + A' + n * sparse(I, n, n)
   @test issymmetric(A)
   @test isposdef(A)
   Benchmarker.add_data(csv, "solve_spd", Benchmarker.measure(reps, solve, A, B))
   @test isposdef(A) && issymmetric(A)
 
   # Symmetric
-  A = sprandn(n,n, density)
-  A = sparse(Symmetric(A, :L)) + sparse(I,n,n)*0.01
+  A = sprandn(n, n, density)
+  A = A + A' + sparse(I, n, n)
   Benchmarker.add_data(csv, "solve_sym", Benchmarker.measure(reps, solve, A, B))
   @test issymmetric(A) && !isposdef(A)
 
   # Triangular
-  A = sprandn(n,n,2.0*density)
-  A = sparse(LowerTriangular(A)) + sparse(I,n,n)*0.01
+  A = sprandn(n, n, 2.0 * density)
+  A = sparse(LowerTriangular(A)) + sparse(I,n,n)
   Benchmarker.add_data(csv, "solve_tri", Benchmarker.measure(reps, solve, A, B))
   @test istril(A)
 end

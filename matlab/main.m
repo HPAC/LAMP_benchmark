@@ -7,7 +7,7 @@ if n ~= 1
   n = maxNumCompThreads(str2num(getenv('OMP_NUM_THREADS')));
 end
 n = maxNumCompThreads();
-fprintf('Threads = %d', n)
+fprintf('Threads = %d\n', n)
 
 n = str2num(getenv('LAMP_N'));
 sp_n = str2num(getenv('LAMP_SP_N'));
