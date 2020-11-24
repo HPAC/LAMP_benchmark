@@ -11,113 +11,120 @@ source("diagonal_elements.R")
 source("index_problems.R")
 source("partitioned_matrices.R")
 source("properties_solve.R")
+source("properties_solve_sparse.R")
 source("add_scal.R")
 source("loop_translation.R")
 source("partial_operand.R")
 source("benchmarker.R")
 
 n <- strtoi(Sys.getenv("LAMP_N"))
+sp_n <- strtoi(Sys.getenv("LAMP_SP_N"))
+density <- strtod(Sys.getenv("LAMP_SP_DENSITY"))
 print(n)
+print(sp_n)
+print(density)
 
 threads <- Sys.getenv("OMP_NUM_THREADS")
 file_name <- paste("R_", threads, sep="")
 init_benchmarker(file_name)
 
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-add_scal(b, A, B)
+properties_solve_sparse(b, sp_n, 10, density)
 
-##! Properties Solve
-properties_solve(b, n, n / 10)
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#add_scal(b, A, B)
 
-##! SYRK
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-C = matrix(data = rnorm(n*n), nrow = n, ncol = n); C = C + t(C);
+###! Properties Solve
+#properties_solve(b, n, n / 10)
 
-kernel_invocations_syrk(b, A, C)
+###! SYRK
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#C = matrix(data = rnorm(n*n), nrow = n, ncol = n); C = C + t(C);
 
-##! GEMM
+#kernel_invocations_syrk(b, A, C)
 
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-C = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+###! GEMM
 
-kernel_invocations_gemm(b, A, B, C)
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#C = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 
-##! SYR2K
+#kernel_invocations_gemm(b, A, B, C)
 
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-C = matrix(data = rnorm(n*n), nrow = n, ncol = n); C = C + t(C);
+###! SYR2K
 
-kernel_invocations_syr2k(b, A, B, C)
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#C = matrix(data = rnorm(n*n), nrow = n, ncol = n); C = C + t(C);
 
-##! Transposition
+#kernel_invocations_syr2k(b, A, B, C)
 
-tn <- n / 10
-A = matrix(data = rnorm(tn * tn), nrow = tn, ncol = tn)
-B = matrix(data = rnorm(tn * tn), nrow = tn, ncol = tn)
-C = matrix(data = rnorm(tn * tn), nrow = tn, ncol = tn)
+###! Transposition
 
-transposition(b, A, B, C)
+#tn <- n / 10
+#A = matrix(data = rnorm(tn * tn), nrow = tn, ncol = tn)
+#B = matrix(data = rnorm(tn * tn), nrow = tn, ncol = tn)
+#C = matrix(data = rnorm(tn * tn), nrow = tn, ncol = tn)
 
-##! Common Subexpression
+#transposition(b, A, B, C)
 
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+###! Common Subexpression
 
-common_subexpressions(b, A, B)
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 
-##! Composed Operations
+#common_subexpressions(b, A, B)
 
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*(n/10)), nrow = n, ncol = n/10)
+###! Composed Operations
 
-solve_linear_systems(b, A, B)
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#B = matrix(data = rnorm(n*(n/10)), nrow = n, ncol = n/10)
 
-##! Matrix Chain Problem
+#solve_linear_systems(b, A, B)
 
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+###! Matrix Chain Problem
 
-matrix_chain(b, A, B)
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 
-##! Diagonal elements
+#matrix_chain(b, A, B)
 
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+###! Diagonal elements
 
-diagonal_elements(b, A, B)
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 
-##! Partial Operand
+#diagonal_elements(b, A, B)
 
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+###! Partial Operand
 
-partial_operand(b, A, B)
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 
-##! Index problems
+#partial_operand(b, A, B)
 
-ipn <- n / 10
-A = matrix(data = rnorm(ipn*ipn), nrow = ipn, ncol = ipn)
-B = matrix(data = rnorm(ipn*ipn), nrow = ipn, ncol = ipn)
-C = matrix(data = rnorm(ipn*1)  , nrow = 1  , ncol = ipn)
+###! Index problems
 
-index_problems(b, A, B, C)
+#ipn <- n / 10
+#A = matrix(data = rnorm(ipn*ipn), nrow = ipn, ncol = ipn)
+#B = matrix(data = rnorm(ipn*ipn), nrow = ipn, ncol = ipn)
+#C = matrix(data = rnorm(ipn*1)  , nrow = 1  , ncol = ipn)
 
-##! Loop Translation
+#index_problems(b, A, B, C)
 
-A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-C = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+###! Loop Translation
 
-loop_translation(b, A, B, C)
+#A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
+#C = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 
-##! Partitioned Matrices
+#loop_translation(b, A, B, C)
 
-p <- n / 2
-A1 = matrix(data = rnorm(p*p), nrow = p, ncol =  p)
-A2 = matrix(data = rnorm(p*p), nrow = p, ncol =  p)
-B  = matrix(data = rnorm(2*p, 2*p), nrow = 2*p, ncol = 2*p)
+###! Partitioned Matrices
 
-partitioned_matrices(b, A1, A2, B)
+#p <- n / 2
+#A1 = matrix(data = rnorm(p*p), nrow = p, ncol =  p)
+#A2 = matrix(data = rnorm(p*p), nrow = p, ncol =  p)
+#B  = matrix(data = rnorm(2*p, 2*p), nrow = 2*p, ncol = 2*p)
+
+#partitioned_matrices(b, A1, A2, B)
