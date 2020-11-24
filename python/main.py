@@ -14,6 +14,7 @@ from index_problems import index_problems
 from partitioned_matrices import partitioned_matrices
 from loop_translation import loop_translation
 from properties_solve import properties_solve
+from properties_solve_sparse import properties_solve_sparse
 from partial_operand import partial_operand
 from add_scal import add_scal
 import logging
@@ -21,108 +22,115 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(name)-2s: %(levelname)-2s %(message)s')
 
 n = int(os.environ['LAMP_N'])
+sp_n = int(os.environ['LAMP_SP_N'])
+density = float(os.environ['LAMP_SP_DENSITY'])
 
 b = ben('python_' + str(os.environ['OMP_NUM_THREADS']))
+print('n      : {}'.format(n))
+print('sp_n   : {}'.format(sp_n))
+print('density: {}'.format(density))
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-add_scal(b, A, B)
+properties_solve_sparse(b, sp_n, 10, density)
 
-# ! Properties Solve
+# A = np.random.randn(n, n)
+# B = np.random.randn(n, n)
+# add_scal(b, A, B)
 
-properties_solve(b, n, int(n / 10))
+# # ! Properties Solve
 
-# ! SYRK
+# properties_solve(b, n, int(n / 10))
 
-A = np.random.randn(n, n)
-C = np.random.randn(n, n)
-C = C + C.T
+# # ! SYRK
 
-kernel_invocations_syrk(b, A, C)
+# A = np.random.randn(n, n)
+# C = np.random.randn(n, n)
+# C = C + C.T
 
-# ! GEMM
+# kernel_invocations_syrk(b, A, C)
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-C = np.random.randn(n, n)
+# # ! GEMM
 
-kernel_invocations_gemm(b, A, B, C)
+# A = np.random.randn(n, n)
+# B = np.random.randn(n, n)
+# C = np.random.randn(n, n)
 
-# ! SYR2K
+# kernel_invocations_gemm(b, A, B, C)
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-C = np.random.randn(n, n)
-C = C + C.T
+# # ! SYR2K
 
-kernel_invocations_syr2k(b, A, B, C)
+# A = np.random.randn(n, n)
+# B = np.random.randn(n, n)
+# C = np.random.randn(n, n)
+# C = C + C.T
 
-# ! Transposition
+# kernel_invocations_syr2k(b, A, B, C)
 
-tn = int(n / 10)
-A = np.random.randn(tn, tn)
-B = np.random.randn(tn, tn)
-C = np.random.randn(tn, tn)
+# # ! Transposition
 
-transposition(b, A, B, C)
+# tn = int(n / 10)
+# A = np.random.randn(tn, tn)
+# B = np.random.randn(tn, tn)
+# C = np.random.randn(tn, tn)
 
-# ! Common Subexpression
+# transposition(b, A, B, C)
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
+# # ! Common Subexpression
 
-common_subexpressions(b, A, B)
+# A = np.random.randn(n, n)
+# B = np.random.randn(n, n)
 
-# ! Composed Operations
+# common_subexpressions(b, A, B)
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, int(n / 10))
+# # ! Composed Operations
 
-solve_linear_systems(b, A, B)
+# A = np.random.randn(n, n)
+# B = np.random.randn(n, int(n / 10))
 
-#! Matrix Chain Problem
+# solve_linear_systems(b, A, B)
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
+# #! Matrix Chain Problem
 
-matrix_chain(b, A, B)
+# A = np.random.randn(n, n)
+# B = np.random.randn(n, n)
 
-# ! Diagonal elements
+# matrix_chain(b, A, B)
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
+# # ! Diagonal elements
 
-diagonal_elements(b, A, B)
+# A = np.random.randn(n, n)
+# B = np.random.randn(n, n)
 
-# ! Partial Operand
+# diagonal_elements(b, A, B)
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
+# # ! Partial Operand
 
-partial_operand(b, A, B)
+# A = np.random.randn(n, n)
+# B = np.random.randn(n, n)
 
-# ! Index problems
+# partial_operand(b, A, B)
 
-ipn = int(n / 10)
-A = np.random.randn(ipn, ipn)
-B = np.random.randn(ipn, ipn)
-C = np.random.randn(ipn)
+# # ! Index problems
 
-index_problems(b, A, B, C)
+# ipn = int(n / 10)
+# A = np.random.randn(ipn, ipn)
+# B = np.random.randn(ipn, ipn)
+# C = np.random.randn(ipn)
 
-# ! Index problems
+# index_problems(b, A, B, C)
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-C = np.random.randn(n, n)
+# # ! Index problems
 
-loop_translation(b, A, B, C)
+# A = np.random.randn(n, n)
+# B = np.random.randn(n, n)
+# C = np.random.randn(n, n)
 
-# ! Partitioned Matrices
+# loop_translation(b, A, B, C)
 
-p = int(n / 2)
-A1 = np.random.randn(p, p)
-A2 = np.random.randn(p, p)
-B = np.random.randn(2*p, 2*p)
+# # ! Partitioned Matrices
 
-partitioned_matrices(b, A1, A2, B)
+# p = int(n / 2)
+# A1 = np.random.randn(p, p)
+# A2 = np.random.randn(p, p)
+# B = np.random.randn(2*p, 2*p)
+
+# partitioned_matrices(b, A1, A2, B)
