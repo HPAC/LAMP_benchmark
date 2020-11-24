@@ -1,4 +1,5 @@
 library("sets")
+library(Matrix)
 
 solve_b <- function(A, B){
 
@@ -14,33 +15,26 @@ properties_solve_sparse <- function(b, n, rhs, density){
 
     B <- matrix(data = rnorm(n * rhs), nrow=n, ncol=rhs)
 
-    A <- matrix(0, nrow=n, ncol=n, sparse=TRUE)
-    iz <- sample(1:(n * n), size = n * n * density, replace = FALSE)
-    A[iz] <- rnorm(n*n*density)
+    A <- rsparsematrix(n, n, density=density, rand.x=rnorm)
     diag(A) <- diag(A) + 1.0
-    cat(c("A symmetric: ", all.equal(A, t(A)), "\n"), sep="")
+    print(nnzero(A))
     res1 <- benchmark('solve_sp_gen', solve_b, A, B)
 
-    A <- matrix(0, nrow=n, ncol=n, sparse=TRUE)
-    iz <- sample(1:(n * n), size = n * n * density, replace = FALSE)
-    A[iz] <- rnorm(n*n*density)
+    A <- rsparsematrix(nrow=n, ncol=n, density=density, rand.x=rnorm)
     A[lower.tri(A)] <- t(A)[lower.tri(A)] # Transform A into a symmetric matrix
-    diag(A) <- diag(A) + 2.0
+    diag(A) <- (diag(A) + 2.0)
+    print(nnzero(A))
     cat(c("A symmetric: ", all.equal(A, t(A)), "\n"), sep="")
     res2 <- benchmark('solve_sp_sym', solve_b, A, B)
 
-    A <- matrix(0, nrow=n, ncol=n, sparse=TRUE)
-    iz <- sample(1:(n * n), size = n * n * density, replace = FALSE)
-    A[iz] <- rnorm(n*n*density)
+    A <- rsparsematrix(nrow=n, ncol=n, density=density)
     A[lower.tri(A)] <- t(A)[lower.tri(A)] # Transform A into a symmetric matrix
-    diag(A) <- diag(A) + m                # Make A Positive Definite
+    diag(A) <- (diag(A) + n)              # Make A Positive Definite
     cat(c("A symmetric: ", all.equal(A, t(A)), "\n"), sep="")
     res1 <- benchmark('solve_sp_spd', solve_b, A, B)
 
-    A <- matrix(0, nrow=n, ncol=n, sparse=TRUE)
-    iz <- sample(1:(n * n), size = n * n * density, replace = FALSE)
-    A[iz] <- rnorm(n*n*density)
+    A <- rsparsematrix(nrow=n, ncol=n, density=2.0*density)
     A[upper.tri(A, diag=FALSE)] <- 0.0 # Transform A into a lower triangular matrix
-    diag(A) <- diag(A) + 1
+    diag(A) <- (diag(A) + 1.0)
     res3 <- benchmark('solve_sp_tri', solve_b, A, B)
 }

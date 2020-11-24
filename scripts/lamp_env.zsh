@@ -27,8 +27,8 @@ export LAMP_L3_CACHE_SIZE="7500000"
 export LAMP_REPS=50
 export LAMP_N=3000
 #export LAMP_N=6000
-export LAMP_SP_N=100000
-export LAMP_SP_DENSITY=0.00001
+export LAMP_SP_N=10000
+export LAMP_SP_DENSITY=0.0001
 
 #######################################################################
 # Languages (compiled and installed by hand)

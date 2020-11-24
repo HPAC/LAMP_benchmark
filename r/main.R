@@ -1,4 +1,5 @@
-library("sets")
+library(sets)
+library(Matrix)
 
 source("kernel_invocations_syrk.R")
 source("kernel_invocations_syr2k.R")
@@ -19,7 +20,8 @@ source("benchmarker.R")
 
 n <- strtoi(Sys.getenv("LAMP_N"))
 sp_n <- strtoi(Sys.getenv("LAMP_SP_N"))
-density <- strtod(Sys.getenv("LAMP_SP_DENSITY"))
+density <- as.double(Sys.getenv("LAMP_SP_DENSITY"))
+
 print(n)
 print(sp_n)
 print(density)
