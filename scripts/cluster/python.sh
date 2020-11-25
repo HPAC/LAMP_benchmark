@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source ${HOME}/.zshrc.local
 source ${HOME}/.zshrc.lamp
 cd ${LAMP_EXPERIMENTS}/python
 
