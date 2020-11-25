@@ -24,11 +24,11 @@ export LD_LIBRARY_PATH=${LAMP_INSTALL_DIR}:${LD_LIBRARY_PATH}
 export LAMP_EXPERIMENTS=${HOME}/projects/LAMP_benchmark
 export LAMP_OUTPUT_DIR="${LAMP_EXPERIMENTS}/results/"
 export LAMP_L3_CACHE_SIZE="7500000"
-export LAMP_REPS=50
+export LAMP_REPS=2
 export LAMP_N=3000
 #export LAMP_N=6000
-export LAMP_SP_N=10000
-export LAMP_SP_DENSITY=0.0001
+export LAMP_SP_N=25000
+export LAMP_SP_DENSITY=0.0002
 
 #######################################################################
 # Languages (compiled and installed by hand)
