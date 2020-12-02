@@ -2,9 +2,8 @@ function solve_linear_systems(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  m = Int(floor(n / 10))
   A = randn(n, n)
-  B = randn(n, m)
+  B = randn(n, 10)
 
   Benchmarker.add_data(csv, "solve_nai", Benchmarker.measure(reps, implicit_solve, A, B))
   Benchmarker.add_data(csv, "solve_rec", Benchmarker.measure(reps, explicit_solve, A, B))

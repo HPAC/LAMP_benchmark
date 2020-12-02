@@ -24,7 +24,7 @@ export LD_LIBRARY_PATH=${LOCAL_INSTALL_DIR}:${LD_LIBRARY_PATH}
 export LAMP_EXPERIMENTS=${HOME}/projects/LAMP_benchmark
 export LAMP_OUTPUT_DIR="${LAMP_EXPERIMENTS}/results/"
 export LAMP_L3_CACHE_SIZE="7500000"
-export LAMP_REPS=50
+export LAMP_REPS=20
 export LAMP_N=3000
 #export LAMP_N=6000
 
@@ -55,6 +55,6 @@ export MATLAB="/usr/local_rwth/sw/MATLAB/matlab_2020a/bin/matlab"
 alias matlab="${MATLAB}"
 
 #######################################################################
-# Navigation 
+# Navigation
 alias lamp="cd ${LAMP_EXPERIMENTS}"
 alias lampi="cd ${LOCAL_INSTALL_DIR}"

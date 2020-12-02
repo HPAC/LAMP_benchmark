@@ -36,7 +36,7 @@ echo "algorithm;m;k;n;C;cs_time"                    > ${LAMP_C_OUTPUT_DIR}
 let N_10=LAMP_N/10
 ./bin/transposition.x $N_10 $N_10 $N_10             >> ${LAMP_C_OUTPUT_DIR}
 
-let RHS_SMALL=LAMP_N/10
+let RHS_SMALL=10
 ./bin/solve_naive.x       $LAMP_N $RHS_SMALL        >> ${LAMP_C_OUTPUT_DIR}
 ./bin/solve_recommended.x $LAMP_N $RHS_SMALL       >> ${LAMP_C_OUTPUT_DIR}
 

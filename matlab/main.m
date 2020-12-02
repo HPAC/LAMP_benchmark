@@ -17,7 +17,7 @@ A = randn(n,n);
 B = randn(n,n);
 add_scal(A, B, b);
 
-properties_solve(n, n / 10, b);
+properties_solve(n, 10, b);
 
 A = randn(n,n);
 C = randn(n,n); C = C+C';
@@ -43,7 +43,7 @@ B = randn(n,n);
 common_subexpressions(A, B, b);
 
 A = randn(n,n);
-B = randn(n,n / 10);
+B = randn(n,10);
 solve_linear_systems(A, B, b);
 
 A = randn(n,n);

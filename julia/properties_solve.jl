@@ -2,9 +2,7 @@ function properties_solve(n)
 
   reps = parse(Int64, ENV["LAMP_REPS"])
 
-  m = Int(floor(n/10))
-
-  B = randn(n,m)
+  B = randn(n, 10)
 
   # SPD
   A = randn(n,n)

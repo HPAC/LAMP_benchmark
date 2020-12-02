@@ -15,8 +15,8 @@ void solve_recommended(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
 void bench_composed_operations(Benchmarker &b, int n)
 {
   MatrixXd A = MatrixXd::Random(n, n);
-  MatrixXd B = MatrixXd::Random(n, n / 10);
-  MatrixXd C = MatrixXd::Zero(n, n / 10);
+  MatrixXd B = MatrixXd::Random(n, 10);
+  MatrixXd C = MatrixXd::Zero(n, 10);
 
   //MatrixXd c1 = C;
   //MatrixXd c2 = C;

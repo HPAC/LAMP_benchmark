@@ -15,8 +15,8 @@ void solve_recommended(const mat &A, const mat &B, mat &C)
 void bench_composed_operations(Benchmarker &b, int n)
 {
   dmat A = randn<dmat>(n, n);
-  dmat B = randn<dmat>(n, n / 10);
-  dmat C = zeros<dmat>(n, n / 10);
+  dmat B = randn<dmat>(n, 10);
+  dmat C = zeros<dmat>(n, 10);
   //dmat c1 = C;
   //dmat c2 = C;
   //naive(A, B, c1);

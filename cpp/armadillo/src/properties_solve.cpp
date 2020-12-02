@@ -9,8 +9,8 @@ static void my_solve(dmat &C, dmat &A, dmat &B)
 
 void bench_properties_solve(Benchmarker& b, int n)
 {
-  dmat B = randn<dmat>(n, n / 10);
-  dmat C = zeros<dmat>(n, n / 10);
+  dmat B = randn<dmat>(n, 10);
+  dmat C = zeros<dmat>(n, 10);
 
   dmat A = randn<dmat>(n, n);
   A = A + trans(A) - diagmat(A) + eye<dmat>(n, n) * n;
