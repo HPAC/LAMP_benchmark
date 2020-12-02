@@ -11,7 +11,7 @@ export MKL_NUM_THREADS=$1
 export OMP_NUM_THREADS=$1
 
 module load MISC
-module load matlab/2019a
+module load matlab/2020a
 
 export MATLAB_LOG_DIR=$LAMP_LOG_DIR
 export MATLABPATH=$LAMP_MATLAB_DIR
