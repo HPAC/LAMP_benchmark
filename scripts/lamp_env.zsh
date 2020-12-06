@@ -4,7 +4,7 @@ export PS1="LAMP"${PS1}
 # Set up environment for RWTH cluster
 module switch intel gcc/8
 module load LIBRARIES
-module load intelmkl/2020
+module load intelmkl/2019
 module load cmake/3.16.4
 
 #######################################################################
