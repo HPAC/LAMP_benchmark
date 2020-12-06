@@ -9,7 +9,8 @@ echo "-----------------------------"
 export MKL_NUM_THREADS=$1
 export OMP_NUM_THREADS=$1
 
+module purge
 module load DEVELOP
-module load pythoni/3.6.2019
+module load intel/19.0
 
 ${PYTHON} main.py
