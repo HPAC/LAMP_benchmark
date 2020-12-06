@@ -23,7 +23,7 @@ else
   export THREADING=
 fi
 echo "Threading: ${THREADING}"
-${MALTAB} ${THREADING} -nodisplay -nodesktop -nosplash -logfile /dev/null <<EOF
+matlab ${THREADING} -nodisplay -nodesktop -nosplash -logfile /dev/null <<EOF
 main;
 quit();
 EOF
