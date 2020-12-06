@@ -19,6 +19,9 @@ from add_scal import add_scal
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(name)-2s: %(levelname)-2s %(message)s')
+logger = logging.getLogger('Main')
+logger.info('Numpy version: {}'.format(np.__version__))
+print('{}'.format(np.__config__.show()))
 
 n = int(os.environ['LAMP_N'])
 
