@@ -9,8 +9,8 @@ void my_solve(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
 
 void bench_properties_solve(Benchmarker& b, int n)
 {
-  MatrixXd C = MatrixXd::Random(n, 10);
-  MatrixXd B = MatrixXd::Random(n, 10);
+  MatrixXd C = MatrixXd::Random(n, 200);
+  MatrixXd B = MatrixXd::Random(n, 200);
 
   //MatrixXd c1 = C;
   //MatrixXd c2 = C;

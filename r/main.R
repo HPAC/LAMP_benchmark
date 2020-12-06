@@ -28,7 +28,7 @@ B = matrix(data = rnorm(n*n), nrow = n, ncol = n)
 add_scal(b, A, B)
 
 ##! Properties Solve
-properties_solve(b, n, 10)
+properties_solve(b, n, 200)
 
 ##! SYRK
 A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
@@ -71,7 +71,7 @@ common_subexpressions(b, A, B)
 ##! Composed Operations
 
 A = matrix(data = rnorm(n*n), nrow = n, ncol = n)
-B = matrix(data = rnorm(n*10), nrow = n, ncol = 10)
+B = matrix(data = rnorm(n*200), nrow = n, ncol = 200)
 
 solve_linear_systems(b, A, B)
 

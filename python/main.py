@@ -33,7 +33,7 @@ add_scal(b, A, B)
 
 # ! Properties Solve
 
-properties_solve(b, n, 10)
+properties_solve(b, n, 200)
 
 # ! SYRK
 
@@ -79,7 +79,7 @@ common_subexpressions(b, A, B)
 # ! Composed Operations
 
 A = np.random.randn(n, n)
-B = np.random.randn(n, 10)
+B = np.random.randn(n, 200)
 
 solve_linear_systems(b, A, B)
 

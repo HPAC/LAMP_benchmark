@@ -15,8 +15,8 @@ void solve_recommended(const MatrixXd& A, const MatrixXd& B, MatrixXd& C)
 void bench_composed_operations(Benchmarker &b, int n)
 {
   MatrixXd A = MatrixXd::Random(n, n);
-  MatrixXd B = MatrixXd::Random(n, 10);
-  MatrixXd C = MatrixXd::Zero(n, 10);
+  MatrixXd B = MatrixXd::Random(n, 200);
+  MatrixXd C = MatrixXd::Zero(n, 200);
 
   //MatrixXd c1 = C;
   //MatrixXd c2 = C;
@@ -27,8 +27,8 @@ void bench_composed_operations(Benchmarker &b, int n)
   b.benchmark("solve_nai", solve_naive, A, B, C);
   b.benchmark("solve_rec", solve_recommended, A, B, C);
 
-  B.setRandom(n , n / 2);
-  C.setZero(n, n / 2);
-  b.benchmark("solve_large_nai", solve_naive, A, B, C);
-  b.benchmark("solve_large_rec", solve_recommended, A, B, C);
+  //B.setRandom(n , n / 2);
+  //C.setZero(n, n / 2);
+  //b.benchmark("solve_large_nai", solve_naive, A, B, C);
+  //b.benchmark("solve_large_rec", solve_recommended, A, B, C);
 }

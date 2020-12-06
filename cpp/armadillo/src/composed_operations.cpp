@@ -15,8 +15,8 @@ void solve_recommended(const mat &A, const mat &B, mat &C)
 void bench_composed_operations(Benchmarker &b, int n)
 {
   dmat A = randn<dmat>(n, n);
-  dmat B = randn<dmat>(n, 10);
-  dmat C = zeros<dmat>(n, 10);
+  dmat B = randn<dmat>(n, 200);
+  dmat C = zeros<dmat>(n, 200);
   //dmat c1 = C;
   //dmat c2 = C;
   //naive(A, B, c1);
@@ -26,8 +26,8 @@ void bench_composed_operations(Benchmarker &b, int n)
   b.benchmark("solve_nai", solve_naive, A, B, C);
   b.benchmark("solve_rec", solve_recommended, A, B, C);
 
-  B = randn<dmat>(n, n / 2);
-  C = zeros<dmat>(n, n / 2);
-  b.benchmark("solve_large_nai", solve_naive, A, B, C);
-  b.benchmark("solve_large_rec", solve_recommended, A, B, C);
+  //B = randn<dmat>(n, n / 2);
+  //C = zeros<dmat>(n, n / 2);
+  //b.benchmark("solve_large_nai", solve_naive, A, B, C);
+  //b.benchmark("solve_large_rec", solve_recommended, A, B, C);
 }
