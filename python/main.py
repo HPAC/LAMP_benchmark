@@ -1,5 +1,7 @@
 import os
 import numpy as np
+import gc
+gc.disable()
 
 from benchmarker import Benchmarker as ben
 from kernel_invocations_syrk import kernel_invocations_syrk
