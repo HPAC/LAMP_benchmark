@@ -1,11 +1,41 @@
-import numpy as np
-import os
-import time
+import copy
+import inspect
 import logging
+import os
+import numpy as np
 
 logger = logging.getLogger('Benchmarker')
 
 cs = np.random.randn(1, int(os.environ['LAMP_L3_CACHE_SIZE']))
+
+
+def benchmark(f):
+    source = inspect.getsource(f)
+    source_lines = source.splitlines()
+    del source_lines[0]  # remove decorator to avoid recursion
+    # pos, start and end in indicate the space between lines of the function (-1 indicates the space before the last line)
+    pos = 1
+    start = 0
+    end = -1
+    source_lines.insert(pos, """    cache_scrub()""")
+    source_lines.insert(pos + 1, """    start = time.perf_counter()""")
+    source_lines.insert(end, """    end = time.perf_counter()""")
+    source_lines.insert(start, """from benchmarker import cache_scrub""")
+    source_lines.insert(start, """from scipy import linalg""")
+    source_lines.insert(start, """import time""")
+    source_lines[-1] = source_lines[-1].replace("return ", "return end-start, ")
+    new_source = "\n".join(source_lines)
+    print(source_lines)
+    print(new_source)
+    scope = {}
+    exec(new_source, scope)
+    new_f = scope[f.__name__]
+
+    def inner(*args):
+        return new_f(*copy.deepcopy(args))
+
+    return inner
+
 
 def cache_scrub():
     for j in range(cs.shape[0]):

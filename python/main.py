@@ -5,7 +5,7 @@ gc.disable()
 
 from benchmarker import Benchmarker as ben
 from kernel_invocations_syrk import kernel_invocations_syrk
-from kernel_invocations_gemm import kernel_invocations_gemm
+from kernel_invocations_gemm import exp01_gemm
 from kernel_invocations_syr2k import kernel_invocations_syr2k
 from transposition import transposition
 from solve_linear_systems import solve_linear_systems
@@ -22,12 +22,16 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(name)-2s: %(levelname)-2s %(message)s')
 logger = logging.getLogger('Main')
-logger.info('Numpy version: {}'.format(np.__version__))
-print('{}'.format(np.__config__.show()))
+# logger.info('Numpy version: {}'.format(np.__version__))
+# print('{}'.format(np.__config__.show()))
 
 n = int(os.environ['LAMP_N'])
 
 b = ben('python_' + str(os.environ['OMP_NUM_THREADS']))
+
+# ! GEMM
+
+exp01_gemm(b, n)
 
 A = np.random.randn(n, n)
 B = np.random.randn(n, n)
@@ -45,13 +49,7 @@ C = C + C.T
 
 kernel_invocations_syrk(b, A, C)
 
-# ! GEMM
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-C = np.random.randn(n, n)
-
-kernel_invocations_gemm(b, A, B, C)
 
 # ! SYR2K
 

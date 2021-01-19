@@ -1,142 +1,84 @@
-from scipy import linalg
-import numpy as np
+from benchmarker import benchmark
 import logging
-import time
-import copy
-from benchmarker import cache_scrub
+import numpy as np
+from scipy import linalg
 
 logger = logging.getLogger('Gemm')
 
 
+@benchmark
 def gemm_implicit(A, B, C):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = at @ bt + ct
-    end = time.perf_counter()
-
-    return end-start, ct
+    C = A @ B + C
+    return C
 
 
+@benchmark
 def gemm_implicit_compact(A, B, C):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct += at @ bt
-    end = time.perf_counter()
-
-    return end-start, ct
+    C += A @ B
+    return C
 
 
+@benchmark
 def gemm_implicit_coeff(A, B, C):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = 3.0 * at @ bt + ct
-    end = time.perf_counter()
-
-    return end-start, ct
+    C = 3.0 * A @ B + C
+    return C
 
 
+@benchmark
 def gemm_implicit_double_coeff(A, B, C):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = 3.0 * at @ bt + 3.0 * ct
-    end = time.perf_counter()
-
-    return end-start, ct
+    C = 3.0 * A @ B + 3.0 * C
+    return C
 
 
+@benchmark
 def gemm_implicit_noup(A, B, C):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = at @ bt
-    end = time.perf_counter()
-
-    return end-start, ct
+    C = A @ B
+    return C
 
 
+@benchmark
 def gemm_explicit(A, B, C):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    ct = ct.ravel(order='F').reshape(ct.shape, order='F')
-    cache_scrub()
-    start = time.perf_counter()
-    linalg.blas.dgemm(1.0, at, bt, 1.0, ct, trans_a=False, trans_b=False, overwrite_c=True)
-    end = time.perf_counter()
-    return end-start, ct
+    linalg.blas.dgemm(1.0, A, B, 1.0, C, trans_a=False, trans_b=False, overwrite_c=True)
+    return C
 
 
+@benchmark
 def trmm_implicit(A, B):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    cache_scrub()
-    start = time.perf_counter()
-    bt = at @ bt
-    end = time.perf_counter()
-    return end-start, bt
+    B = A @ B
+    return B
 
 
+@benchmark
 def trmm_explicit(A, B):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    bt = bt.ravel(order='F').reshape(bt.shape, order='F')
-    cache_scrub()
-    start = time.perf_counter()
-    linalg.blas.dtrmm(1.0, at, bt, diag=False, trans_a=False, side=False,
+    linalg.blas.dtrmm(1.0, A, B, diag=False, trans_a=False, side=False,
                       lower=True, overwrite_b=True)  # diag specifies unit triangular
-    end = time.perf_counter()
-    return end-start, bt
+    return B
 
 
+@benchmark
 def diagmm(A, B, C):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = at @ bt
-    end = time.perf_counter()
-
-    return end-start, ct
+    C = A @ B
+    return C
 
 
-def kernel_invocations_gemm(b, *args):
+def exp01_gemm(b, n):
 
-    res1 = b.benchmark('gemm_implicit', gemm_implicit, *args)
-    res2 = b.benchmark('gemm_implicit_compact', gemm_implicit_compact, *args)
-    res3 = b.benchmark('gemm_explicit', gemm_explicit, *args)
+    A = np.random.randn(n, n)
+    B = np.random.randn(n, n)
+    C = np.random.randn(n, n)
 
-    res4 = b.benchmark('gemm_implicit_noup', gemm_implicit_noup, *args)
+    res1 = b.benchmark('gemm_implicit', gemm_implicit, A, B, C)
+    res2 = b.benchmark('gemm_implicit_compact', gemm_implicit_compact, A, B, C)
+    res3 = b.benchmark('gemm_explicit', gemm_explicit, A, B, C)
 
-    res4 = b.benchmark('gemm_implicit_coeff', gemm_implicit_coeff, *args)
-    res4 = b.benchmark('gemm_implicit_double_coeff', gemm_implicit_double_coeff, *args)
+    res4 = b.benchmark('gemm_implicit_noup', gemm_implicit_noup, A, B, C)
 
-    Asq = np.random.randn(args[0].shape[0], args[0].shape[0])
-    Bsq = np.random.randn(args[0].shape[0], args[0].shape[0])
-    Csq = np.random.randn(args[0].shape[0], args[0].shape[0])
+    res4 = b.benchmark('gemm_implicit_coeff', gemm_implicit_coeff, A, B, C)
+    res4 = b.benchmark('gemm_implicit_double_coeff', gemm_implicit_double_coeff, A, B, C)
+
+    Asq = np.random.randn(A.shape[0], A.shape[0])
+    Bsq = np.random.randn(A.shape[0], A.shape[0])
+    Csq = np.random.randn(A.shape[0], A.shape[0])
 
     Asq = np.tril(Asq)
     logger.debug('Asq is triangualar'.format(np.allclose(Asq, np.tril(Asq))))
