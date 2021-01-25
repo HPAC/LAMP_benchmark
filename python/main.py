@@ -4,12 +4,12 @@ import gc
 gc.disable()
 
 from benchmarker import Benchmarker as ben
-from kernel_invocations_syrk import exp02_syrk
-from kernel_invocations_gemm import exp01_gemm
-from kernel_invocations_syr2k import exp03_syr2k
+from exp02_syrk import exp02_syrk
+from exp01_gemm import exp01_gemm
+from exp03_syr2k import exp03_syr2k
 from transposition import transposition
-from solve_linear_systems import exp05_solve_linear_systems
-from matrix_chain import exp06_optimal_parenthesization
+from exp05_explicit_inversion import exp05_solve_linear_systems
+from exp06_optimal_parenthesization import exp06_optimal_parenthesization
 from diagonal_elements import diagonal_elements
 from common_subexpressions import common_subexpressions
 from index_problems import index_problems
