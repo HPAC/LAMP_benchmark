@@ -8,7 +8,7 @@ from kernel_invocations_syrk import exp02_syrk
 from kernel_invocations_gemm import exp01_gemm
 from kernel_invocations_syr2k import exp03_syr2k
 from transposition import transposition
-from solve_linear_systems import solve_linear_systems
+from solve_linear_systems import exp05_solve_linear_systems
 from matrix_chain import matrix_chain
 from diagonal_elements import diagonal_elements
 from common_subexpressions import common_subexpressions
@@ -68,10 +68,7 @@ common_subexpressions(b, A, B)
 
 # ! Composed Operations
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, 200)
-
-solve_linear_systems(b, A, B)
+exp05_solve_linear_systems(b, n)
 
 #! Matrix Chain Problem
 
