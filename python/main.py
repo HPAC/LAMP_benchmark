@@ -12,7 +12,7 @@ from exp05_explicit_inversion import exp05_explicit_inversion
 from exp06_optimal_parenthesization import exp06_optimal_parenthesization
 from exp07_properties_multiplication import exp07_properties_multiplication
 from diagonal_elements import diagonal_elements
-from common_subexpressions import common_subexpressions
+from exp09_common_subexpressions import exp09_common_subexpressions
 from index_problems import index_problems
 from partitioned_matrices import partitioned_matrices
 from loop_translation import loop_translation
@@ -63,10 +63,7 @@ transposition(b, A, B, C)
 
 # ! Common Subexpression
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-
-common_subexpressions(b, A, B)
+exp09_common_subexpressions(b, n)
 
 # ! Composed Operations
 
@@ -74,7 +71,7 @@ exp05_explicit_inversion(b, n)
 
 #! Matrix Chain Problem
 
-exp06_optimal_parenthesization(b, A, B)
+exp06_optimal_parenthesization(b, n)
 
 # ! Diagonal elements
 
