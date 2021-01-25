@@ -4,6 +4,7 @@ import gc
 gc.disable()
 
 from benchmarker import Benchmarker as ben
+
 from exp01_gemm import exp01_gemm
 from exp02_syrk import exp02_syrk
 from exp03_syr2k import exp03_syr2k
@@ -11,12 +12,13 @@ from exp03_syr2k import exp03_syr2k
 from exp05_explicit_inversion import exp05_explicit_inversion
 from exp06_optimal_parenthesization import exp06_optimal_parenthesization
 from exp07_properties_multiplication import exp07_properties_multiplication
-from diagonal_elements import diagonal_elements
-from exp09_common_subexpressions import exp09_common_subexpressions
-from index_problems import index_problems
-from partitioned_matrices import partitioned_matrices
-from loop_translation import loop_translation
 from exp08_properties_in_linear_systems import exp08_properties_in_linear_systems
+from exp09_common_subexpressions import exp09_common_subexpressions
+from exp10_loop_invariant_code_motion import exp10_loop_invariant_code_motion
+
+from partitioned_matrices import partitioned_matrices
+from diagonal_elements import diagonal_elements
+from loop_translation import loop_translation
 from partial_operand import partial_operand
 from add_scal import add_scal
 from transposition import transposition
@@ -59,7 +61,7 @@ A = np.random.randn(tn, tn)
 B = np.random.randn(tn, tn)
 C = np.random.randn(tn, tn)
 
-transposition(b, A, B, C)
+transposition(b, n)
 
 # ! Common Subexpression
 
@@ -89,12 +91,7 @@ partial_operand(b, A, B)
 
 # ! Index problems
 
-ipn = int(n / 10)
-A = np.random.randn(ipn, ipn)
-B = np.random.randn(ipn, ipn)
-C = np.random.randn(ipn)
-
-index_problems(b, A, B, C)
+exp10_loop_invariant_code_motion(b, n)
 
 # ! Index problems
 
