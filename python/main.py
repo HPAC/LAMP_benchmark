@@ -4,9 +4,9 @@ import gc
 gc.disable()
 
 from benchmarker import Benchmarker as ben
-from kernel_invocations_syrk import kernel_invocations_syrk
+from kernel_invocations_syrk import exp02_syrk
 from kernel_invocations_gemm import exp01_gemm
-from kernel_invocations_syr2k import kernel_invocations_syr2k
+from kernel_invocations_syr2k import exp03_syr2k
 from transposition import transposition
 from solve_linear_systems import solve_linear_systems
 from matrix_chain import matrix_chain
@@ -33,6 +33,7 @@ b = ben('python_' + str(os.environ['OMP_NUM_THREADS']))
 
 exp01_gemm(b, n)
 
+# add_scal
 A = np.random.randn(n, n)
 B = np.random.randn(n, n)
 add_scal(b, A, B)
@@ -44,16 +45,10 @@ properties_solve(b, n, 200)
 # ! SYRK
 
 exp02_syrk(b, n)
-kernel_invocations_syrk(b, A, C)
 
 # ! SYR2K
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-C = np.random.randn(n, n)
-C = C + C.T
-
-kernel_invocations_syr2k(b, A, B, C)
+exp03_syr2k(b, n)
 
 # ! Transposition
 

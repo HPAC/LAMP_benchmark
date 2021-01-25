@@ -4,67 +4,42 @@ import logging
 import time
 import copy
 from benchmarker import cache_scrub
+from benchmarker import benchmark
 
 logger = logging.getLogger('Syr2k')
 
-
+@benchmark
 def syr2k_implicit(A, B, C):
+    C = A @ B.T + B @ A.T + C
+    return C
 
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = at @ bt.T + bt @ at.T + ct
-    end = time.perf_counter()
-
-    return end-start, ct
-
-
+@benchmark
 def syr2k_implicit_noup(A, B, C):
+    C = A @ B.T + B @ A.T
+    return C
 
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = at @ bt.T + bt @ at.T
-    end = time.perf_counter()
-
-    return end-start, ct
-
-
+@benchmark
 def syr2k_implicit_compact(A, B, C):
+    C += A @ B.T + B @ A.T
+    return C
 
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct += at @ bt.T + bt @ at.T
-    end = time.perf_counter()
-
-    return end-start, ct
-
-
+@benchmark
 def syr2k_explicit(A, B, C):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(C)
-    ct = ct.ravel(order='F').reshape(ct.shape, order='F')
-    cache_scrub()
-    start = time.perf_counter()
-    linalg.blas.dsyr2k(1.0, at, bt, 1.0, ct, overwrite_c=True, lower=True, trans=False)
-    end = time.perf_counter()
-    return end-start, ct
+    linalg.blas.dsyr2k(1.0, A, B, 1.0, C, overwrite_c=True, lower=True, trans=False)
+    return C
 
 
-def kernel_invocations_syr2k(b, *args):
+def exp03_syr2k(b, n):
 
-    res1 = b.benchmark('syr2k_implicit', syr2k_implicit, *args)
-    res2 = b.benchmark('syr2k_explicit', syr2k_explicit, *args)
-    res3 = b.benchmark('syr2k_implicit_compact', syr2k_implicit_compact, *args)
-    res4 = b.benchmark('syr2k_implicit_noup', syr2k_implicit_noup, *args)
+    A = np.random.randn(n, n)
+    B = np.random.randn(n, n)
+    C = np.random.randn(n, n)
+    C = C + C.T
+
+    res1 = b.benchmark('syr2k_implicit', syr2k_implicit, A, B, C)
+    res3 = b.benchmark('syr2k_implicit_compact', syr2k_implicit_compact, A, B, C)
+    res4 = b.benchmark('syr2k_implicit_noup', syr2k_implicit_noup, A, B, C)
+    C = C.ravel(order='F').reshape(C.shape, order='F')
+    res2 = b.benchmark('syr2k_explicit', syr2k_explicit, A, B, C)
     logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res1, k=0), np.tril(res2, k=0))))
     logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res1, k=0), np.tril(res3, k=0))))
