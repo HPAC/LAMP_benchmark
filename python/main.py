@@ -9,7 +9,7 @@ from kernel_invocations_gemm import exp01_gemm
 from kernel_invocations_syr2k import exp03_syr2k
 from transposition import transposition
 from solve_linear_systems import exp05_solve_linear_systems
-from matrix_chain import matrix_chain
+from matrix_chain import exp06_optimal_parenthesization
 from diagonal_elements import diagonal_elements
 from common_subexpressions import common_subexpressions
 from index_problems import index_problems
@@ -72,10 +72,7 @@ exp05_solve_linear_systems(b, n)
 
 #! Matrix Chain Problem
 
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-
-matrix_chain(b, A, B)
+exp06_optimal_parenthesization(b, A, B)
 
 # ! Diagonal elements
 
