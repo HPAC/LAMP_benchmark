@@ -16,7 +16,7 @@ from common_subexpressions import common_subexpressions
 from index_problems import index_problems
 from partitioned_matrices import partitioned_matrices
 from loop_translation import loop_translation
-from properties_solve import properties_solve
+from exp08_properties_in_linear_systems import exp08_properties_in_linear_systems
 from partial_operand import partial_operand
 from add_scal import add_scal
 from transposition import transposition
@@ -42,7 +42,7 @@ add_scal(b, A, B)
 
 # ! Properties Solve
 
-properties_solve(b, n, 200)
+exp08_properties_in_linear_systems(b, n, 200)
 
 # ! SYRK
 
