@@ -8,7 +8,7 @@ from exp02_syrk import exp02_syrk
 from exp01_gemm import exp01_gemm
 from exp03_syr2k import exp03_syr2k
 from transposition import transposition
-from exp05_explicit_inversion import exp05_solve_linear_systems
+from exp05_explicit_inversion import exp05_explicit_inversion
 from exp06_optimal_parenthesization import exp06_optimal_parenthesization
 from diagonal_elements import diagonal_elements
 from common_subexpressions import common_subexpressions
@@ -68,7 +68,7 @@ common_subexpressions(b, A, B)
 
 # ! Composed Operations
 
-exp05_solve_linear_systems(b, n)
+exp05_explicit_inversion(b, n)
 
 #! Matrix Chain Problem
 

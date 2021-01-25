@@ -16,7 +16,7 @@ def solve_rec(A, B):
     return C
 
 
-def exp05_solve_linear_systems(b, n):
+def exp05_explicit_inversion(b, n):
 
     A = np.random.randn(n, n)
     B = np.random.randn(n, 200)
