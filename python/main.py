@@ -43,13 +43,8 @@ properties_solve(b, n, 200)
 
 # ! SYRK
 
-A = np.random.randn(n, n)
-C = np.random.randn(n, n)
-C = C + C.T
-
+exp02_syrk(b, n)
 kernel_invocations_syrk(b, A, C)
-
-
 
 # ! SYR2K
 
@@ -129,5 +124,3 @@ A2 = np.random.randn(p, p)
 B = np.random.randn(2*p, 2*p)
 
 partitioned_matrices(b, A1, A2, B)
-
-print (Here, we commit the first change.)

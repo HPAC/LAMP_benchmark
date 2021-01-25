@@ -4,63 +4,42 @@ import logging
 import time
 import copy
 from benchmarker import cache_scrub
+from benchmarker import benchmark
 
 logger = logging.getLogger('Syrk')
 
-
+@benchmark
 def syrk_implicit(A, C):
+    C = A @ A.T + C
+    return C
 
-    at = copy.deepcopy(A)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = at @ at.T + ct
-    end = time.perf_counter()
-
-    return end-start, ct
-
-
+@benchmark
 def syrk_implicit_compact(A, C):
+    C += A @ A.T
+    return C
 
-    at = copy.deepcopy(A)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct += at @ at.T
-    end = time.perf_counter()
-
-    return end-start, ct
-
-
+@benchmark
 def syrk_implicit_noup(A, C):
+    C = A @ A.T
+    return C
 
-    at = copy.deepcopy(A)
-    ct = copy.deepcopy(C)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = at @ at.T
-    end = time.perf_counter()
-
-    return end-start, ct
-
-
+@benchmark
 def syrk_explicit(A, C):
-
-    at = copy.deepcopy(A)
-    ct = copy.deepcopy(C)
-    ct = ct.ravel(order='F').reshape(ct.shape, order='F')
-    cache_scrub()
-    start = time.perf_counter()
-    linalg.blas.dsyrk(1.0, at, 1.0, ct, overwrite_c=True, lower=True, trans=False)
-    end = time.perf_counter()
-    return end-start, ct
+    linalg.blas.dsyrk(1.0, A, 1.0, C, overwrite_c=True, lower=True, trans=False)
+    return C
 
 
-def kernel_invocations_syrk(b, *args):
+def exp02_syrk(b, n):
 
-    res1 = b.benchmark('syrk_implicit', syrk_implicit, *args)
-    res2 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, *args)
-    res3 = b.benchmark('syrk_explicit', syrk_explicit, *args)
-    res4 = b.benchmark('syrk_implicit_noup', syrk_implicit_noup, *args)
+    A = np.random.randn(n, n)
+    C = np.random.randn(n, n)
+    C = C + C.T
+
+    res1 = b.benchmark('syrk_implicit', syrk_implicit, A, C)
+    res2 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, A, C)
+    res4 = b.benchmark('syrk_implicit_noup', syrk_implicit_noup, A, C)
+    C = C.ravel(order='F').reshape(C.shape, order='F')
+    res3 = b.benchmark('syrk_explicit', syrk_explicit, A, C)
+
     logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res1, k=0), np.tril(res2, k=0))))
     logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res1, k=0), np.tril(res3, k=0))))
