@@ -43,19 +43,6 @@ def gemm_explicit(A, B, C):
 
 
 @benchmark
-def trmm_implicit(A, B):
-    B = A @ B
-    return B
-
-
-@benchmark
-def trmm_explicit(A, B):
-    linalg.blas.dtrmm(1.0, A, B, diag=False, trans_a=False, side=False,
-                      lower=True, overwrite_b=True)  # diag specifies unit triangular
-    return B
-
-
-@benchmark
 def diagmm(A, B, C):
     C = A @ B
     return C
@@ -82,12 +69,10 @@ def exp01_gemm(b, n):
 
     Asq = np.tril(Asq)
     logger.debug('Asq is triangualar'.format(np.allclose(Asq, np.tril(Asq))))
-    res7 = b.benchmark('trmm_implicit', trmm_implicit, Asq, Bsq)
-    res8 = b.benchmark('trmm_explicit', trmm_explicit, Asq, Bsq)
 
     Ad = np.diag(np.diag(Asq))
     res9 = b.benchmark('diagmm', diagmm, Ad, Bsq, Csq)
 
     logger.info('Gemm correctness: {}'.format(np.allclose(res1, res2)))
     logger.info('Gemm correctness: {}'.format(np.allclose(res1, res3)))
-    logger.info('Trmm correctness: {}'.format(np.allclose(res7, res8)))
+

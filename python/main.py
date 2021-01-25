@@ -4,12 +4,13 @@ import gc
 gc.disable()
 
 from benchmarker import Benchmarker as ben
-from exp02_syrk import exp02_syrk
 from exp01_gemm import exp01_gemm
+from exp02_syrk import exp02_syrk
 from exp03_syr2k import exp03_syr2k
-from transposition import transposition
+# from exp04_update_of_c import exp04_update_of_c
 from exp05_explicit_inversion import exp05_explicit_inversion
 from exp06_optimal_parenthesization import exp06_optimal_parenthesization
+from exp07_properties_multiplication import exp07_properties_multiplication
 from diagonal_elements import diagonal_elements
 from common_subexpressions import common_subexpressions
 from index_problems import index_problems
@@ -18,6 +19,7 @@ from loop_translation import loop_translation
 from properties_solve import properties_solve
 from partial_operand import partial_operand
 from add_scal import add_scal
+from transposition import transposition
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(name)-2s: %(levelname)-2s %(message)s')
