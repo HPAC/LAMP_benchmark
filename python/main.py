@@ -18,7 +18,6 @@ from exp10_loop_invariant_code_motion import exp10_loop_invariant_code_motion
 from exp11_blocked_matrices import exp11_blocked_matrices
 from exp12_partial_operand_access import exp12_partial_operand_access
 
-from diagonal_elements import diagonal_elements
 from loop_translation import loop_translation
 from add_scal import add_scal
 from transposition import transposition
@@ -67,12 +66,6 @@ exp05_explicit_inversion(b, n)
 
 #! Matrix Chain Problem
 exp06_optimal_parenthesization(b, n)
-
-# ! Diagonal elements
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-
-diagonal_elements(b, A, B)
 
 # ! Partial Operand
 exp12_partial_operand_access(b, n)
