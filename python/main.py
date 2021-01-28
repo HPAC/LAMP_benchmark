@@ -19,7 +19,7 @@ from exp11_blocked_matrices import exp11_blocked_matrices
 from exp12_partial_operand_access import exp12_partial_operand_access
 from expNN_transposition import expNN_transposition
 
-from loop_translation import loop_translation
+from expNN_BLAS_level_2_to_level_3 import expNN_BLAS_level_2_to_level_3
 from add_scal import add_scal
 
 
@@ -70,11 +70,7 @@ exp12_partial_operand_access(b, n)
 exp10_loop_invariant_code_motion(b, n)
 
 # ! Index problems
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-C = np.random.randn(n, n)
-
-loop_translation(b, A, B, C)
+expNN_BLAS_level_2_to_level_3(b, n)
 
 # ! Partitioned Matrices
 exp11_blocked_matrices(b, n)
