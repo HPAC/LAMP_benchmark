@@ -3,7 +3,7 @@ import logging
 import numpy as np
 from scipy import linalg
 
-### logger = logging.getLogger('Gemm')
+logger = logging.getLogger('exp07_properties_multiplication')
 
 @benchmark
 def trmm_implicit(A, B):
