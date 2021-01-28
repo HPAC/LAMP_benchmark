@@ -16,12 +16,13 @@ from exp08_properties_in_linear_systems import exp08_properties_in_linear_system
 from exp09_common_subexpressions import exp09_common_subexpressions
 from exp10_loop_invariant_code_motion import exp10_loop_invariant_code_motion
 from exp11_blocked_matrices import exp11_blocked_matrices
+from exp12_partial_operand_access import exp12_partial_operand_access
 
 from diagonal_elements import diagonal_elements
 from loop_translation import loop_translation
-from partial_operand import partial_operand
 from add_scal import add_scal
 from transposition import transposition
+
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(name)-2s: %(levelname)-2s %(message)s')
@@ -74,10 +75,7 @@ B = np.random.randn(n, n)
 diagonal_elements(b, A, B)
 
 # ! Partial Operand
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
-
-partial_operand(b, A, B)
+exp12_partial_operand_access(b, n)
 
 # ! Index problems
 exp10_loop_invariant_code_motion(b, n)
