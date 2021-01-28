@@ -17,10 +17,11 @@ from exp09_common_subexpressions import exp09_common_subexpressions
 from exp10_loop_invariant_code_motion import exp10_loop_invariant_code_motion
 from exp11_blocked_matrices import exp11_blocked_matrices
 from exp12_partial_operand_access import exp12_partial_operand_access
+from expNN_transposition import expNN_transposition
 
 from loop_translation import loop_translation
 from add_scal import add_scal
-from transposition import transposition
+
 
 import logging
 
@@ -51,12 +52,7 @@ exp02_syrk(b, n)
 exp03_syr2k(b, n)
 
 # ! Transposition
-tn = int(n / 10)
-A = np.random.randn(tn, tn)
-B = np.random.randn(tn, tn)
-C = np.random.randn(tn, tn)
-
-transposition(b, n)
+expNN_transposition(b, n)
 
 # ! Common Subexpression
 exp09_common_subexpressions(b, n)
