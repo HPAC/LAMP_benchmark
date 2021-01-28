@@ -4,16 +4,23 @@ import logging
 import time
 import copy
 from benchmarker import cache_scrub
+from benchmarker import benchmark
 
 logger = logging.getLogger('Partitioned Matrices')
 
 
-def partitioned_matrices(b, *args):
-    res1 = b.benchmark("compact", blocked_solve_naive, *args)
-    res2 = b.benchmark("blocked", blocked_solve_recommended, *args)
+def exp11_blocked_matrices(b, n):
+
+    p = int(n / 2)
+    A1 = np.random.randn(p, p)
+    A2 = np.random.randn(p, p)
+    B = np.random.randn(2 * p, 2 * p)
+
+    res1 = b.benchmark("compact", blocked_solve_naive, A1, A2, B)
+    res2 = b.benchmark("blocked", blocked_solve_recommended, A1, A2, B)
     logger.info('PartitionedMatrices correctness: {}'.format(np.allclose(res1, res2)))
 
-
+@benchmark
 def blocked_solve_naive(A1, A2, B):
     a1t = copy.deepcopy(A1)
     a2t = copy.deepcopy(A2)
@@ -29,7 +36,7 @@ def blocked_solve_naive(A1, A2, B):
     end = time.perf_counter()
     return end-start, ct
 
-
+@benchmark
 def blocked_solve_recommended(A1, A2, B):
     a1t = copy.deepcopy(A1)
     a2t = copy.deepcopy(A2)
