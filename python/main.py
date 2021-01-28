@@ -60,23 +60,3 @@ expNN_BLAS_level_2_to_level_3(b, n)
 
 expNN_transposition(b, n)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
