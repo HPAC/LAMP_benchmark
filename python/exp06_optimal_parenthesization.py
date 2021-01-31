@@ -1,9 +1,8 @@
-from scipy import linalg
 import numpy as np
 import logging
 from benchmarker import benchmark
 
-logger = logging.getLogger('MatrixChain')
+logger = logging.getLogger('exp06_optimal_parenthesization')
 
 @benchmark
 def mc_l_r_orig(C, A, B, res):

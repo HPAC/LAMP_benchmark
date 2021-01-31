@@ -1,9 +1,8 @@
-from scipy import linalg
 import numpy as np
 import logging
 from benchmarker import benchmark
 
-logger = logging.getLogger('Solve')
+logger = logging.getLogger('exp05_explicit_inversion')
 
 @benchmark
 def solve_nai(A, B):
