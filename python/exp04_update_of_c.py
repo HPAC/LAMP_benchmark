@@ -15,6 +15,7 @@ def scal(A):
     A = 3.0 * A
     return A
 
+# from exp01_gemm
 
 @benchmark
 def gemm_implicit(A, B, C):
@@ -41,6 +42,7 @@ def gemm_explicit(A, B, C):
     linalg.blas.dgemm(1.0, A, B, 1.0, C, trans_a=False, trans_b=False, overwrite_c=True)
     return C
 
+# from exp02_syrk
 
 @benchmark
 def syrk_implicit(A, C):
@@ -57,6 +59,22 @@ def syrk_explicit(A, C):
     linalg.blas.dsyrk(1.0, A, 1.0, C, overwrite_c=True, lower=True, trans=False)
     return C
 
+# from exp03_syr2k
+
+@benchmark
+def syr2k_implicit(A, B, C):
+    C = A @ B.T + B @ A.T + C
+    return C
+
+@benchmark
+def syr2k_implicit_compact(A, B, C):
+    C += A @ B.T + B @ A.T
+    return C
+
+@benchmark
+def syr2k_explicit(A, B, C):
+    linalg.blas.dsyr2k(1.0, A, B, 1.0, C, overwrite_c=True, lower=True, trans=False)
+    return C
 
 def exp04_update_of_c(b, n):
 
@@ -68,24 +86,28 @@ def exp04_update_of_c(b, n):
     b.benchmark('scal', scal, A)
 
     # from exp01_gemm
-    res1 = b.benchmark('gemm_implicit', gemm_implicit, A, B, C)
-    res2 = b.benchmark('gemm_implicit_compact', gemm_implicit_compact, A, B, C)
-    res3 = b.benchmark('gemm_explicit', gemm_explicit, A, B, C)
+    res01 = b.benchmark('gemm_implicit', gemm_implicit, A, B, C)
+    res02 = b.benchmark('gemm_implicit_compact', gemm_implicit_compact, A, B, C)
+    res03 = b.benchmark('gemm_explicit', gemm_explicit, A, B, C)
 
-    res4 = b.benchmark('gemm_implicit_coeff', gemm_implicit_coeff, A, B, C)
-    res5 = b.benchmark('gemm_implicit_double_coeff', gemm_implicit_double_coeff, A, B, C)
+    res04 = b.benchmark('gemm_implicit_coeff', gemm_implicit_coeff, A, B, C)
+    res05 = b.benchmark('gemm_implicit_double_coeff', gemm_implicit_double_coeff, A, B, C)
 
-    logger.info('Gemm correctness: {}'.format(np.allclose(res1, res2)))
-    logger.info('Gemm correctness: {}'.format(np.allclose(res1, res3)))
+    logger.info('Gemm correctness: {}'.format(np.allclose(res01, res02)))
+    logger.info('Gemm correctness: {}'.format(np.allclose(res01, res03)))
 
-    # from exp02_syrk
+    # from exp02_syrk & exp03_syr2k
     C = C + C.T
-    res1 = b.benchmark('syrk_implicit', syrk_implicit, A, C)
-    res2 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, A, C)
+    res11 = b.benchmark('syrk_implicit', syrk_implicit, A, C)
+    res12 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, A, C)
+    res21 = b.benchmark('syr2k_implicit', syr2k_implicit, A, B, C)
+    res23 = b.benchmark('syr2k_implicit_compact', syr2k_implicit_compact, A, B, C)
     C = C.ravel(order='F').reshape(C.shape, order='F')
-    res3 = b.benchmark('syrk_explicit', syrk_explicit, A, C)
+    res13 = b.benchmark('syrk_explicit', syrk_explicit, A, C)
+    res22 = b.benchmark('syr2k_explicit', syr2k_explicit, A, B, C)
 
-    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res1, k=0), np.tril(res2, k=0))))
-    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res1, k=0), np.tril(res3, k=0))))
+    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res11, k=0), np.tril(res12, k=0))))
+    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res11, k=0), np.tril(res13, k=0))))
+    logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res21, k=0), np.tril(res22, k=0))))
+    logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res21, k=0), np.tril(res23, k=0))))
 
-    # from exp03_syr2k
