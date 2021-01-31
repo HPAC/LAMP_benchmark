@@ -3,44 +3,12 @@ import logging
 import numpy as np
 from scipy import linalg
 
-logger = logging.getLogger('Gemm')
-
-
-@benchmark
-def gemm_implicit(A, B, C):
-    C = A @ B + C
-    return C
-
-
-@benchmark
-def gemm_implicit_compact(A, B, C):
-    C += A @ B
-    return C
-
-
-@benchmark
-def gemm_implicit_coeff(A, B, C):
-    C = 3.0 * A @ B + C
-    return C
-
-
-@benchmark
-def gemm_implicit_double_coeff(A, B, C):
-    C = 3.0 * A @ B + 3.0 * C
-    return C
-
+logger = logging.getLogger('exp01_gemm')
 
 @benchmark
 def gemm_implicit_noup(A, B, C):
     C = A @ B
     return C
-
-
-@benchmark
-def gemm_explicit(A, B, C):
-    linalg.blas.dgemm(1.0, A, B, 1.0, C, trans_a=False, trans_b=False, overwrite_c=True)
-    return C
-
 
 @benchmark
 def diagmm(A, B, C):
@@ -54,14 +22,7 @@ def exp01_gemm(b, n):
     B = np.random.randn(n, n)
     C = np.random.randn(n, n)
 
-    res1 = b.benchmark('gemm_implicit', gemm_implicit, A, B, C)
-    res2 = b.benchmark('gemm_implicit_compact', gemm_implicit_compact, A, B, C)
-    res3 = b.benchmark('gemm_explicit', gemm_explicit, A, B, C)
-
-    res4 = b.benchmark('gemm_implicit_noup', gemm_implicit_noup, A, B, C)
-
-    res4 = b.benchmark('gemm_implicit_coeff', gemm_implicit_coeff, A, B, C)
-    res4 = b.benchmark('gemm_implicit_double_coeff', gemm_implicit_double_coeff, A, B, C)
+    res1 = b.benchmark('gemm_implicit_noup', gemm_implicit_noup, A, B, C)
 
     Asq = np.random.randn(A.shape[0], A.shape[0])
     Bsq = np.random.randn(A.shape[0], A.shape[0])
@@ -71,8 +32,7 @@ def exp01_gemm(b, n):
     logger.debug('Asq is triangualar'.format(np.allclose(Asq, np.tril(Asq))))
 
     Ad = np.diag(np.diag(Asq))
-    res9 = b.benchmark('diagmm', diagmm, Ad, Bsq, Csq)
+    res2 = b.benchmark('diagmm', diagmm, Ad, Bsq, Csq)
 
-    logger.info('Gemm correctness: {}'.format(np.allclose(res1, res2)))
-    logger.info('Gemm correctness: {}'.format(np.allclose(res1, res3)))
+
 
