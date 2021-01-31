@@ -42,6 +42,22 @@ def gemm_explicit(A, B, C):
     return C
 
 
+@benchmark
+def syrk_implicit(A, C):
+    C = A @ A.T + C
+    return C
+
+@benchmark
+def syrk_implicit_compact(A, C):
+    C += A @ A.T
+    return C
+
+@benchmark
+def syrk_explicit(A, C):
+    linalg.blas.dsyrk(1.0, A, 1.0, C, overwrite_c=True, lower=True, trans=False)
+    return C
+
+
 def exp04_update_of_c(b, n):
 
     A = np.random.randn(n, n)
@@ -51,6 +67,7 @@ def exp04_update_of_c(b, n):
     b.benchmark('add', add, A, B)
     b.benchmark('scal', scal, A)
 
+    # from exp01_gemm
     res1 = b.benchmark('gemm_implicit', gemm_implicit, A, B, C)
     res2 = b.benchmark('gemm_implicit_compact', gemm_implicit_compact, A, B, C)
     res3 = b.benchmark('gemm_explicit', gemm_explicit, A, B, C)
@@ -60,3 +77,15 @@ def exp04_update_of_c(b, n):
 
     logger.info('Gemm correctness: {}'.format(np.allclose(res1, res2)))
     logger.info('Gemm correctness: {}'.format(np.allclose(res1, res3)))
+
+    # from exp02_syrk
+    C = C + C.T
+    res1 = b.benchmark('syrk_implicit', syrk_implicit, A, C)
+    res2 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, A, C)
+    C = C.ravel(order='F').reshape(C.shape, order='F')
+    res3 = b.benchmark('syrk_explicit', syrk_explicit, A, C)
+
+    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res1, k=0), np.tril(res2, k=0))))
+    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res1, k=0), np.tril(res3, k=0))))
+
+    # from exp03_syr2k
