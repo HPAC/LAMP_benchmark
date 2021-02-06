@@ -24,7 +24,7 @@ def exp05_explicit_inversion(b, n):
     res2 = b.benchmark('solve_rec', solve_rec, A, B)
     logger.info('Solve correctness: {}'.format(np.allclose(res1, res2)))
 
-    B = np.random.randn(B.shape[0], 5 * A.shape[0])  # B.rows , 5 * A.rows
+    B = np.random.randn(n, 5*n)  # B.rows , 5 * A.rows
     res3 = b.benchmark('solve_large_nai', solve_nai, A, B)
     res4 = b.benchmark('solve_large_rec', solve_rec, A, B)
     logger.info('Solve correctness: {}'.format(np.allclose(res3, res4)))
