@@ -37,3 +37,4 @@ def exp07_properties_multiplication(b, n):
     res3 = b.benchmark('diagmm', diagmm, Ad, B, C)
 
     logger.info('Trmm correctness: {}'.format(np.allclose(res1, res2)))
+
