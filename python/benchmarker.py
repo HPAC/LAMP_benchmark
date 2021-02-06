@@ -21,7 +21,7 @@ def benchmark(f):
     source_lines.insert(pos + 1, """    start = time.perf_counter()""")
     source_lines.insert(end, """    end = time.perf_counter()""")
     source_lines.insert(start, """from benchmarker import cache_scrub""")
-    # source_lines.insert(start, """import numpy as np""")
+    source_lines.insert(start, """import numpy as np""")
     source_lines.insert(start, """from scipy import linalg""")
     source_lines.insert(start, """import time""")
     source_lines[-1] = source_lines[-1].replace("return ", "return end-start, ")
