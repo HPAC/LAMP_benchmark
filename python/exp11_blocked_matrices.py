@@ -20,11 +20,11 @@ def blocked_solve_recommended(A1, A2, B, C):
 
 def exp11_blocked_matrices(b, n):
 
-    p = int(n / 2)
-    A1 = np.random.randn(p, p)
-    A2 = np.random.randn(p, p)
-    B = np.random.randn(2 * p, 2 * p)
-    C = np.zeros((B.shape[0], B.shape[1]), dtype=np.float64)
+    bm_n = int(n / 2)
+    A1 = np.random.randn(bm_n, bm_n)
+    A2 = np.random.randn(bm_n, bm_n)
+    B = np.random.randn(2 * bm_n, 2 * bm_n)
+    C = np.zeros((2 * bm_n, 2 * bm_n), dtype=np.float64)
 
     res1 = b.benchmark("compact", blocked_solve_naive, A1, A2, B, C)
     res2 = b.benchmark("blocked", blocked_solve_recommended, A1, A2, B, C)

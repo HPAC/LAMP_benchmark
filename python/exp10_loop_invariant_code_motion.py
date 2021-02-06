@@ -21,11 +21,11 @@ def recommended_loop(A, B, C, temp):
 
 def exp10_loop_invariant_code_motion(b, n):
 
-    ipn = int(n / 10)
-    A = np.random.randn(ipn, ipn)
-    B = np.random.randn(ipn, ipn)
-    C = np.random.randn(ipn)
-    temp = np.zeros((A.shape[0], B.shape[1]), dtype=np.float64)
+    licm_n = int(n / 10)
+    A = np.random.randn(licm_n, licm_n)
+    B = np.random.randn(licm_n, licm_n)
+    C = np.random.randn(licm_n)
+    temp = np.zeros((licm_n, licm_n), dtype=np.float64)
 
     res1 = b.benchmark("loop_nai", naive_loop, A, B, C, temp)
     res2 = b.benchmark("loop_rec", recommended_loop, A, B, C, temp)
