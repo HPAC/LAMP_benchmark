@@ -89,25 +89,32 @@ def exp04_update_of_c(b, n):
     res01 = b.benchmark('gemm_implicit', gemm_implicit, A, B, C)
     res02 = b.benchmark('gemm_implicit_compact', gemm_implicit_compact, A, B, C)
     res03 = b.benchmark('gemm_explicit', gemm_explicit, A, B, C)
-
     res04 = b.benchmark('gemm_implicit_coeff', gemm_implicit_coeff, A, B, C)
     res05 = b.benchmark('gemm_implicit_double_coeff', gemm_implicit_double_coeff, A, B, C)
 
     logger.info('Gemm correctness: {}'.format(np.allclose(res01, res02)))
     logger.info('Gemm correctness: {}'.format(np.allclose(res01, res03)))
 
-    # from exp02_syrk & exp03_syr2k
+    # from exp02_syrk
     C = C + C.T
-    res11 = b.benchmark('syrk_implicit', syrk_implicit, A, C)
-    res12 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, A, C)
-    res21 = b.benchmark('syr2k_implicit', syr2k_implicit, A, B, C)
-    res23 = b.benchmark('syr2k_implicit_compact', syr2k_implicit_compact, A, B, C)
-    C = C.ravel(order='F').reshape(C.shape, order='F')
-    res13 = b.benchmark('syrk_explicit', syrk_explicit, A, C)
-    res22 = b.benchmark('syr2k_explicit', syr2k_explicit, A, B, C)
+    Cnew = C.ravel(order='F').reshape(C.shape, order='F')
 
-    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res11, k=0), np.tril(res12, k=0))))
-    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res11, k=0), np.tril(res13, k=0))))
-    logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res21, k=0), np.tril(res22, k=0))))
-    logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res21, k=0), np.tril(res23, k=0))))
+    res06 = b.benchmark('syrk_implicit', syrk_implicit, A, C)
+    res07 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, A, C)
+    res08 = b.benchmark('syrk_explicit', syrk_explicit, A, Cnew)
+
+    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res06, k=0), np.tril(res07, k=0))))
+    logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res06, k=0), np.tril(res08, k=0))))
+
+    # from exp03_syr2k
+    res09 = b.benchmark('syr2k_implicit', syr2k_implicit, A, B, C)
+    res10 = b.benchmark('syr2k_implicit_compact', syr2k_implicit_compact, A, B, C)
+    res11 = b.benchmark('syr2k_explicit', syr2k_explicit, A, B, Cnew)
+
+    logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res09, k=0), np.tril(res10, k=0))))
+    logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res09, k=0), np.tril(res11, k=0))))
+
+
+
+
 

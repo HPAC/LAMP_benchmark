@@ -1,4 +1,3 @@
-from scipy import linalg
 import numpy as np
 import logging
 from benchmarker import benchmark
@@ -18,6 +17,6 @@ def exp03_syr2k(b, n):
     C = np.random.randn(n, n)
     C = C + C.T
 
-    res4 = b.benchmark('syr2k_implicit_noup', syr2k_implicit_noup, A, B, C)
+    res = b.benchmark('syr2k_implicit_noup', syr2k_implicit_noup, A, B, C)
 
 
