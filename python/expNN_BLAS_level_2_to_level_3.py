@@ -24,4 +24,3 @@ def expNN_BLAS_level_2_to_level_3(b, n):
     res1 = b.benchmark("loop_translation_nai", naive_loop, A, B, C)
     res2 = b.benchmark("loop_translation_rec", recommended_loop, A, B, C)
     logger.info('LoopTranslation correctness: {}'.format(np.allclose(res1, res2)))
-
