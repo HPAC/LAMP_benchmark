@@ -17,4 +17,3 @@ def exp02_syrk(b, n):
     C = C + C.T
 
     res = b.benchmark('syrk_implicit_noup', syrk_implicit_noup, A, C)
-

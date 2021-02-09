@@ -17,8 +17,3 @@ def exp01_gemm(b, n):
     C = np.random.randn(n, n)
 
     res = b.benchmark('gemm_implicit_noup', gemm_implicit_noup, A, B, C)
-
-
-
-
-

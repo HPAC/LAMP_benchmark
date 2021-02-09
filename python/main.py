@@ -30,7 +30,6 @@ n = int(os.environ['LAMP_N'])
 
 b = ben('python_' + str(os.environ['OMP_NUM_THREADS']))
 
-
 exp01_gemm(b, n)
 
 exp02_syrk(b, n)
@@ -58,4 +57,3 @@ exp12_partial_operand_access(b, n)
 expNN_BLAS_level_2_to_level_3(b, n)
 
 expNN_transposition(b, n)
-

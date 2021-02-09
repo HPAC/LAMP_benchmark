@@ -81,6 +81,7 @@ def exp04_update_of_c(b, n):
     A = np.random.randn(n, n)
     B = np.random.randn(n, n)
     C = np.random.randn(n, n)
+    C_fortran_style = C.ravel(order='F').reshape(C.shape, order='F')
 
     b.benchmark('add', add, A, B)
     b.benchmark('scal', scal, A)
@@ -88,7 +89,7 @@ def exp04_update_of_c(b, n):
     # from exp01_gemm
     res01 = b.benchmark('gemm_implicit', gemm_implicit, A, B, C)
     res02 = b.benchmark('gemm_implicit_compact', gemm_implicit_compact, A, B, C)
-    res03 = b.benchmark('gemm_explicit', gemm_explicit, A, B, C)
+    res03 = b.benchmark('gemm_explicit', gemm_explicit, A, B, C_fortran_style)
     res04 = b.benchmark('gemm_implicit_coeff', gemm_implicit_coeff, A, B, C)
     res05 = b.benchmark('gemm_implicit_double_coeff', gemm_implicit_double_coeff, A, B, C)
 
@@ -97,11 +98,11 @@ def exp04_update_of_c(b, n):
 
     # from exp02_syrk
     C = C + C.T
-    Cnew = C.ravel(order='F').reshape(C.shape, order='F')
+    C_fortran_style = C.ravel(order='F').reshape(C.shape, order='F')
 
     res06 = b.benchmark('syrk_implicit', syrk_implicit, A, C)
     res07 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, A, C)
-    res08 = b.benchmark('syrk_explicit', syrk_explicit, A, Cnew)
+    res08 = b.benchmark('syrk_explicit', syrk_explicit, A, C_fortran_style)
 
     logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res06, k=0), np.tril(res07, k=0))))
     logger.info('Syrk correctness: {}'.format(np.allclose(np.tril(res06, k=0), np.tril(res08, k=0))))
@@ -109,12 +110,7 @@ def exp04_update_of_c(b, n):
     # from exp03_syr2k
     res09 = b.benchmark('syr2k_implicit', syr2k_implicit, A, B, C)
     res10 = b.benchmark('syr2k_implicit_compact', syr2k_implicit_compact, A, B, C)
-    res11 = b.benchmark('syr2k_explicit', syr2k_explicit, A, B, Cnew)
+    res11 = b.benchmark('syr2k_explicit', syr2k_explicit, A, B, C_fortran_style)
 
     logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res09, k=0), np.tril(res10, k=0))))
     logger.info('Syr2k correctness: {}'.format(np.allclose(np.tril(res09, k=0), np.tril(res11, k=0))))
-
-
-
-
-

@@ -18,5 +18,3 @@ def exp03_syr2k(b, n):
     C = C + C.T
 
     res = b.benchmark('syr2k_implicit_noup', syr2k_implicit_noup, A, B, C)
-
-
