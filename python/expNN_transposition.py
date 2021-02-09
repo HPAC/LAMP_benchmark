@@ -68,4 +68,3 @@ def expNN_transposition(b, n):
     logger.info('tr_tn correctness: {}'.format(np.allclose(res3, res4)))
     logger.info('tr_nt correctness: {}'.format(np.allclose(res5, res6)))
     logger.info('tr_tt correctness: {}'.format(np.allclose(res7, res8)))
-
