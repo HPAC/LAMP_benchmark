@@ -26,8 +26,8 @@ def benchmark(f):
     source_lines.insert(start, """import time""")
     source_lines[-1] = source_lines[-1].replace("return ", "return end-start, ")
     new_source = "\n".join(source_lines)
-    print(source_lines)
-    print(new_source)
+    # print(source_lines)
+    # print(new_source)
     scope = {}
     exec(new_source, scope)
     new_f = scope[f.__name__]
