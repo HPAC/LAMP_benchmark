@@ -1,42 +1,33 @@
-from scipy import linalg
 import numpy as np
 import logging
-import time
-import copy
-from benchmarker import cache_scrub
+from benchmarker import benchmark
 
-logger = logging.getLogger('PropertiesSolve')
+logger = logging.getLogger('exp08_properties_in_linear_systems')
 
-
-def solve(A, B):
-
-    at = copy.deepcopy(A)
-    bt = copy.deepcopy(B)
-    ct = copy.deepcopy(B)
-    cache_scrub()
-    start = time.perf_counter()
-    ct = np.linalg.solve(at, bt)
-    end = time.perf_counter()
-    return end-start, ct
+@benchmark
+def solve(A, B, C):
+    C = np.linalg.solve(A, B)
+    return C
 
 
-def properties_solve(b, m, rhs):
+def exp08_properties_in_linear_systems(b, n, rhs):
 
-    B = np.random.randn(m, rhs)
+    B = np.random.randn(n, rhs)
+    C = np.zeros((n, rhs), dtype=np.float64)
 
     # SPD
-    A = np.random.randn(m, m)
-    A = A + A.T + np.eye(m, dtype=np.float64) * m
+    A = np.random.randn(n, n)
+    A = A + A.T + np.eye(n, dtype=np.float64) * n
     logger.info('A is symmetric: {}'.format(np.allclose(A, A.T)))
     try:
         np.linalg.cholesky(A)
         logger.info('A is SPD: True')
     except np.linalg.LinAlgError:
         logger.info('A is SPD: False')
-    b.benchmark('solve_spd', solve, A, B)
+    b.benchmark('solve_spd', solve, A, B, C)
 
     # Symmetric
-    A = np.random.randn(m, m)
+    A = np.random.randn(n, n)
     A = A + A.T
     A[1, 1] = -1.0
     logger.info('A is symmetric: {}'.format(np.allclose(A, A.T)))
@@ -45,16 +36,16 @@ def properties_solve(b, m, rhs):
         logger.info('A is SPD: True')
     except np.linalg.LinAlgError:
         logger.info('A is SPD: False')
-    b.benchmark('solve_sym', solve, A, B)
+    b.benchmark('solve_sym', solve, A, B, C)
 
     # Triangular
-    A = np.random.randn(m, m)
+    A = np.random.randn(n, n)
     A = np.tril(A)
     logger.info('A is triangular: {}'.format(np.allclose(A, np.tril(A))))
-    b.benchmark('solve_tri', solve, A, B)
+    b.benchmark('solve_tri', solve, A, B, C)
 
     # Diagonal
-    A = np.random.randn(m, m)
+    A = np.random.randn(n, n)
     A = np.diag(np.diag(A))
     logger.info('A is diagonal: {}'.format(np.allclose(A, np.diag(np.diag(A)))))
-    b.benchmark('solve_dia', solve, A, B)
+    b.benchmark('solve_dia', solve, A, B, C)
