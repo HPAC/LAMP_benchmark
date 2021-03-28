@@ -35,13 +35,13 @@ exp01_gemm(b, n)
 exp02_syrk(b, n)
 
 exp03_syr2k(b, n)
-"""
+
 exp04_update_of_c(b, n)
-"""
+
 exp05_explicit_inversion(b, n)
-
+"""
 exp06_optimal_parenthesization(b, n)
-
+"""
 exp07_properties_multiplication(b, n)
 
 exp08_properties_in_linear_systems(b, n, 200)
