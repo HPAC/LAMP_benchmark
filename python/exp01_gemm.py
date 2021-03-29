@@ -1,6 +1,6 @@
 from benchmarker import benchmark
 import logging
-import numpy as np
+import torch as torch
 
 logger = logging.getLogger('exp01_gemm')
 
@@ -12,8 +12,8 @@ def gemm_implicit_noup(A, B, C):
 
 def exp01_gemm(b, n):
 
-    A = np.random.randn(n, n)
-    B = np.random.randn(n, n)
-    C = np.random.randn(n, n)
+    A = torch.randn(n, n)
+    B = torch.randn(n, n)
+    C = torch.randn(n, n)
 
     res = b.benchmark('gemm_implicit_noup', gemm_implicit_noup, A, B, C)
