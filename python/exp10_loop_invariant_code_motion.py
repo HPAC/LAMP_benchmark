@@ -1,6 +1,6 @@
-import numpy as np
 import logging
 from benchmarker import benchmark
+import torch as torch
 
 logger = logging.getLogger('exp10_loop_invariant_code_motion')
 
@@ -22,11 +22,11 @@ def recommended_loop(A, B, C, temp):
 def exp10_loop_invariant_code_motion(b, n):
 
     licm_n = int(n / 10)
-    A = np.random.randn(licm_n, licm_n)
-    B = np.random.randn(licm_n, licm_n)
-    C = np.random.randn(licm_n)
-    temp = np.zeros((licm_n, licm_n), dtype=np.float64)
+    A = torch.randn(licm_n, licm_n)
+    B = torch.randn(licm_n, licm_n)
+    C = torch.randn(licm_n)
+    temp = torch.zeros((licm_n, licm_n), dtype=torch.float64)
 
     res1 = b.benchmark("loop_nai", naive_loop, A, B, C, temp)
     res2 = b.benchmark("loop_rec", recommended_loop, A, B, C, temp)
-    logger.info('IndexProblems correctness: {}'.format(np.allclose(res1, res2)))
+    logger.info('IndexProblems correctness: {}'.format(torch.allclose(res1, res2)))
