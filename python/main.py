@@ -49,11 +49,11 @@ exp08_properties_in_linear_systems(b, n, 200)
 exp09_common_subexpressions(b, n)
 
 exp10_loop_invariant_code_motion(b, n)
-"""
+
 exp11_blocked_matrices(b, n)
 """
 exp12_partial_operand_access(b, n)
-
+"""
 expNN_BLAS_level_2_to_level_3(b, n)
 
 expNN_transposition(b, n)
