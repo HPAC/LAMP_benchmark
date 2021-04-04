@@ -1,6 +1,6 @@
-import numpy as np
 import logging
 from benchmarker import benchmark
+import tensorflow as tf
 
 logger = logging.getLogger('exp09_common_subexpressions')
 
@@ -18,10 +18,10 @@ def subexpr_rec(A, B, K):
 
 def exp09_common_subexpressions(b, n):
 
-    A = np.random.randn(n, n)
-    B = np.random.randn(n, n)
-    K = np.zeros((n, n), dtype=np.float64)
+    A = tf.random.normal([n, n], dtype=tf.float64)
+    B = tf.random.normal([n, n], dtype=tf.float64)
+    K = tf.zeros((n, n), dtype=tf.float64)
 
     res1 = b.benchmark('subexpr_nai', subexpr_nai, A, B, K)
     res2 = b.benchmark('subexpr_rec', subexpr_rec, A, B, K)
-    logger.info('CommonSubExpr correctness: {}'.format(np.allclose(res1, res2)))
+    logger.info('CommonSubExpr correctness: {}'.format(tf.experimental.numpy.allclose(res1, res2)))
