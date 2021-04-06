@@ -21,9 +21,9 @@ def blocked_solve_recommended(A1, A2, B, C):
 def exp11_blocked_matrices(b, n):
 
     bm_n = int(n / 2)
-    A1 = torch.randn(bm_n, bm_n)
-    A2 = torch.randn(bm_n, bm_n)
-    B = torch.randn(2 * bm_n, 2 * bm_n)
+    A1 = torch.randn((bm_n, bm_n), dtype=torch.float64)
+    A2 = torch.randn((bm_n, bm_n), dtype=torch.float64)
+    B = torch.randn((2 * bm_n, 2 * bm_n), dtype=torch.float64)
     C = torch.zeros((2 * bm_n, 2 * bm_n), dtype=torch.float64)
 
     res1 = b.benchmark("compact", blocked_solve_naive, A1, A2, B, C)
