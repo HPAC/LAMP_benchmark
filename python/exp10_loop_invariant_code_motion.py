@@ -8,16 +8,14 @@ logger = logging.getLogger('exp10_loop_invariant_code_motion')
 def naive_loop(A, B, C, temp):
     for i in range(C.shape[0]):
         temp = A @ B
-        C = tf.scatter_nd_update(C, [[i]], [temp[i, i]])
-        #C[i] = temp[i, i]
+        C = tf.tensor_scatter_nd_update(C, [[i]], [temp[i, i]])
     return C
 
 @benchmark
 def recommended_loop(A, B, C, temp):
     temp = A @ B
     for i in range(C.shape[0]):
-        C = tf.scatter_nd_update(C, [[i]], [temp[i, i]])
-        #C[i] = temp[i, i]
+        C = tf.tensor_scatter_nd_update(C, [[i]], [temp[i, i]])
     return C
 
 
