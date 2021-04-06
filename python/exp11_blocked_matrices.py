@@ -28,4 +28,4 @@ def exp11_blocked_matrices(b, n):
 
     res1 = b.benchmark("compact", blocked_solve_naive, A1, A2, B, C)
     res2 = b.benchmark("blocked", blocked_solve_recommended, A1, A2, B, C)
-    logger.info('PartitionedMatrices correctness: {}'.format(tf.experimental.numpy.allclose(res1, res2)))
+    logger.info('PartitionedMatrices correctness: {}'.format(tf.debugging.assert_near(res1, res2, rtol=1e-05, atol=1e-08)))
