@@ -24,4 +24,4 @@ def exp09_common_subexpressions(b, n):
 
     res1 = b.benchmark('subexpr_nai', subexpr_nai, A, B, K)
     res2 = b.benchmark('subexpr_rec', subexpr_rec, A, B, K)
-    logger.info('CommonSubExpr correctness: {}'.format(tf.experimental.numpy.allclose(res1, res2)))
+    logger.info('CommonSubExpr correctness: {}'.format(tf.debugging.assert_near(res1, res2, rtol=1e-05, atol=1e-08)))
