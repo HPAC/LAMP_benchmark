@@ -17,13 +17,13 @@ def diagmm(A, B, C):
 
 def exp07_properties_multiplication(b, n):
 
-    A = tf.random.normal([n, n])
-    B = tf.random.normal([n, n])
-    C = tf.random.normal([n, n])
+    A = tf.random.normal([n, n], dtype=tf.float64)
+    B = tf.random.normal([n, n], dtype=tf.float64)
+    C = tf.random.normal([n, n], dtype=tf.float64)
 
-    A = tf.experimental.numpy.tril(A)
-    logger.debug('A is triangualar'.format(tf.experimental.numpy.allclose(A, tf.experimental.numpy.tril(A))))
+    A = tf.linalg.band_part(A, -1, 0)
+    logger.debug('A is triangualar'.format(tf.debugging.assert_near(A, tf.linalg.band_part(A, -1, 0), rtol=1e-05, atol=1e-08)))
     res1 = b.benchmark('trmm_implicit', trmm_implicit, A, B)
 
-    Ad = tf.experimental.numpy.diag(tf.experimental.numpy.diag(A))
+    Ad = tf.linalg.diag(tf.linalg.diag_part(A))
     res2 = b.benchmark('diagmm', diagmm, Ad, B, C)
