@@ -1,7 +1,6 @@
 import logging
 from benchmarker import benchmark
 import tensorflow as tf
-import numpy as np
 
 logger = logging.getLogger('exp04_update_of_c')
 
@@ -76,7 +75,7 @@ def exp04_update_of_c(b, n):
     res3 = b.benchmark('gemm_implicit_coeff', gemm_implicit_coeff, A, B, C)
     res4 = b.benchmark('gemm_implicit_double_coeff', gemm_implicit_double_coeff, A, B, C)
 
-    logger.info('Gemm correctness: {}'.format(tf.experimental.numpy.allclose(res1, res2)))
+    logger.info('Gemm correctness: {}'.format(tf.debugging.assert_near(res1, res2, rtol=1e-05, atol=1e-08)))
 
     # from exp02_syrk
     C = C + tf.transpose(C)
@@ -84,10 +83,10 @@ def exp04_update_of_c(b, n):
     res5 = b.benchmark('syrk_implicit', syrk_implicit, A, C)
     res6 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, A, C)
 
-    logger.info('Syrk correctness: {}'.format(np.allclose(tf.experimental.numpy.tril(res5, k=0), tf.experimental.numpy.tril(res6, k=0))))
+    logger.info('Syrk correctness: {}'.format(tf.debugging.assert_near(tf.linalg.band_part(res5, -1, 0), tf.linalg.band_part(res6, -1, 0)), rtol=1e-05, atol=1e-08))
 
     # from exp03_syr2k
     res7 = b.benchmark('syr2k_implicit', syr2k_implicit, A, B, C)
     res8 = b.benchmark('syr2k_implicit_compact', syr2k_implicit_compact, A, B, C)
 
-    logger.info('Syr2k correctness: {}'.format(np.allclose(tf.experimental.numpy.tril(res7, k=0), tf.experimental.numpy.tril(res8, k=0))))
+    logger.info('Syr2k correctness: {}'.format(tf.debugging.assert_near(tf.linalg.band_part(res7, -1, 0), tf.linalg.band_part(res8, -1, 0)), rtol=1e-05, atol=1e-08))
