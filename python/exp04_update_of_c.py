@@ -83,10 +83,10 @@ def exp04_update_of_c(b, n):
     res5 = b.benchmark('syrk_implicit', syrk_implicit, A, C)
     res6 = b.benchmark('syrk_implicit_compact', syrk_implicit_compact, A, C)
 
-    logger.info('Syrk correctness: {}'.format(torch.allclose(torch.tril(res5, diagonal=0), torch.tril(res6, diagonal=0))))
+    logger.info('Syrk correctness: {}'.format(torch.allclose(torch.tril(res5), torch.tril(res6))))
 
     # from exp03_syr2k
     res7 = b.benchmark('syr2k_implicit', syr2k_implicit, A, B, C)
     res8 = b.benchmark('syr2k_implicit_compact', syr2k_implicit_compact, A, B, C)
 
-    logger.info('Syr2k correctness: {}'.format(torch.allclose(torch.tril(res7, diagonal=0), torch.tril(res8, diagonal=0))))
+    logger.info('Syr2k correctness: {}'.format(torch.allclose(torch.tril(res7), torch.tril(res8))))
