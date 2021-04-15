@@ -23,7 +23,7 @@ def exp08_properties_in_linear_systems(b, n, rhs):
     try:
         tf.linalg.cholesky(A)
         logger.info('A is SPD: True')
-    except np.linalg.LinAlgError:
+    except tf.errors.InvalidArgumentError:
         logger.info('A is SPD: False')
     b.benchmark('solve_spd', solve, A, B, C)
 
@@ -32,13 +32,11 @@ def exp08_properties_in_linear_systems(b, n, rhs):
     A = A + tf.transpose(A)
     A = tf.tensor_scatter_nd_update(A, [[1, 1]], [-1.0])
     logger.info('A is symmetric: {}'.format(tf.debugging.assert_near(A, tf.transpose(A), rtol=1e-05, atol=1e-08)))
-    """
     try:
         tf.linalg.cholesky(A)
         logger.info('A is SPD: True')
-    except np.linalg.LinAlgError:
+    except tf.errors.InvalidArgumentError:
         logger.info('A is SPD: False')
-    """
     b.benchmark('solve_sym', solve, A, B, C)
 
     # Triangular

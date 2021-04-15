@@ -29,4 +29,4 @@ def exp10_loop_invariant_code_motion(b, n):
 
     res1 = b.benchmark("loop_nai", naive_loop, A, B, C, temp)
     res2 = b.benchmark("loop_rec", recommended_loop, A, B, C, temp)
-    logger.info('IndexProblems correctness: {}'.format(tf.debugging.assert_near(res1, res2, rtol=1e-05, atol=1e-08)))
+    logger.info('LICM correctness: {}'.format(tf.debugging.assert_near(res1, res2, rtol=1e-05, atol=1e-08)))
