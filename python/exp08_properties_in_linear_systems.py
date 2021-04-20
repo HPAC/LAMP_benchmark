@@ -1,6 +1,5 @@
 import logging
 from benchmarker import benchmark
-import numpy as np
 import tensorflow as tf
 
 logger = logging.getLogger('exp08_properties_in_linear_systems')
