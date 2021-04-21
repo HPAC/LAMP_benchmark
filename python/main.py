@@ -1,3 +1,8 @@
+""" Documentation
+1-
+
+
+"""
 import os
 import gc
 gc.disable()
@@ -23,7 +28,7 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(name)-2s: %(levelname)-2s %(message)s')
 logger = logging.getLogger('Main')
-# logger.info('Numpy version: {}'.format(np.__version__))
+# logger.info('Numpy version: {}'.format(tf.__version__))
 # print('{}'.format(np.__config__.show()))
 
 n = int(os.environ['LAMP_N'])
@@ -37,7 +42,7 @@ exp02_syrk(b, n)
 exp03_syr2k(b, n)
 
 exp04_update_of_c(b, n)
-
+"""
 exp05_explicit_inversion(b, n)
 
 exp06_optimal_parenthesization(b, n)
@@ -53,7 +58,7 @@ exp10_loop_invariant_code_motion(b, n)
 exp11_blocked_matrices(b, n)
 
 exp12_partial_operand_access(b, n)
-
+"""
 """
 expNN_BLAS_level_2_to_level_3(b, n)
 

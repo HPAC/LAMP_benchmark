@@ -12,9 +12,9 @@ def syr2k_implicit_noup(A, B, C):
 
 def exp03_syr2k(b, n):
 
-    A = tf.random.normal([n, n])
-    B = tf.random.normal([n, n])
-    C = tf.random.normal([n, n])
+    A = tf.random.normal([n, n], dtype=tf.float64)
+    B = tf.random.normal([n, n], dtype=tf.float64)
+    C = tf.random.normal([n, n], dtype=tf.float64)
     C = C + tf.transpose(C)
 
     res = b.benchmark('syr2k_implicit_noup', syr2k_implicit_noup, A, B, C)

@@ -62,9 +62,9 @@ def syr2k_implicit_compact(A, B, C):
 
 def exp04_update_of_c(b, n):
 
-    A = tf.random.normal([n, n])
-    B = tf.random.normal([n, n])
-    C = tf.random.normal([n, n])
+    A = tf.random.normal([n, n], dtype=tf.float64)
+    B = tf.random.normal([n, n], dtype=tf.float64)
+    C = tf.random.normal([n, n], dtype=tf.float64)
 
     b.benchmark('add', add, A, B)
     b.benchmark('scal', scal, A)
