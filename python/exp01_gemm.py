@@ -12,8 +12,8 @@ def gemm_implicit_noup(A, B, C):
 
 def exp01_gemm(b, n):
 
-    A = torch.randn(n, n)
-    B = torch.randn(n, n)
-    C = torch.randn(n, n)
+    A = torch.randn((n, n), dtype=torch.float64)
+    B = torch.randn((n, n), dtype=torch.float64)
+    C = torch.randn((n, n), dtype=torch.float64)
 
     res = b.benchmark('gemm_implicit_noup', gemm_implicit_noup, A, B, C)

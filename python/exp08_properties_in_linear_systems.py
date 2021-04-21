@@ -1,7 +1,6 @@
 import logging
 from benchmarker import benchmark
 import torch as torch
-import numpy as np
 
 logger = logging.getLogger('exp08_properties_in_linear_systems')
 

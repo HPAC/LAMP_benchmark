@@ -12,8 +12,8 @@ def syrk_implicit_noup(A, C):
 
 def exp02_syrk(b, n):
 
-    A = torch.randn(n, n)
-    C = torch.randn(n, n)
+    A = torch.randn((n, n), dtype=torch.float64)
+    C = torch.randn((n, n), dtype=torch.float64)
     C = C + torch.transpose(C, 0, 1)
 
     res = b.benchmark('syrk_implicit_noup', syrk_implicit_noup, A, C)
