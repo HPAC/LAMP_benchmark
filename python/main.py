@@ -1,3 +1,7 @@
+""" Documentation:
+
+
+"""
 import os
 import gc
 gc.disable()
@@ -23,8 +27,8 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(name)-2s: %(levelname)-2s %(message)s')
 logger = logging.getLogger('Main')
-# logger.info('Numpy version: {}'.format(np.__version__))
-# print('{}'.format(np.__config__.show()))
+# logger.info('Numpy version: {}'.format(torch.__version__))
+# print('{}'.format(torch.__config__.show()))
 
 n = int(os.environ['LAMP_N'])
 
@@ -51,10 +55,10 @@ exp09_common_subexpressions(b, n)
 exp10_loop_invariant_code_motion(b, n)
 
 exp11_blocked_matrices(b, n)
-"""
+
 exp12_partial_operand_access(b, n)
 """
 expNN_BLAS_level_2_to_level_3(b, n)
-
+"""
 expNN_transposition(b, n)
 """
