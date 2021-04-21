@@ -29,4 +29,4 @@ def exp10_loop_invariant_code_motion(b, n):
 
     res1 = b.benchmark("loop_nai", naive_loop, A, B, C, temp)
     res2 = b.benchmark("loop_rec", recommended_loop, A, B, C, temp)
-    logger.info('IndexProblems correctness: {}'.format(torch.allclose(res1, res2)))
+    logger.info('LICM correctness: {}'.format(torch.allclose(res1, res2)))

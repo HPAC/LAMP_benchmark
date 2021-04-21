@@ -23,7 +23,7 @@ def exp08_properties_in_linear_systems(b, n, rhs):
     try:
         torch.linalg.cholesky(A)
         logger.info('A is SPD: True')
-    except np.linalg.LinAlgError:
+    except RuntimeError:
         logger.info('A is SPD: False')
     b.benchmark('solve_spd', solve, A, B, C)
 
@@ -32,13 +32,11 @@ def exp08_properties_in_linear_systems(b, n, rhs):
     A = A + torch.transpose(A, 0, 1)
     A[1, 1] = -1.0
     logger.info('A is symmetric: {}'.format(torch.allclose(A, torch.transpose(A, 0, 1))))
-    """
     try:
         torch.linalg.cholesky(A)
         logger.info('A is SPD: True')
-    except np.linalg.LinAlgError:
+    except RuntimeError:
         logger.info('A is SPD: False')
-    """
     b.benchmark('solve_sym', solve, A, B, C)
 
     # Triangular
