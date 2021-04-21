@@ -1,6 +1,8 @@
-""" Documentation:
-
-
+""" Comments:
+1- torch.randn(): This function uses a global default. We must explicitly set the data type to tf.float64.
+2- torch.zeros(): This function uses a global default. We must explicitly set the data type to tf.float64.
+3- torch.eye(): This function uses a global default. We must explicitly set the data type to tf.float64.
+4- torch.allclose(): This function uses the same tolerances as np.allclose().
 """
 import os
 import gc
