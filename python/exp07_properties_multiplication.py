@@ -4,10 +4,12 @@ import torch as torch
 
 logger = logging.getLogger('exp07_properties_multiplication')
 
+
 @benchmark
 def trmm_implicit(A, B):
     B = A @ B
     return B
+
 
 @benchmark
 def diagmm(A, B, C):
@@ -16,10 +18,9 @@ def diagmm(A, B, C):
 
 
 def exp07_properties_multiplication(b, n):
-
-    A = torch.randn(n, n)
-    B = torch.randn(n, n)
-    C = torch.randn(n, n)
+    A = torch.randn((n, n), dtype=torch.float64)
+    B = torch.randn((n, n), dtype=torch.float64)
+    C = torch.randn((n, n), dtype=torch.float64)
 
     A = torch.tril(A)
     logger.debug('A is triangualar'.format(torch.allclose(A, torch.tril(A))))

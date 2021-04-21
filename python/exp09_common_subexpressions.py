@@ -4,10 +4,12 @@ import torch as torch
 
 logger = logging.getLogger('exp09_common_subexpressions')
 
+
 @benchmark
 def subexpr_nai(A, B, K):
     K = A @ B + A @ B
     return K
+
 
 @benchmark
 def subexpr_rec(A, B, K):
@@ -17,9 +19,8 @@ def subexpr_rec(A, B, K):
 
 
 def exp09_common_subexpressions(b, n):
-
-    A = torch.randn(n, n)
-    B = torch.randn(n, n)
+    A = torch.randn((n, n), dtype=torch.float64)
+    B = torch.randn((n, n), dtype=torch.float64)
     K = torch.zeros((n, n), dtype=torch.float64)
 
     res1 = b.benchmark('subexpr_nai', subexpr_nai, A, B, K)

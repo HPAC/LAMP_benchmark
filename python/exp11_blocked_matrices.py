@@ -4,12 +4,14 @@ import torch as torch
 
 logger = logging.getLogger('exp11_blocked_matrices')
 
+
 @benchmark
 def blocked_solve_naive(A1, A2, B, C):
     C = torch.linalg.solve(torch.cat(
         (torch.cat((A1, torch.zeros((A1.shape[0], A1.shape[1]), dtype=torch.float64)), dim=1),
          torch.cat((torch.zeros((A2.shape[0], A2.shape[1]), dtype=torch.float64), A2), dim=1)), dim=0), B)
     return C
+
 
 @benchmark
 def blocked_solve_recommended(A1, A2, B, C):
@@ -18,8 +20,8 @@ def blocked_solve_recommended(A1, A2, B, C):
     C = torch.cat((torch.linalg.solve(A1, b1), torch.linalg.solve(A2, b2)), dim=0)
     return C
 
-def exp11_blocked_matrices(b, n):
 
+def exp11_blocked_matrices(b, n):
     bm_n = int(n / 2)
     A1 = torch.randn((bm_n, bm_n), dtype=torch.float64)
     A2 = torch.randn((bm_n, bm_n), dtype=torch.float64)

@@ -4,6 +4,7 @@ import torch as torch
 
 logger = logging.getLogger('exp08_properties_in_linear_systems')
 
+
 @benchmark
 def solve(A, B, C):
     C = torch.linalg.solve(A, B)
@@ -11,7 +12,6 @@ def solve(A, B, C):
 
 
 def exp08_properties_in_linear_systems(b, n, rhs):
-
     B = torch.randn((n, rhs), dtype=torch.float64)
     C = torch.zeros((n, rhs), dtype=torch.float64)
 

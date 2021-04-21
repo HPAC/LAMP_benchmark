@@ -4,15 +4,18 @@ import torch as torch
 
 logger = logging.getLogger('exp04_update_of_c')
 
+
 @benchmark
 def add(A, B):
     B = A + B
     return B
 
+
 @benchmark
 def scal(A):
     A = 3.0 * A
     return A
+
 
 # from exp01_gemm
 
@@ -21,20 +24,24 @@ def gemm_implicit(A, B, C):
     C = A @ B + C
     return C
 
+
 @benchmark
 def gemm_implicit_compact(A, B, C):
     C += A @ B
     return C
+
 
 @benchmark
 def gemm_implicit_coeff(A, B, C):
     C = 3.0 * A @ B + C
     return C
 
+
 @benchmark
 def gemm_implicit_double_coeff(A, B, C):
     C = 3.0 * A @ B + 3.0 * C
     return C
+
 
 # from exp02_syrk
 
@@ -43,10 +50,12 @@ def syrk_implicit(A, C):
     C = A @ torch.transpose(A, 0, 1) + C
     return C
 
+
 @benchmark
 def syrk_implicit_compact(A, C):
     C += A @ torch.transpose(A, 0, 1)
     return C
+
 
 # from exp03_syr2k
 
@@ -55,13 +64,14 @@ def syr2k_implicit(A, B, C):
     C = A @ torch.transpose(B, 0, 1) + B @ torch.transpose(A, 0, 1) + C
     return C
 
+
 @benchmark
 def syr2k_implicit_compact(A, B, C):
     C += A @ torch.transpose(B, 0, 1) + B @ torch.transpose(A, 0, 1)
     return C
 
-def exp04_update_of_c(b, n):
 
+def exp04_update_of_c(b, n):
     A = torch.randn((n, n), dtype=torch.float64)
     B = torch.randn((n, n), dtype=torch.float64)
     C = torch.randn((n, n), dtype=torch.float64)

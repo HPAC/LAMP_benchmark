@@ -4,30 +4,36 @@ import torch as torch
 
 logger = logging.getLogger('exp06_optimal_parenthesization')
 
+
 @benchmark
 def mc_l_r_orig(A, B, C, res):
     res = C @ A @ B
     return res
+
 
 @benchmark
 def mc_l_r_guid(A, B, C, res):
     res = (C @ A) @ B
     return res
 
+
 @benchmark
 def mc_r_l_orig(A, B, C, res):
     res = A @ B @ C
     return res
+
 
 @benchmark
 def mc_r_l_guid(A, B, C, res):
     res = A @ (B @ C)
     return res
 
+
 @benchmark
 def mc_mixed_orig(A, B, C, D, res):
     res = A @ B @ C @ D
     return res
+
 
 @benchmark
 def mc_mixed_guid(A, B, C, D, res):
@@ -36,8 +42,7 @@ def mc_mixed_guid(A, B, C, D, res):
 
 
 def exp06_optimal_parenthesization(b, n):
-
-    n_5 = int(n/5)
+    n_5 = int(n / 5)
     A = torch.randn((n, n), dtype=torch.float64)
     B = torch.randn((n, n), dtype=torch.float64)
 

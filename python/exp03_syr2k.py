@@ -4,6 +4,7 @@ import torch as torch
 
 logger = logging.getLogger('exp03_syr2k')
 
+
 @benchmark
 def syr2k_implicit_noup(A, B, C):
     C = A @ torch.transpose(B, 0, 1) + B @ torch.transpose(A, 0, 1)
@@ -11,7 +12,6 @@ def syr2k_implicit_noup(A, B, C):
 
 
 def exp03_syr2k(b, n):
-
     A = torch.randn((n, n), dtype=torch.float64)
     B = torch.randn((n, n), dtype=torch.float64)
     C = torch.randn((n, n), dtype=torch.float64)

@@ -6,6 +6,7 @@
 """
 import os
 import gc
+
 gc.disable()
 
 from benchmarker import Benchmarker as ben
@@ -35,7 +36,6 @@ logger = logging.getLogger('Main')
 n = int(os.environ['LAMP_N'])
 
 b = ben('python_torch_' + str(os.environ['OMP_NUM_THREADS']))
-
 
 exp01_gemm(b, n)
 
