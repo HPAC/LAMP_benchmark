@@ -11,6 +11,7 @@
 """
 import os
 import gc
+
 gc.disable()
 
 from benchmarker import Benchmarker as ben
@@ -64,7 +65,6 @@ exp10_loop_invariant_code_motion(b, n)
 exp11_blocked_matrices(b, n)
 
 exp12_partial_operand_access(b, n)
-
 """
 expNN_BLAS_level_2_to_level_3(b, n)
 

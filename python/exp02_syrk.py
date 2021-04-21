@@ -4,6 +4,7 @@ import tensorflow as tf
 
 logger = logging.getLogger('exp02_syrk')
 
+
 @benchmark
 def syrk_implicit_noup(A, C):
     C = A @ tf.transpose(A)
@@ -11,7 +12,6 @@ def syrk_implicit_noup(A, C):
 
 
 def exp02_syrk(b, n):
-
     A = tf.random.normal([n, n], dtype=tf.float64)
     C = tf.random.normal([n, n], dtype=tf.float64)
     C = C + tf.transpose(C)
