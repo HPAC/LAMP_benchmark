@@ -3,7 +3,7 @@ import numpy as np
 import logging
 from benchmarker import benchmark
 
-logger = logging.getLogger('Transposition')
+logger = logging.getLogger('expNN_transposition')
 
 @benchmark
 def tr_tt_implicit(A, B, C):
