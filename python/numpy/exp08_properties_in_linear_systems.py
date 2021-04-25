@@ -4,6 +4,7 @@ from benchmarker import benchmark
 
 logger = logging.getLogger('exp08_properties_in_linear_systems')
 
+
 @benchmark
 def solve(A, B, C):
     C = np.linalg.solve(A, B)
@@ -11,7 +12,6 @@ def solve(A, B, C):
 
 
 def exp08_properties_in_linear_systems(b, n, rhs):
-
     B = np.random.randn(n, rhs)
     C = np.zeros((n, rhs), dtype=np.float64)
 

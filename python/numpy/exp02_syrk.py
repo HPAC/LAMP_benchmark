@@ -4,6 +4,7 @@ from benchmarker import benchmark
 
 logger = logging.getLogger('exp02_syrk')
 
+
 @benchmark
 def syrk_implicit_noup(A, C):
     C = A @ A.T
@@ -11,7 +12,6 @@ def syrk_implicit_noup(A, C):
 
 
 def exp02_syrk(b, n):
-
     A = np.random.randn(n, n)
     C = np.random.randn(n, n)
     C = C + C.T

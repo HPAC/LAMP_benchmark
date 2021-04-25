@@ -4,12 +4,14 @@ from benchmarker import benchmark
 
 logger = logging.getLogger('exp10_loop_invariant_code_motion')
 
+
 @benchmark
 def naive_loop(A, B, C, temp):
     for i in range(C.shape[0]):
         temp = A @ B
         C[i] = temp[i, i]
     return C
+
 
 @benchmark
 def recommended_loop(A, B, C, temp):
@@ -20,7 +22,6 @@ def recommended_loop(A, B, C, temp):
 
 
 def exp10_loop_invariant_code_motion(b, n):
-
     licm_n = int(n / 10)
     A = np.random.randn(licm_n, licm_n)
     B = np.random.randn(licm_n, licm_n)

@@ -5,15 +5,18 @@ from benchmarker import benchmark
 
 logger = logging.getLogger('exp04_update_of_c')
 
+
 @benchmark
 def add(A, B):
     B = A + B
     return B
 
+
 @benchmark
 def scal(A):
     A = 3.0 * A
     return A
+
 
 # from exp01_gemm
 
@@ -22,25 +25,30 @@ def gemm_implicit(A, B, C):
     C = A @ B + C
     return C
 
+
 @benchmark
 def gemm_implicit_compact(A, B, C):
     C += A @ B
     return C
+
 
 @benchmark
 def gemm_implicit_coeff(A, B, C):
     C = 3.0 * A @ B + C
     return C
 
+
 @benchmark
 def gemm_implicit_double_coeff(A, B, C):
     C = 3.0 * A @ B + 3.0 * C
     return C
 
+
 @benchmark
 def gemm_explicit(A, B, C):
     linalg.blas.dgemm(1.0, A, B, 1.0, C, trans_a=False, trans_b=False, overwrite_c=True)
     return C
+
 
 # from exp02_syrk
 
@@ -49,15 +57,18 @@ def syrk_implicit(A, C):
     C = A @ A.T + C
     return C
 
+
 @benchmark
 def syrk_implicit_compact(A, C):
     C += A @ A.T
     return C
 
+
 @benchmark
 def syrk_explicit(A, C):
     linalg.blas.dsyrk(1.0, A, 1.0, C, overwrite_c=True, lower=True, trans=False)
     return C
+
 
 # from exp03_syr2k
 
@@ -66,18 +77,20 @@ def syr2k_implicit(A, B, C):
     C = A @ B.T + B @ A.T + C
     return C
 
+
 @benchmark
 def syr2k_implicit_compact(A, B, C):
     C += A @ B.T + B @ A.T
     return C
+
 
 @benchmark
 def syr2k_explicit(A, B, C):
     linalg.blas.dsyr2k(1.0, A, B, 1.0, C, overwrite_c=True, lower=True, trans=False)
     return C
 
-def exp04_update_of_c(b, n):
 
+def exp04_update_of_c(b, n):
     A = np.random.randn(n, n)
     B = np.random.randn(n, n)
     C = np.random.randn(n, n)
