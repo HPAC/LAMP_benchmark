@@ -29,7 +29,7 @@ logger = logging.getLogger('Main')
 
 n = int(os.environ['LAMP_N'])
 
-b = ben('python_' + str(os.environ['OMP_NUM_THREADS']))
+b = ben('numpy_' + str(os.environ['OMP_NUM_THREADS']))
 
 exp01_gemm(b, n)
 

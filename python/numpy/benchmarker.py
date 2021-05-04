@@ -55,7 +55,7 @@ class Benchmarker:
         self.reps = int(os.environ['LAMP_REPS'])
 
         with open(self.file, 'w') as f:
-            f.write('algorithm;Python\n')
+            f.write('algorithm;Numpy\n')
         with open(self.file_timings, 'w') as f:
             f.write('')
 
