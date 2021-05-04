@@ -2,13 +2,15 @@ import numpy as np
 import logging
 from benchmarker import benchmark
 
-logger = logging.getLogger('LoopTranslation')
+logger = logging.getLogger('expNN_BLAS_level_2_to_level_3')
+
 
 @benchmark
 def naive_loop(A, B, C):
     for i in range(C.shape[1]):
         C[:, i] = A @ B[:, i]
     return C
+
 
 @benchmark
 def recommended_loop(A, B, C):

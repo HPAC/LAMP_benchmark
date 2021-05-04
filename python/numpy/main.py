@@ -1,5 +1,6 @@
 import os
 import gc
+
 gc.disable()
 
 from benchmarker import Benchmarker as ben

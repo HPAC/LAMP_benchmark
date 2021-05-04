@@ -5,16 +5,19 @@ from scipy import linalg
 
 logger = logging.getLogger('exp07_properties_multiplication')
 
+
 @benchmark
 def trmm_implicit(A, B):
     B = A @ B
     return B
+
 
 @benchmark
 def trmm_explicit(A, B):
     linalg.blas.dtrmm(1.0, A, B, diag=False, trans_a=False, side=False,
                       lower=True, overwrite_b=True)  # diag specifies unit triangular
     return B
+
 
 @benchmark
 def diagmm(A, B, C):
@@ -23,7 +26,6 @@ def diagmm(A, B, C):
 
 
 def exp07_properties_multiplication(b, n):
-
     A = np.random.randn(n, n)
     B = np.random.randn(n, n)
     C = np.random.randn(n, n)

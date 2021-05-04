@@ -3,42 +3,50 @@ import numpy as np
 import logging
 from benchmarker import benchmark
 
-logger = logging.getLogger('Transposition')
+logger = logging.getLogger('expNN_transposition')
+
 
 @benchmark
 def tr_tt_implicit(A, B, C):
     C = A.T @ B.T
     return C
 
+
 @benchmark
 def tr_tt_explicit(A, B, C):
     linalg.blas.dgemm(1.0, A, B, 0.0, C, trans_a=True, trans_b=True, overwrite_c=True)
     return C
+
 
 @benchmark
 def tr_nt_implicit(A, B, C):
     C = A @ B.T
     return C
 
+
 @benchmark
 def tr_nt_explicit(A, B, C):
     linalg.blas.dgemm(1.0, A, B, 0.0, C, trans_a=False, trans_b=True, overwrite_c=True)
     return C
+
 
 @benchmark
 def tr_tn_implicit(A, B, C):
     C = A.T @ B
     return C
 
+
 @benchmark
 def tr_tn_explicit(A, B, C):
     linalg.blas.dgemm(1.0, A, B, 0.0, C, trans_a=True, trans_b=False, overwrite_c=True)
     return C
 
+
 @benchmark
 def tr_nn_implicit(A, B, C):
     C = A @ B
     return C
+
 
 @benchmark
 def tr_nn_explicit(A, B, C):
@@ -47,7 +55,6 @@ def tr_nn_explicit(A, B, C):
 
 
 def expNN_transposition(b, n):
-
     tn = int(n / 10)
     A = np.random.randn(tn, tn)
     B = np.random.randn(tn, tn)
